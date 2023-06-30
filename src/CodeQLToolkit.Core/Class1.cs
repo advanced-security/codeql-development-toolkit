@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CodeQLDevelopmentLifecycleToolkit.Core
 {
+
     internal class Class1
     {
     }

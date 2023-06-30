@@ -1,0 +1,82 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33801.468
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeQLToolkit.Features.Query", "CodeQLToolkit.Features.Query", "{15D5DFB3-16CE-460F-B361-D6FFB8498508}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{667B480C-D805-4A9C-AC1F-D9FCCF3DB57C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{05645E0E-835A-4627-BDAE-C27EC39B23EE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3038EA53-8F37-4B35-AA50-FDFDDFF0F264}"
+	ProjectSection(SolutionItems) = preProject
+		docs\README.md = docs\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Features.Query.Commands", "src\CodeQLToolkit.Features.Query.Commands\CodeQLToolkit.Features.Query.Commands.csproj", "{EC665188-9901-4A92-B964-2F49B8287FA9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Features.Query.Data", "src\CodeQLToolkit.Features.Query.Data\CodeQLToolkit.Features.Query.Data.csproj", "{DA962DE9-B02B-4203-91D2-D0030C777025}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Features.Query.Lifecycle", "src\CodeQLToolkit.Features.Query.Lifecycle\CodeQLToolkit.Features.Query.Lifecycle.csproj", "{5F7BFA1E-7B35-4813-A5A0-D4E9A65DFBBD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Features.Query.Scaffolding", "src\CodeQLToolkit.Features.Query.Scaffolding\CodeQLToolkit.Features.Query.Scaffolding.csproj", "{4E4FB227-CC8A-495F-9999-2060F2D38F73}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Features.Query", "src\CodeQLToolkit.Features.Query\CodeQLToolkit.Features.Query.csproj", "{EF2DD68B-9320-4450-8803-52FD2BB1E69D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Core", "src\CodeQLToolkit.Core\CodeQLToolkit.Core.csproj", "{FFC777F2-B98B-4132-A3B8-896C7F8CB763}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeQLToolkit.Shared", "src\CodeQLToolkit.Shared\CodeQLToolkit.Shared.csproj", "{4C5C87E8-46E8-41D3-9CF9-F77148C432AF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC665188-9901-4A92-B964-2F49B8287FA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC665188-9901-4A92-B964-2F49B8287FA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC665188-9901-4A92-B964-2F49B8287FA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC665188-9901-4A92-B964-2F49B8287FA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA962DE9-B02B-4203-91D2-D0030C777025}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA962DE9-B02B-4203-91D2-D0030C777025}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA962DE9-B02B-4203-91D2-D0030C777025}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA962DE9-B02B-4203-91D2-D0030C777025}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F7BFA1E-7B35-4813-A5A0-D4E9A65DFBBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F7BFA1E-7B35-4813-A5A0-D4E9A65DFBBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F7BFA1E-7B35-4813-A5A0-D4E9A65DFBBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F7BFA1E-7B35-4813-A5A0-D4E9A65DFBBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E4FB227-CC8A-495F-9999-2060F2D38F73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E4FB227-CC8A-495F-9999-2060F2D38F73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E4FB227-CC8A-495F-9999-2060F2D38F73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E4FB227-CC8A-495F-9999-2060F2D38F73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF2DD68B-9320-4450-8803-52FD2BB1E69D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF2DD68B-9320-4450-8803-52FD2BB1E69D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF2DD68B-9320-4450-8803-52FD2BB1E69D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF2DD68B-9320-4450-8803-52FD2BB1E69D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFC777F2-B98B-4132-A3B8-896C7F8CB763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFC777F2-B98B-4132-A3B8-896C7F8CB763}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFC777F2-B98B-4132-A3B8-896C7F8CB763}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFC777F2-B98B-4132-A3B8-896C7F8CB763}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C5C87E8-46E8-41D3-9CF9-F77148C432AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C5C87E8-46E8-41D3-9CF9-F77148C432AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C5C87E8-46E8-41D3-9CF9-F77148C432AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C5C87E8-46E8-41D3-9CF9-F77148C432AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{15D5DFB3-16CE-460F-B361-D6FFB8498508} = {667B480C-D805-4A9C-AC1F-D9FCCF3DB57C}
+		{EC665188-9901-4A92-B964-2F49B8287FA9} = {15D5DFB3-16CE-460F-B361-D6FFB8498508}
+		{DA962DE9-B02B-4203-91D2-D0030C777025} = {15D5DFB3-16CE-460F-B361-D6FFB8498508}
+		{5F7BFA1E-7B35-4813-A5A0-D4E9A65DFBBD} = {15D5DFB3-16CE-460F-B361-D6FFB8498508}
+		{4E4FB227-CC8A-495F-9999-2060F2D38F73} = {15D5DFB3-16CE-460F-B361-D6FFB8498508}
+		{EF2DD68B-9320-4450-8803-52FD2BB1E69D} = {15D5DFB3-16CE-460F-B361-D6FFB8498508}
+		{FFC777F2-B98B-4132-A3B8-896C7F8CB763} = {667B480C-D805-4A9C-AC1F-D9FCCF3DB57C}
+		{4C5C87E8-46E8-41D3-9CF9-F77148C432AF} = {667B480C-D805-4A9C-AC1F-D9FCCF3DB57C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BF8F3B81-F4DC-4608-A41C-F00F3E5A05CA}
+	EndGlobalSection
+EndGlobal
