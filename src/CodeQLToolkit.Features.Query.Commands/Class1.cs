@@ -1,5 +1,4 @@
-﻿using CodeQLDevelopmentLifecycleToolkit.Features.Query.Scaffolding;
-
+﻿
 
 namespace CodeQLDevelopmentLifecycleToolkit.Features.Query.Commands
 {
@@ -7,9 +6,9 @@ namespace CodeQLDevelopmentLifecycleToolkit.Features.Query.Commands
     {
         static Class1()
         {
-            ModuleManager.REGISTER_MODULE("Query Module");
-        }
+            // idea for a commmand 
+            // "check"
 
-        public static int a = 1;
+        }
     }
 }

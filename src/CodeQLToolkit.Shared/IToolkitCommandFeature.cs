@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodeQLDevelopmentLifecycleToolkit.Core
+namespace CodeQLToolkit.Shared
 {
-
-    internal class Class1
+    public interface IToolkitCommandFeature
     {
     }
 }
