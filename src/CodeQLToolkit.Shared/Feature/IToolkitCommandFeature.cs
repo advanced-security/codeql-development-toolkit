@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodeQLToolkit.Shared
+namespace CodeQLToolkit.Shared.Feature
 {
-    public interface IToolkitFeature<T>
+    public interface IToolkitCommandFeature
     {
-        public int Run(T opts, string[] args);
     }
 }

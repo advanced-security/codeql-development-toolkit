@@ -7,6 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Templates\Query\c\new-dataflow-query.liquid" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Templates\Query\c\new-dataflow-query.liquid" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+    <PackageReference Include="NLog" Version="5.2.2" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.2" />
+
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CodeQLToolkit.Shared\CodeQLToolkit.Shared.csproj" />
   </ItemGroup>
 

@@ -1,41 +1,25 @@
-﻿using CodeQLToolkit.Shared;
-using CommandLine.Text;
-using CommandLine;
+﻿using CodeQLToolkit.Shared.Feature;
+using CodeQLToolkit.Shared.Template;
+using System.CommandLine;
 
 namespace CodeQLToolkit.Features.Query.Scaffolding
 {
-    [Verb("generate", HelpText = "Specifies to generate items related to queries.")]
 
-    public class QueryScaffoldingOptions : BaseOptions
+    public class QueryScaffoldFeature : IToolkitScaffoldingFeature
     {
-    }
-
-    [Verb("new-query", HelpText = "Generates a new query.")]
-
-    public class QueryScaffoldingNewQueryOptions : BaseOptions
-    {
-    }
-
-
-    public class QueryScaffoldFeature : IToolkitScaffoldingFeature<QueryScaffoldingOptions>
-    {
-
-        public int Run(QueryScaffoldingOptions opts, string[] args)
+        static TemplateUtil templateUtil { get; } = new TemplateUtil()
         {
-            string[] subArgs = args.Skip(1).ToArray();
+            TemplatePath = ""
+        };
 
-            return Parser.Default.ParseArguments<QueryScaffoldingNewQueryOptions>(args)
-             .MapResult(
-                 // Register the query scaffolding 
-                 // Note that within each subcommand we should dispatach to the correct orchestration layer. 
-                 (QueryScaffoldingNewQueryOptions opts) => { 
-                     Console.WriteLine("Creating a new query!");
-                     Console.WriteLine($"Base Path={opts.GetBaseDirectory()}");
-                     
-                     return 0; 
-                 
-                 },
-             errs => 1);
+        public void Register(Command parentCommand)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Run()
+        {
+            return 0;
         }
     }
 }

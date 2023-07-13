@@ -1,17 +1,13 @@
-﻿using CodeQLToolkit.Shared;
-using CodeQLToolkit.Features.Query.Scaffolding;
-using CommandLine;
+﻿using CodeQLToolkit.Features.Query.Scaffolding;
+using CodeQLToolkit.Shared.Feature;
+using CodeQLToolkit.Shared.Logging;
+using Microsoft.Extensions.Logging;
+using System.CommandLine;
 
 namespace CodeQLDevelopmentLifecycleToolkit.Features.Query
 {
 
-    [Verb("query", HelpText = "Functions for manipulating queries within your repository.")]
-    public class QueryFeatureOptions : BaseOptions
-    {
-       
-
-    }
-    public class QueryFeatureMain : IToolkitFeature<QueryFeatureOptions>
+    public class QueryFeatureMain : IToolkitFeature
     {
         readonly QueryScaffoldFeature scaffoldFeature;
         readonly static QueryFeatureMain instance;
@@ -26,18 +22,18 @@ namespace CodeQLDevelopmentLifecycleToolkit.Features.Query
 
         public static QueryFeatureMain Instance { get { return instance; } }
 
-        public int Run(QueryFeatureOptions opts, string[] args)
+        public int Run()
         {
+
             Console.WriteLine("[Query] RUNNING QUERY FEATURE");
 
-            string[] subArgs = args.Skip(1).ToArray();
+            return 0;
+        }
 
-            return Parser.Default.ParseArguments<QueryScaffoldingOptions>(args)
-             .MapResult(  
-                 // Register the query scaffolding 
-                 // Note that within each subcommand we should dispatach to the correct orchestration layer. 
-                 (QueryScaffoldingOptions opts) => scaffoldFeature.Run(opts, subArgs),
-             errs => 1);
+        public void Register(Command parentCommand)
+        {
+            Log<QueryFeatureMain>.G().LogInformation("Registering scaffolding submodule.");
+            throw new NotImplementedException();
         }
     }
 }

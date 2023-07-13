@@ -102,3 +102,11 @@ Do an example:
 1. The feature module
 2. The submodule 
 3. The thing to generate 
+
+-----
+
+Alternate version that uses just one level of commands.
+
+qlt generate query:new-query
+
+the top level commands 
