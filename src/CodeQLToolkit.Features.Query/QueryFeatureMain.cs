@@ -32,8 +32,11 @@ namespace CodeQLDevelopmentLifecycleToolkit.Features.Query
 
         public void Register(Command parentCommand)
         {
+            var queryCommand = new Command("query", "Use the features related to query creation and execution.");
+            parentCommand.Add(queryCommand);
             Log<QueryFeatureMain>.G().LogInformation("Registering scaffolding submodule.");
-            throw new NotImplementedException();
+            scaffoldFeature.Register(queryCommand);
+            
         }
     }
 }
