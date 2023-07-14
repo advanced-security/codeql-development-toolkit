@@ -4,6 +4,7 @@ using System.CommandLine;
 using CodeQLToolkit.Shared.Logging;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using CodeQLToolkit.Shared.Options;
 
 namespace CodeQLDevelopmentLifecycleToolkit.Core
 {
@@ -17,10 +18,8 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
             var rootCommand = new RootCommand();
 
             // Add global option for the root directory
-            var basePathOption = new Option<string>("--base", () => {
-                return Directory.GetCurrentDirectory();
-            }, "The base path to find the query repository.");
-            rootCommand.AddGlobalOption(basePathOption);
+          
+            rootCommand.AddGlobalOption(Globals.BasePathOption);
 
 
             // Register the `Query` feature

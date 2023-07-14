@@ -11,5 +11,10 @@ namespace CodeQLToolkit.Shared.Feature
     {
         public void Register(Command parentCommand);
         public int Run();
+
+        public void DieWithError(string message)
+        {
+            Console.Error.WriteLine(message);
+        }
     }
 }
