@@ -10,7 +10,6 @@ namespace CodeQLToolkit.Shared.Target
         public string Name { get; set; }
         public string Language { get; set; }
         public bool OverwriteExisting { get; set; }
-
         public string FeatureName { get; set; }
 
         public abstract void Run();
