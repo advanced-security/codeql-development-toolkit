@@ -36,5 +36,5 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: ZIP Bundle
+        name: qlt-bundle
         path: qlt*.zip
