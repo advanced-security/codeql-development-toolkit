@@ -27,6 +27,7 @@ jobs:
     - name: Create Build Bundle (Linux)
       shell: pwsh
       run: |
+        Write-Host (Get-Location)
         dotnet publish /p:PublishProfile=.\src\CodeQLToolkit.Core\Properties\PublishProfiles\Linux-Profile.pubxml
         $version = Get-Content version 
         $version = $version.Trim()
