@@ -31,10 +31,10 @@ jobs:
         dotnet publish .\src\CodeQLToolkit.Core\CodeQLToolkit.Core.csproj /p:PublishProfile=.\src\CodeQLToolkit.Core\Properties\PublishProfiles\Linux-Profile.pubxml
         $version = Get-Content version 
         $version = $version.Trim()
-        Compress-Archive -Path .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\linux-x64\* -DestinationPath qlt-$version.zip
+        Compress-Archive -Path .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\linux-x64\* -DestinationPath qlt-linux-x86_64-$version.zip
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: qlt-bundle
+        name: qlt-dist
         path: qlt*.zip
