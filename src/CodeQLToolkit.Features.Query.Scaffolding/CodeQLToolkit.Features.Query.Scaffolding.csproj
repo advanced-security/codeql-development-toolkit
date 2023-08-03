@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Templates\Query\c\new-dataflow-query.liquid" />
+    <None Remove="Templates\Query\cpp\new-dataflow-query.liquid" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Templates\Query\c\new-dataflow-query.liquid" />
+    <Compile Include="Templates\Query\cpp\new-dataflow-query.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +25,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CodeQLToolkit.Shared\CodeQLToolkit.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Templates\Query\cpp\new-query.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Query\cpp\qlpack-query.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Query\cpp\qlpack-test.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

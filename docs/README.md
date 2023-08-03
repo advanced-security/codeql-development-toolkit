@@ -110,3 +110,12 @@ Alternate version that uses just one level of commands.
 qlt generate query:new-query
 
 the top level commands 
+
+
+# General Directory Structure
+
+
+`language`
+	- `package name`
+		- `src` `scope/package-name`
+		- `test` `scope/package-name-test`
