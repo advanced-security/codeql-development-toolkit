@@ -1,0 +1,38 @@
+name: Build Linux (PR Check)
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build -c Release --no-restore
+    # - name: Test
+    #   run: dotnet test --no-build --verbosity normal
+    
+    # create archive in \src\CodeQLToolkit.Core\bin\Release\net6.0\publish\linux-x64
+    - name: Create Build Bundle (Linux)
+      shell: pwsh
+      run: |
+        Write-Host (Get-Location)
+        dotnet publish .\src\CodeQLToolkit.Core\CodeQLToolkit.Core.csproj /p:PublishProfile=.\src\CodeQLToolkit.Core\Properties\PublishProfiles\Linux-Profile.pubxml
+        Compress-Archive -Path .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\linux-x64\* -DestinationPath qlt-linux-x86_64.zip
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: qlt-dist
+        path: qlt*.zip

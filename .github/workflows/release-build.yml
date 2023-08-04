@@ -1,9 +1,7 @@
-name: Build Linux
+name: Build Release
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
     branches: [ "master" ]
 
 jobs:
@@ -29,8 +27,6 @@ jobs:
       run: |
         Write-Host (Get-Location)
         dotnet publish .\src\CodeQLToolkit.Core\CodeQLToolkit.Core.csproj /p:PublishProfile=.\src\CodeQLToolkit.Core\Properties\PublishProfiles\Linux-Profile.pubxml
-        $version = Get-Content version 
-        $version = $version.Trim()
         Compress-Archive -Path .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\linux-x64\* -DestinationPath qlt-linux-x86_64.zip
 
     - name: Upload build artifacts
@@ -38,3 +34,11 @@ jobs:
       with:
         name: qlt-dist
         path: qlt*.zip
+
+    - name: Create Draft Release 
+      shell: pwsh
+      run: |
+        Write-Host (Get-Location)
+        New-Item -ItemType "directory" -Path . -Name "artifacts"
+        Move-Item qlt-linux-x86_64.zip artifacts\
+        .\scripts\create_draft_release.ps1 -ArchiveDir (Get-Item "artifacts").FullName
