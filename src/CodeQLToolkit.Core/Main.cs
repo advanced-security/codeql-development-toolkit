@@ -5,6 +5,7 @@ using CodeQLToolkit.Shared.Logging;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using CodeQLToolkit.Shared.Options;
+using CodeQLToolkit.Shared.Utils;
 
 namespace CodeQLDevelopmentLifecycleToolkit.Core
 {
@@ -20,6 +21,16 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
             // Add global option for the root directory
           
             rootCommand.AddGlobalOption(Globals.BasePathOption);
+
+            var versionCommand = new Command("version", "Get the current tool version.");
+            rootCommand.Add(versionCommand);
+
+            versionCommand.SetHandler(() =>
+            {
+                var version = File.ReadAllText(Path.Combine(FileUtils.GetExecutingDirectory().FullName, "ver.txt"));
+
+                Console.Write($"QLT Version: {version}");
+            });
 
 
             // Register the `Query` feature

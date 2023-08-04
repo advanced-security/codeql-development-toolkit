@@ -26,4 +26,10 @@
     <ProjectReference Include="..\CodeQLToolkit.Shared\CodeQLToolkit.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ver.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
