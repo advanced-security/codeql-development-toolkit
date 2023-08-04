@@ -42,3 +42,5 @@ jobs:
         New-Item -ItemType "directory" -Path . -Name "artifacts"
         Move-Item qlt-linux-x86_64.zip artifacts\
         .\scripts\create_draft_release.ps1 -ArchiveDir (Get-Item "artifacts").FullName
+      env:
+        GH_TOKEN: ${{ github.token }}
