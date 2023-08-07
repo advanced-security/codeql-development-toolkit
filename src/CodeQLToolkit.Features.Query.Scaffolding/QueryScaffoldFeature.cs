@@ -7,6 +7,9 @@ namespace CodeQLToolkit.Features.Query.Scaffolding
 {
     public class QueryScaffoldFeature : FeatureBase, IToolkitScaffoldingFeature 
     {
+        public QueryScaffoldFeature() {
+            FeatureName = "Query";
+        }
         public override string[] SupportedLangauges { get => new string[] { "c", "cpp" }; }
 
         public void Register(Command parentCommand)
@@ -54,7 +57,8 @@ namespace CodeQLToolkit.Features.Query.Scaffolding
                         QueryPackScope = queryPackScope,
                         CreateTests = createTests,
                         CreateQueryPack = createQueryPack,
-                        OverwriteExisting = overwriteExisting
+                        OverwriteExisting = overwriteExisting,
+                        FeatureName = FeatureName 
                     }.Run(); 
 
                 }, createQueryPackOption, createTestsOption, queryNameOption, queryLanguageOption, queryPackOption, Globals.BasePathOption, overwriteExistingOption, queryPackScopeOption);

@@ -9,6 +9,8 @@ namespace CodeQLToolkit.Shared.Feature
 {
     abstract public class FeatureBase
     {
+        public string FeatureName { get; set; }
+
         public virtual string[] SupportedLangauges { get; } = { };
         public bool IsSupportedLangauge(string language)
         {

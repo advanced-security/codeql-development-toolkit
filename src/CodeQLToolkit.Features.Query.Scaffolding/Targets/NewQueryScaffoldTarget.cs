@@ -18,7 +18,7 @@ namespace CodeQLToolkit.Features.Query.Scaffolding.Targets
             var query = new Shared.Utils.Query()
             {
                 Language = Language,
-                QueryPack = QueryPack,
+                QueryPackName = QueryPack,
                 Name = Name,
                 Scope = QueryPackScope,
                 Base = Base
@@ -29,7 +29,7 @@ namespace CodeQLToolkit.Features.Query.Scaffolding.Targets
             WriteTemplateIfOverwriteOrNotExists("new-query", query.QueryFilePath, "new query", new
             {
                 language = query.Language,
-                package = query.QueryPack,
+                queryPackName = query.QueryPackName,
                 queryName = query.Name,
                 description = "Replace this text with a description of your query.",
                 qlLanguageImport = query.GetLanguageImportForLangauge()
@@ -39,13 +39,14 @@ namespace CodeQLToolkit.Features.Query.Scaffolding.Targets
             {
                 WriteTemplateIfOverwriteOrNotExists("qlpack-query", query.QueryPackPath, "new query pack", new
                 {
-                    packName = $"{query.Scope}/{query.QueryPack}"
+                    queryPackScope = query.Scope,
+                    queryPackName = query.QueryPackName
                 });
             }
       
             if (CreateTests)
             {                
-                Directory.CreateDirectory(query.QueryTestDir);
+                Directory.CreateDirectory(query.QueryFileTestDir);
 
                 // the source file to use 
                 WriteTemplateIfOverwriteOrNotExists("test", query.QueryFileTestPath, "new query test file", new {});
@@ -54,10 +55,16 @@ namespace CodeQLToolkit.Features.Query.Scaffolding.Targets
                 WriteTemplateIfOverwriteOrNotExists("expected", query.QueryTestExpectedFile, "new query test expected file", new { });
 
                 // the the qlref file 
-                WriteTemplateIfOverwriteOrNotExists("testref", query.QueryFileQLRefPath, "new query test ref", new { });
+                WriteTemplateIfOverwriteOrNotExists("testref", query.QueryFileQLRefPath, "new query test ref", new {
+                    queryName = query.Name
+                });
 
                 // the qlpack file
-                WriteTemplateIfOverwriteOrNotExists("qlpack-test", query.QueryPackTestPath, "new query test pack", new { });
+                WriteTemplateIfOverwriteOrNotExists("qlpack-test", query.QueryPackTestPath, "new query test pack", new {
+                    queryPackDependency = $"{query.Scope}/{query.QueryPackName}",
+                    queryPackScope = query.Scope,
+                    queryPackName  = query.QueryTestPackName
+                });
 
             }
             else

@@ -1,7 +1,8 @@
-name: {{packName}}
+name: {{query_pack_scope}}/{{query_pack_name}}
 version: 0.0.0
 description: Default description
 suites: 
 license: 
+extractor: cpp
 dependencies:
-  codeql/cpp-all: 0.3.5
+  {{query_pack_dependency}}: '*'

@@ -10,7 +10,7 @@ namespace CodeQLToolkit.Shared.Utils
     {
         public string Base { get; set; }
         public string Language { get; set; }
-        public string QueryPack { get; set; }
+        public string QueryPackName { get; set; }
         public string Scope { get; set; }
         public string Name { get; set; }
 
@@ -18,7 +18,7 @@ namespace CodeQLToolkit.Shared.Utils
         {
             get
             {
-                return Path.Combine(Base, Language, QueryPack, "src");
+                return Path.Combine(Base, Language, QueryPackName, "src");
             }
         }
 
@@ -38,7 +38,7 @@ namespace CodeQLToolkit.Shared.Utils
             }
         }
 
-        public String QueryPackPath
+        public string QueryPackPath
         {
             get
             {
@@ -52,7 +52,7 @@ namespace CodeQLToolkit.Shared.Utils
         {
             get
             {
-                return Path.Combine(Base, Language, QueryPack, "test");
+                return Path.Combine(Base, Language, QueryPackName, "test");
             }
         }
 
@@ -80,7 +80,7 @@ namespace CodeQLToolkit.Shared.Utils
             }
         }
 
-        public String QueryPackTestPath
+        public string QueryPackTestPath
         {
             get
             {
@@ -89,12 +89,20 @@ namespace CodeQLToolkit.Shared.Utils
             }
         }
 
-        public String QueryTestExpectedFile
+        public string QueryTestExpectedFile
         {
             get
             {
                 return Path.Combine(QueryFileTestDir, $"{Name}.expected");
 
+            }
+        }
+
+        public string QueryTestPackName
+        {
+            get
+            {
+                return $"{QueryPackName}-tests";
             }
         }
 

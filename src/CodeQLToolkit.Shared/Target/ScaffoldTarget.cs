@@ -35,11 +35,11 @@ namespace CodeQLToolkit.Shared.Target
 
         public void WriteTemplateIfOverwriteOrNotExists(string template, string path, string description, object model)
         {
-            if (!File.Exists(template) || OverwriteExisting)
+            if (!File.Exists(path) || OverwriteExisting)
             {
                 Log<ScaffoldTarget>.G().LogInformation($"Writing new {description} in {path}.");
 
-                var t = new TemplateUtil().TemplateFromFile(GetTemplatePathForLanguage("new-query"));
+                var t = new TemplateUtil().TemplateFromFile(GetTemplatePathForLanguage(template));
 
                 var rendered = t.Render(model);
 

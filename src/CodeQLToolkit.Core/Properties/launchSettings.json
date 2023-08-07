@@ -2,7 +2,7 @@
   "profiles": {
     "CodeQLToolkit.Core": {
       "commandName": "Project",
-      "commandLineArgs": "add --verbose 100"
+      "commandLineArgs": " --base C:\\QLPACKTEST query generate new-query --query-name TestQuery --language cpp  --pack stuff --scope qlt"
     }
   }
 }
