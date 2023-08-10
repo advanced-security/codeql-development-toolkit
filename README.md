@@ -16,5 +16,15 @@ Below is a guide showing you how to perform the most common tasks with the CodeQ
 
 You can install QLT by grabbing a release on the releases page. We currently ship builds for Linux x86_64. There are no dependencies to install. Just unpack the bundle and run the binary `qlt` in the unpacked directory. 
 
+# General Command Structure 
+
+QLT is organized groups of functionality called "Features." Within those features, the functionality of that feature is split into 4 verbs that describe the functionality provided:
+
+
+Which In the following sections you will find documentation of those features as well as examples of their most common usages. 
+
+# Query Feature 
+
+
 # Architecture 
 

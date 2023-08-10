@@ -1,4 +1,5 @@
 ﻿using CodeQLToolkit.Shared.Template;
+using CodeQLToolkit.Shared.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +24,7 @@ namespace CodeQLToolkit.Shared.Feature
 
         public void DieWithError(string message)
         {
-            Console.Error.WriteLine(message);
-            Environment.Exit(1);
+            ProcessUtils.DieWithError(message);
         }
     }
 }

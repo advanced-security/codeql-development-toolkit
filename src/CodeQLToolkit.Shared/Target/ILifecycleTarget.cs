@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace CodeQLToolkit.Shared.Target
 {
-    public abstract class ITarget
+    public abstract class ILifecycleTarget : ITarget
     {
-        public string Base { get; set; }
-        public abstract void Run();
     }
 }

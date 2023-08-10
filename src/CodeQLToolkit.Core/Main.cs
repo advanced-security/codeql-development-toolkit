@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System.IO;
 using CodeQLToolkit.Shared.Options;
 using CodeQLToolkit.Shared.Utils;
+using CodeQLToolkit.Features.CodeQL;
 
 namespace CodeQLDevelopmentLifecycleToolkit.Core
 {
@@ -35,6 +36,7 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
 
             // Register the `Query` feature
             QueryFeatureMain.Instance.Register(rootCommand);
+            CodeQLFeatureMain.Instance.Register(rootCommand);
 
             await rootCommand.InvokeAsync(args);
 

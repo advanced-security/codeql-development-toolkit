@@ -66,7 +66,7 @@ by `.Features` modules and by the `.Core` module.
 The `qlt` command takes as a second argument a string with a prefix which is one of:
 - `command` (run)
 - `scaffold` (generate)
-- `lifecycle` (manage)
+- `lifecycle` (manage/set/get/upgrade/register/init)
 - `data` (show)
 
 Examples:

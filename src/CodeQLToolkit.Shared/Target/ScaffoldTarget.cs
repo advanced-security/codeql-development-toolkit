@@ -6,13 +6,13 @@ namespace CodeQLToolkit.Shared.Target
 {
     public abstract class ScaffoldTarget : ITarget
     {
-        public string Base { get; set; }
+       
         public string Name { get; set; }
         public string Language { get; set; }
         public bool OverwriteExisting { get; set; }
         public string FeatureName { get; set; }
 
-        public abstract void Run();
+       
 
         public string GetTemplatePathForLanguage(string templateName)
         {
@@ -50,5 +50,6 @@ namespace CodeQLToolkit.Shared.Target
                 Log<ScaffoldTarget>.G().LogInformation($"Refusing to overwrite existing {description} in {path}");
             }
         }
+
     }
 }
