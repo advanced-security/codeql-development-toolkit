@@ -68,5 +68,9 @@ namespace CodeQLToolkit.Features.CodeQL.Lifecycle
 
         }
 
+        public int Run()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

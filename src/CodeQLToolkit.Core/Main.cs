@@ -7,6 +7,7 @@ using System.IO;
 using CodeQLToolkit.Shared.Options;
 using CodeQLToolkit.Shared.Utils;
 using CodeQLToolkit.Features.CodeQL;
+using CodeQLToolkit.Features.Test;
 
 namespace CodeQLDevelopmentLifecycleToolkit.Core
 {
@@ -35,8 +36,11 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
 
             // Register the `Query` feature
             QueryFeatureMain.Instance.Register(rootCommand);
+            // Register the `CodeQL` feature
             CodeQLFeatureMain.Instance.Register(rootCommand);
-            
+            // Register the `Test` feature
+            TestFeatureMain.Instance.Register(rootCommand);
+
             await rootCommand.InvokeAsync(args);
 
             return 0;            
