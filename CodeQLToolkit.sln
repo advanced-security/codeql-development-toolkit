@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{05645E0E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3038EA53-8F37-4B35-AA50-FDFDDFF0F264}"
 	ProjectSection(SolutionItems) = preProject
+		developer_guide.md = developer_guide.md
 		docs\README.md = docs\README.md
 	EndProjectSection
 EndProject

@@ -13,30 +13,33 @@ namespace CodeQLToolkit.Shared.Types
     {
         public static T FindTargetForAutomationType<T>(AutomationType automationType)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            var types = assembly.GetTypes();
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-            foreach (var type in types)
-            {
-                // restrict this to just things that are subtypes
-                // of targets 
-                if (!type.IsSubclassOf(typeof(ITarget)) || !type.IsSubclassOf(typeof(T)))
+            foreach (var assembly in assemblies)
+            {                
+                var types = assembly.GetTypes();
+
+                foreach (var type in types)
                 {
-                    continue; 
-                }
-
-                var attributes = type.GetCustomAttributes(typeof(AutomationType), true);
-
-                // match the first thing with the automation type attribute 
-                foreach(var attribute in attributes)
-                {
-                    if(((AutomationTypeAttribute)attribute).AutomationType == automationType)
+                    // restrict this to just things that are subtypes
+                    // of targets 
+                    if (!type.IsSubclassOf(typeof(ITarget)) || !type.IsSubclassOf(typeof(T)))
                     {
-                        return (T)Activator.CreateInstance(type);
+                       continue;
+                    }
+
+                    var attributes = type.GetCustomAttributes(typeof(AutomationTypeAttribute), true);
+
+                    // match the first thing with the automation type attribute 
+                    foreach (var attribute in attributes)
+                    {
+                        if (((AutomationTypeAttribute)attribute).AutomationType == automationType)
+                        {
+                            return (T)Activator.CreateInstance(type);
+                        }
                     }
                 }
             }
-
             throw new NotImplementedException();
         }
     }

@@ -1,6 +1,7 @@
 ﻿using CodeQLToolkit.Features.Test.Lifecycle.Targets;
 using CodeQLToolkit.Features.Test.Lifecycle.Targets.Actions;
 using System.CommandLine;
+using System.Reflection;
 
 namespace CodeQLToolkit.Features.Test.Lifecycle
 {
@@ -19,12 +20,14 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
 
             var initCommand = new Command("init", "Initialize testing in this repository.");
             parentCommand.Add(initCommand);
-
-
             
             initCommand.SetHandler((basePath, automationType) =>
             {
                 Log<TestLifecycleFeature>.G().LogInformation("Executing init command...");
+
+
+                var attribute = typeof(InitLifecycleTarget).GetCustomAttribute(typeof(AutomationTypeAttribute));
+
 
                 // dispatch at runtime to the correct automation type
                 var featureTarget = AutomationFeatureFinder.FindTargetForAutomationType<BaseLifecycleTarget>(AutomationTypeHelper.AutomationTypeFromString(automationType));

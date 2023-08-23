@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 namespace CodeQLToolkit.Features.Test.Lifecycle.Targets.Actions
 {
     [AutomationType(AutomationType.ACTIONS)]
-    public class InitLifecycleTarget : ILifecycleTarget
+    public class InitLifecycleTarget : BaseLifecycleTarget
     {
         public override void Run()
         {
             Log<InitLifecycleTarget>.G().LogInformation("Running init command...");
-
-
         }
     }
 }
