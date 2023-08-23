@@ -6,7 +6,7 @@ using CodeQLToolkit.Features.CodeQL.Lifecycle;
 
 namespace CodeQLToolkit.Features.CodeQL
 {
-    public class CodeQLFeatureMain : IToolkitFeature
+        public class CodeQLFeatureMain : IToolkitFeature
     {
         readonly CodeQLLifecycleFeature lifecycleFeature;
         readonly static CodeQLFeatureMain instance;

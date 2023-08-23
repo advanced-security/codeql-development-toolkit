@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CodeQLToolkit.Shared.Feature
 {
-    public interface IToolkitLifecycleFeature
+    public interface IToolkitLifecycleFeature : IToolkitFeature
     {
     }
 }

@@ -10,5 +10,13 @@ namespace CodeQLToolkit.Shared.Target
     {
         public string Base { get; set; }
         public abstract void Run();
+
+        public static ITarget ForCurrentOrchestration()
+        {
+
+        }
+
+        public static ITarget ForOrchestration(Orchestration orchestration) 
+        
     }
 }

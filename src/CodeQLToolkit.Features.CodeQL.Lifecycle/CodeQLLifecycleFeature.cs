@@ -1,6 +1,4 @@
 ﻿using CodeQLToolkit.Features.CodeQL.Lifecycle.Targets;
-using CodeQLToolkit.Shared.Feature;
-using CodeQLToolkit.Shared.Options;
 using System.CommandLine;
 
 namespace CodeQLToolkit.Features.CodeQL.Lifecycle

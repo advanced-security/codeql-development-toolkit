@@ -89,10 +89,6 @@ Explicit Prefix:
 - `qlt query scaffold:new-query <query-name>`
 - `qlt codeql lifecycle:version `
 - `qlt query data:show all`
-
-
-
-
 ------------
 
 Do an example:
@@ -119,3 +115,10 @@ the top level commands
 	- `package name`
 		- `src` `scope/package-name`
 		- `test` `scope/package-name-test`
+
+
+# Feature Development Notes
+
+## Test Feature
+
+The test feature is responsible for creating the necessary scaffolding for 

@@ -19,9 +19,9 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
             
             var rootCommand = new RootCommand();
 
-            // Add global option for the root directory
-          
+            // Add global option for the root directory          
             rootCommand.AddGlobalOption(Globals.BasePathOption);
+            rootCommand.AddGlobalOption(Globals.AutomationTypeOption);
 
             var versionCommand = new Command("version", "Get the current tool version.");
             rootCommand.Add(versionCommand);
@@ -33,11 +33,10 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
                 Console.Write($"QLT Version: {version}");
             });
 
-
             // Register the `Query` feature
             QueryFeatureMain.Instance.Register(rootCommand);
             CodeQLFeatureMain.Instance.Register(rootCommand);
-
+            
             await rootCommand.InvokeAsync(args);
 
             return 0;            
