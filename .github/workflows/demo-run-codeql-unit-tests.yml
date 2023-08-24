@@ -47,6 +47,8 @@ jobs:
         run: |
           API_URL=https://api.github.com/repos/github/codeql-development-lifecycle-toolkit/contents/scripts/install-latest.sh
           gh api $API_URL -H "Accept: application/vnd.github.raw" | bash
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Cache CodeQL
         id: cache-codeql
