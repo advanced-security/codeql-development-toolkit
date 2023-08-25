@@ -1,4 +1,4 @@
-name: ⚙️ CodeQL Check Examples
+﻿name: ⚙️ CodeQL Check Examples
 
 on:
   push:
@@ -10,8 +10,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  create-unit-test-matrix:
-    name: Create CodeQL Unit Test Matrix
+  prepare-unit-test-matrix:
+    name: Prepare CodeQL unit test matrix
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.export-unit-test-matrix.outputs.matrix }}
@@ -22,26 +22,27 @@ jobs:
       - name: Export unit test matrix
         id: export-unit-test-matrix
         run: |
-          echo "matrix=$(cat supported_codeql_configs.json | jq --compact-output '.supported_environment | map([.+{os: "ubuntu-20.04-xl", codeql_standard_library_ident : .codeql_standard_library | sub("\/"; "_")}]) | flatten | {include: .}')" >> $GITHUB_OUTPUT
+          echo "Merging Result:"
+          echo "::set-output name=matrix::$(
+            cat supported_codeql_configs.json | jq --compact-output '.supported_environment | map([.+{os: "ubuntu-20.04-xl", codeql_standard_library_ident : .codeql_standard_library | sub("\/"; "_")}]) | flatten | {include: .}')"
 
   run-test-suites:
-    name: Run Unit Tests
-    needs: create-unit-test-matrix
+    name: Run unit tests
+    needs: prepare-unit-test-matrix
 
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.create-unit-test-matrix.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.prepare-unit-test-matrix.outputs.matrix) }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install QLT
-        uses: ./.github/actions/install-qlt
+      - name: Install Python
+        uses: actions/setup-python@v4
         with:
-          qlt-version: 'latest'
-          add-to-path: true
+          python-version: '3.9'
 
       - name: Cache CodeQL
         id: cache-codeql
