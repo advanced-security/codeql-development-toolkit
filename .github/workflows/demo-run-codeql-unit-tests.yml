@@ -41,6 +41,7 @@ jobs:
         uses: ./.github/actions/install-qlt
         with:
           qlt-version: 'latest'
+          qlt-home: ${{ github.workspace }}/qlt_home
           add-to-path: true
 
       - name: Cache CodeQL
