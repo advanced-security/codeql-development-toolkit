@@ -39,33 +39,37 @@ jobs:
 
 
       - name: Install QLT
+        id: install-qlt
         uses: ./.github/actions/install-qlt
         with:
           qlt-version: 'latest'
           add-to-path: true
       
       - name: Install CodeQL
-        if: steps.cache-codeql.outputs.cache-hit != 'true'
+        id: install-codeql
         uses: ./.github/actions/install-codeql
         with:
           codeql-cli-version: ${{ matrix.codeql_cli }}
           codeql-stdlib-version: ${{ matrix.codeql_standard_library }}
-          codeql-home: ${{ github.workspace }}/codeql_home
-          add-to-path: false
+          add-to-path: true
 
       - name: Verify Versions of Tooling
         shell: bash
         run: |
-          echo $PATH 
+          echo "PATH: $PATH"
+
+          echo "CodeQL Home: ${{ steps.install-codeql.outputs.codeql-home }}"
           echo -e "Checking CodeQL Version:"
-          ${{ github.workspace }}/codeql_home/codeql/codeql --version 
+          codeql --version 
+          
           echo -e "Checking QLT Version:"
+          echo "QLT Home: ${{ steps.install-qlt.outputs.qlt-home }}"
           qlt version
 
       - name: Install QL Packs
         shell: bash
         run: |
-          find . -name 'qlpack.yml' | xargs -L1 /opt/codeql_home/codeql/codeql pack install
+          find . -name 'qlpack.yml' | xargs -L1 codeql pack install
 
       - name: Run test suites
         id: run-test-suites
