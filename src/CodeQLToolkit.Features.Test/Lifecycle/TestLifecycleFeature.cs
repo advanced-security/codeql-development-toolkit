@@ -25,11 +25,8 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
             {
                 Log<TestLifecycleFeature>.G().LogInformation("Executing init command...");
 
-
-                var attribute = typeof(InitLifecycleTarget).GetCustomAttribute(typeof(AutomationTypeAttribute));
-
-
                 // dispatch at runtime to the correct automation type
+
                 var featureTarget = AutomationFeatureFinder.FindTargetForAutomationType<BaseLifecycleTarget>(AutomationTypeHelper.AutomationTypeFromString(automationType));
 
                 featureTarget.Base = basePath;

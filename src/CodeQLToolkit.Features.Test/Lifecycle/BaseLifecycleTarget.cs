@@ -8,8 +8,5 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
 {
     abstract public class BaseLifecycleTarget : ILifecycleTarget
     {
-        public string Base { get; set; }
-
-
     }
 }
