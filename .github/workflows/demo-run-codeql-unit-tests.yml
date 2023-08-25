@@ -61,12 +61,6 @@ jobs:
           codeql-home: ${{ github.workspace }}/codeql_home
           add-to-path: true
 
-      - name: Install QL Packs
-        shell: bash
-        run: |
-          find docs/ -name 'qlpack.yml' | xargs -L1 ${{ github.workspace }}/codeql_home/codeql/codeql pack install
-
-
       - name: Verify Versions of Tooling
         shell: bash
         run: |
@@ -75,6 +69,10 @@ jobs:
           echo -e "Checking QLT Version:"
           qlt version
 
+      - name: Install QL Packs
+        shell: bash
+        run: |
+          find docs/ -name 'qlpack.yml' | xargs -L1 ${{ github.workspace }}/codeql_home/codeql/codeql pack install
 
       - name: Run test suites
         id: run-test-suites
