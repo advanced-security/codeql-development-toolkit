@@ -32,7 +32,6 @@ jobs:
         chmod +x ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/qlt
         chmod +r -R ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64
 
-        Compress-Archive -Path .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\linux-x64\* -DestinationPath qlt-linux-x86_64.zip
 
     - name: Create Build Bundle (Linux)
       shell: pwsh
