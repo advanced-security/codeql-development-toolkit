@@ -33,7 +33,7 @@ runs:
         QLT_HOME: ${{ inputs.qlt-home }}
       shell: bash
       run: |
-        echo "Determining QLT release for $RUNNER_OS"
+        echo -e "\e[0;32m[QLT]\e[0m Determining QLT release for $RUNNER_OS"
         case $RUNNER_OS in
           "Linux")
             RELEASE_PATTERN="qlt-linux-x86_64.zip"
@@ -43,21 +43,21 @@ runs:
             exit 1
             ;;
         esac
-        echo "Selected $RELEASE_PATTERN"
+        echo -e "\e[0;32m[QLT]\e[0m Selected $RELEASE_PATTERN"
 
         if [ "$QLT_HOME" == "" ]
         then
-          echo "Creating temporary QLT home"
+          echo -e "\e[0;32m[QLT]\e[0m Creating temporary QLT home"
           QLT_HOME=$(mktemp -d -p $RUNNER_TEMP qlt-home-XXXXXXXXXX)
         else
-          echo "Creating CodeQL home at $QLT_HOME"
+          echo -e "\e[0;32m[QLT]\e[0m Creating CodeQL home at $QLT_HOME"
           mkdir -p $QLT_HOME
         fi
 
-        echo "Changing directory to $QLT_HOME"
+        echo -e "\e[0;32m[QLT]\e[0m Changing directory to $QLT_HOME"
         pushd $QLT_HOME
 
-        echo "Downloading QLT version $QLT_VERSION"
+        echo -e "\e[0;32m[QLT]\e[0m Downloading QLT version $QLT_VERSION"
         if [ "$QLT_VERSION" == "latest" ]
         then
           # download the actual bundle 
@@ -65,17 +65,17 @@ runs:
         else
           gh release download "$QLT_VERSION" -R github/codeql-development-lifecycle-toolkit --pattern "$RELEASE_PATTERN"
         fi
-        echo "Unpacking QLT"
+        echo -e "\e[0;32m[QLT]\e[0m Unpacking QLT"
         unzip -q $RELEASE_PATTERN
 
         if [ "$ADD_TO_PATH" == "true" ]
         then
-          echo "Adding QLT '$(pwd)/qlt' to system path"
+          echo -e "\e[0;32m[QLT]\e[0m Adding QLT '$(pwd)/qlt' to system path"
           echo "$(pwd)/qlt" >> $GITHUB_PATH
         fi
 
-        echo "Setting output parameter qlt-home to $(pwd)"
+        echo -e "\e[0;32m[QLT]\e[0m Setting output parameter qlt-home to $(pwd)"
         echo "qlt-home=$(pwd)" >> $GITHUB_OUTPUT
 
         popd
-        echo "Done."
+        echo -e "\e[0;32m[QLT]\e[0m Done."
