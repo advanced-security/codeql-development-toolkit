@@ -68,13 +68,10 @@ runs:
         echo -e "\e[0;32m[QLT]\e[0m Unpacking QLT"
         unzip $RELEASE_PATTERN
         
-        find . -name 'qlt'
-
         if [ "$ADD_TO_PATH" == "true" ]
         then
           echo -e "\e[0;32m[QLT]\e[0m Adding QLT '$(pwd)/qlt' to system path"
-          #echo "$(pwd)/qlt" >> $GITHUB_PATH
-          echo "/home/runner/work/codeql-development-lifecycle-toolkit/codeql-development-lifecycle-toolkit/qlt_home/qlt" >> $GITHUB_PATH
+          echo "$(pwd)" >> $GITHUB_PATH
         fi
 
         echo -e "\e[0;32m[QLT]\e[0m Setting output parameter qlt-home to $(pwd)"
