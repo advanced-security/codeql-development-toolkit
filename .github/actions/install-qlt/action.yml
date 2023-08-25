@@ -66,7 +66,7 @@ runs:
           gh release download "$QLT_VERSION" -R github/codeql-development-lifecycle-toolkit --pattern "$RELEASE_PATTERN"
         fi
         echo -e "\e[0;32m[QLT]\e[0m Unpacking QLT"
-        unzip -q $RELEASE_PATTERN
+        unzip $RELEASE_PATTERN
 
         if [ "$ADD_TO_PATH" == "true" ]
         then
