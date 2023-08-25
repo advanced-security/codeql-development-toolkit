@@ -23,20 +23,23 @@ jobs:
     #   run: dotnet test --no-build --verbosity normal
     
     # create archive in \src\CodeQLToolkit.Core\bin\Release\net6.0\publish\linux-x64
-    - name: Prepare Build Bundle (Linux)
+    - name: Build Bundle (Linux)
       shell: bash
       run: |
         echo "Current Directory $(pwd)"
+        # build the project 
         dotnet publish ./src/CodeQLToolkit.Core/CodeQLToolkit.Core.csproj /p:PublishProfile=./src/CodeQLToolkit.Core/Properties/PublishProfiles/Linux-Profile.pubxml
         cp ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/CodeQLToolkit.Core ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/qlt
+        
+        # repair permissions
         chmod +x ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/qlt
-        chmod +r -R ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64
-
-
-    - name: Create Build Bundle (Linux)
-      shell: pwsh
-      run: |
-        Compress-Archive -Path .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\linux-x64\* -DestinationPath qlt-linux-x86_64.zip
+        chmod +r -R ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64        
+        
+        # create bundle 
+        ARCHIVE="$(pwd)/qlt-linux-x86_64.zip"        
+        pushd ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64
+        zip -r $ARCHIVE .
+        popd
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
