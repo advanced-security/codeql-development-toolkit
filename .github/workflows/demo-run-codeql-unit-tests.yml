@@ -59,12 +59,22 @@ jobs:
           codeql-cli-version: ${{ matrix.codeql_cli }}
           codeql-stdlib-version: ${{ matrix.codeql_standard_library }}
           codeql-home: ${{ github.workspace }}/codeql_home
-          add-to-path: false
+          add-to-path: true
 
       - name: Install QL Packs
         shell: bash
         run: |
           find docs/ -name 'qlpack.yml' | xargs -L1 ${{ github.workspace }}/codeql_home/codeql/codeql pack install
+
+
+      - name: Verify Versions of Tooling
+        shell: bash
+        run: |
+          echo -e "Checking CodeQL Version:"
+          codeql --version 
+          echo -e "Checking QLT Version:"
+          qlt version
+
 
       - name: Run test suites
         id: run-test-suites
