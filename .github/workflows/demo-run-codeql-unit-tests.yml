@@ -65,6 +65,8 @@ jobs:
       - name: Verify Versions of Tooling
         shell: bash
         run: |
+          find . -name 'qlt'
+          find . 
           echo -e "Checking CodeQL Version:"
           codeql --version 
           echo -e "Checking QLT Version:"
