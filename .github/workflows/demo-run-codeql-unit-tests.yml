@@ -64,7 +64,7 @@ jobs:
       - name: Install QL Packs
         shell: bash
         run: |
-          find docs/ -name 'qlpack.yml' | xargs -L1 ${{ github.workspace }}/codeql_home/codeql/codeql pack install
+          find . -name 'qlpack.yml' | xargs -L1 ${{ github.workspace }}/codeql_home/codeql/codeql pack install
 
       - name: Run test suites
         id: run-test-suites
