@@ -67,6 +67,8 @@ runs:
         fi
         echo -e "\e[0;32m[QLT]\e[0m Unpacking QLT"
         unzip $RELEASE_PATTERN
+        find . -name 'qlt'
+        chmod +x qlt 
 
         if [ "$ADD_TO_PATH" == "true" ]
         then
