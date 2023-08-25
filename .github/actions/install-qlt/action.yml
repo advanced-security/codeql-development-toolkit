@@ -4,7 +4,7 @@ description: |
 inputs:
   qlt-version:
     description: |
-      The version of the CodeQL CLI to be downloaded.
+      The version of QLT to be downloaded.
     required: false
     default: 'latest'
 
@@ -61,9 +61,9 @@ runs:
         if [ "$QLT_VERSION" == "latest" ]
         then
           # download the actual bundle 
-          gh release download -R github/codeql-development-lifecycle-toolkit --pattern '$RELEASE_PATTERN' 
+          gh release download -R github/codeql-development-lifecycle-toolkit --pattern "$RELEASE_PATTERN"
         else
-          gh release download "$QLT_VERSION" -R github/codeql-development-lifecycle-toolkit --pattern '$RELEASE_PATTERN' 
+          gh release download "$QLT_VERSION" -R github/codeql-development-lifecycle-toolkit --pattern "$RELEASE_PATTERN"
         fi
         echo "::debug::Unpacking QLT"
         unzip -q $RELEASE_PATTERN
