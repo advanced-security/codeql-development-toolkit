@@ -37,13 +37,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install QLT
-        uses: ./.github/actions/install-qlt
-        with:
-          qlt-version: 'latest'
-          qlt-home: ${{ github.workspace }}/qlt_home
-          add-to-path: true
-
+      
       - name: Cache CodeQL
         id: cache-codeql
         uses: actions/cache@v2.1.3
@@ -61,6 +55,14 @@ jobs:
           codeql-stdlib-version: ${{ matrix.codeql_standard_library }}
           codeql-home: ${{ github.workspace }}/codeql_home
           add-to-path: true
+
+      - name: Install QLT
+        uses: ./.github/actions/install-qlt
+        with:
+          qlt-version: 'latest'
+          qlt-home: ${{ github.workspace }}/qlt_home
+          add-to-path: true
+
 
       - name: Verify Versions of Tooling
         shell: bash
