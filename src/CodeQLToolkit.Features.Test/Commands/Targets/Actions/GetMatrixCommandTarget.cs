@@ -59,7 +59,16 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
             };
 
             var json = JsonSerializer.Serialize(data);
-            Console.WriteLine(json);
+
+            var matrixVariable = $"matrix={json}";
+
+            string envFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT");
+
+            Log<TestCommandFeature>.G().LogInformation($"Writing matrix output {matrixVariable} to {envFile}");
+
+            File.AppendAllText(envFile, matrixVariable );
+
+            Log<TestCommandFeature>.G().LogInformation($"Done.");
 
         }
     }

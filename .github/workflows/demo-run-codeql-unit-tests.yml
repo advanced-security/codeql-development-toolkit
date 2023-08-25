@@ -1,4 +1,4 @@
-name: ⚙️ CodeQL Check Examples
+name: ⚙️ CodeQL - Run Unit Tests
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
       - name: Export unit test matrix
         id: export-unit-test-matrix
         run: |
-          echo "matrix=$(qlt test run get-matrix --os-version ubuntu-latest)" >> $GITHUB_OUTPUT
+          qlt test run get-matrix --os-version ubuntu-latest
 
   run-test-suites:
     name: Run Unit Tests
