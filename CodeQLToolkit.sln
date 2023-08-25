@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3038EA53-8
 		docs\README.md = docs\README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Features.Query.Scaffolding", "src\CodeQLToolkit.Features.Query.Scaffolding\CodeQLToolkit.Features.Query.Scaffolding.csproj", "{4E4FB227-CC8A-495F-9999-2060F2D38F73}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Features.Query", "src\CodeQLToolkit.Features.Query\CodeQLToolkit.Features.Query.csproj", "{EF2DD68B-9320-4450-8803-52FD2BB1E69D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Core", "src\CodeQLToolkit.Core\CodeQLToolkit.Core.csproj", "{FFC777F2-B98B-4132-A3B8-896C7F8CB763}"
@@ -47,10 +45,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4E4FB227-CC8A-495F-9999-2060F2D38F73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E4FB227-CC8A-495F-9999-2060F2D38F73}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E4FB227-CC8A-495F-9999-2060F2D38F73}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E4FB227-CC8A-495F-9999-2060F2D38F73}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EF2DD68B-9320-4450-8803-52FD2BB1E69D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EF2DD68B-9320-4450-8803-52FD2BB1E69D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF2DD68B-9320-4450-8803-52FD2BB1E69D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -85,7 +79,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{15D5DFB3-16CE-460F-B361-D6FFB8498508} = {667B480C-D805-4A9C-AC1F-D9FCCF3DB57C}
-		{4E4FB227-CC8A-495F-9999-2060F2D38F73} = {15D5DFB3-16CE-460F-B361-D6FFB8498508}
 		{EF2DD68B-9320-4450-8803-52FD2BB1E69D} = {15D5DFB3-16CE-460F-B361-D6FFB8498508}
 		{FFC777F2-B98B-4132-A3B8-896C7F8CB763} = {667B480C-D805-4A9C-AC1F-D9FCCF3DB57C}
 		{4C5C87E8-46E8-41D3-9CF9-F77148C432AF} = {667B480C-D805-4A9C-AC1F-D9FCCF3DB57C}

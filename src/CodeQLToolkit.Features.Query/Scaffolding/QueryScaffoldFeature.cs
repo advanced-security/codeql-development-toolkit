@@ -14,6 +14,8 @@ namespace CodeQLToolkit.Features.Query.Scaffolding
 
         public void Register(Command parentCommand)
         {
+            Log<QueryScaffoldFeature>.G().LogInformation("Registering scaffolding submodule.");
+
             var scaffoldCommand = new Command("generate", "Functions pertaining to generating query-related artifacts.");
             parentCommand.Add(scaffoldCommand);
 

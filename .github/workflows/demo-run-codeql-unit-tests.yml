@@ -19,6 +19,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Install QLT
+        id: install-qlt
+        uses: ./.github/actions/install-qlt
+        with:
+          qlt-version: 'latest'
+          add-to-path: true
+
       - name: Export unit test matrix
         id: export-unit-test-matrix
         run: |
@@ -36,7 +43,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
 
       - name: Install QLT
         id: install-qlt
@@ -56,8 +62,6 @@ jobs:
       - name: Verify Versions of Tooling
         shell: bash
         run: |
-          echo "PATH: $PATH"
-
           echo "CodeQL Home: ${{ steps.install-codeql.outputs.codeql-home }}"
           echo -e "Checking CodeQL Version:"
           codeql --version 
@@ -69,7 +73,7 @@ jobs:
       - name: Install QL Packs
         shell: bash
         run: |
-          find . -name 'qlpack.yml' | xargs -L1 codeql pack install
+          qlt query run install-packs
 
       - name: Run test suites
         id: run-test-suites

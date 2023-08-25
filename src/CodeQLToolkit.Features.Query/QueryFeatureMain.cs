@@ -1,4 +1,5 @@
-﻿using CodeQLToolkit.Features.Query.Scaffolding;
+﻿using CodeQLToolkit.Features.Query.Commands;
+using CodeQLToolkit.Features.Query.Scaffolding;
 using CodeQLToolkit.Shared.Feature;
 using CodeQLToolkit.Shared.Logging;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,8 @@ namespace CodeQLDevelopmentLifecycleToolkit.Features.Query
     public class QueryFeatureMain : IToolkitFeature
     {
         readonly QueryScaffoldFeature scaffoldFeature;
+        readonly QueryCommandFeature commandFeature;
+
         readonly static QueryFeatureMain instance;
 
         static QueryFeatureMain() { 
@@ -18,6 +21,7 @@ namespace CodeQLDevelopmentLifecycleToolkit.Features.Query
         private QueryFeatureMain()
         {
             scaffoldFeature = new QueryScaffoldFeature();
+            commandFeature = new QueryCommandFeature();
         }
 
         public static QueryFeatureMain Instance { get { return instance; } }
@@ -34,8 +38,9 @@ namespace CodeQLDevelopmentLifecycleToolkit.Features.Query
         {
             var queryCommand = new Command("query", "Use the features related to query creation and execution.");
             parentCommand.Add(queryCommand);
-            Log<QueryFeatureMain>.G().LogInformation("Registering scaffolding submodule.");
+
             scaffoldFeature.Register(queryCommand);
+            commandFeature.Register(queryCommand);
             
         }
     }

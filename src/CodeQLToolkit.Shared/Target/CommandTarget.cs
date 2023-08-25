@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodeQLToolkit.Shared.Feature
+namespace CodeQLToolkit.Shared.Target
 {
-    public interface IToolkitCommandFeature : IToolkitFeature
+    public abstract class CommandTarget : ITarget
     {
     }
 }

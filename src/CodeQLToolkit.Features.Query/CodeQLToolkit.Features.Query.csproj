@@ -1,10 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Templates\Query\cpp\new-dataflow-query.liquid" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Templates\Query\cpp\new-dataflow-query.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
@@ -14,7 +24,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CodeQLToolkit.Features.Query.Scaffolding\CodeQLToolkit.Features.Query.Scaffolding.csproj" />
+    <ProjectReference Include="..\CodeQLToolkit.Shared\CodeQLToolkit.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Templates\Query\cpp\expected.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Query\cpp\new-query.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Query\cpp\qlpack-query.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Query\cpp\qlpack-test.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Query\cpp\test.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Query\cpp\testref.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
