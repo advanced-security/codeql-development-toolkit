@@ -103,7 +103,7 @@ runs:
         fi
 
         echo "::debug::Setting output parameter codeql-home to $(pwd)"
-        echo "::set-output name=codeql-home::$(pwd)"
+        echo "codeql-home=$(pwd)" >> $GITHUB_OUTPUT
 
         popd
         echo "::debug::Done."
