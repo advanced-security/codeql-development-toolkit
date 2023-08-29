@@ -1,4 +1,5 @@
-name: ⚙️ CodeQL - Run Unit Tests
+name: ⚙️ CodeQL - Run Unit Tests (cpp)
+
 
 on:
   push:
@@ -29,7 +30,7 @@ jobs:
       - name: Export unit test matrix
         id: export-unit-test-matrix
         run: |
-          qlt test run get-matrix --os-version ubuntu-latest
+          qlt test run get-matrix --os-version ubuntu-latest --base example/
 
   run-test-suites:
     name: Run Unit Tests
@@ -73,84 +74,28 @@ jobs:
       - name: Install QL Packs
         shell: bash
         run: |
-          qlt query run install-packs
+          qlt query run install-packs --base example/
 
       - name: Run test suites
         id: run-test-suites
         env:
           RUNNER_OS: ${{ runner.os }}
-          RUNNER_TEMP: ${{ runner.temp }}
           CODEQL_CLI: ${{ matrix.codeql_cli }}
           CODEQL_STDLIB: ${{ matrix.codeql_standard_library }}
           CODEQL_STDLIB_IDENT: ${{matrix.codeql_standard_library_ident}}
-          CODEQL_HOME: ${{ github.workspace }}/codeql_home
-        shell: python
+          RUNNER_TMP: ${{ runner.temp }}
+        shell: bash
         run: |
-          import os
-          import sys
-          import subprocess
-          import re
-          import json
-          from pathlib import Path
+          qlt run test unit-tests \ 
+            --num-threads 4 \
+            --language cpp \
+            --runner-os $RUNNER_OS \
+            --cli-version $CODEQL_CLI \
+            --stdlib-ident $CODEQL_STDLIB_IDENT \
+            --work-dir $RUNNER_TMP \
+            --base example/
 
-
-          print("Executing Unit Tests...")
-
-          def print_error(fmt, *args):
-            print(f"::error::{fmt}", *args)
             
-          def print_error_and_fail(fmt, *args):
-            print_error(fmt, args)
-            sys.exit(1)
-
-          cli_version = os.environ['CODEQL_CLI']
-          stdlib_ref = os.environ['CODEQL_STDLIB']
-          stdlib_ref_ident = os.environ['CODEQL_STDLIB_IDENT']
-          workspace = os.environ['GITHUB_WORKSPACE']
-          runner_os = os.environ['RUNNER_OS']
-          runner_temp = os.environ['RUNNER_TEMP']
-          codeql_home = os.environ['CODEQL_HOME']
-          codeql_bin = os.path.join(codeql_home, 'codeql', 'codeql')
-
-
-          print(f"Working in workspace root: {workspace}")
-
-          language_root = Path(workspace, 'docs')
-          print(f"Setting search path to {language_root}...")
-
-          test_roots = list(map(str, language_root.glob('**/tests')))
-          for test_root in test_roots:
-            print(f"Executing tests found (recursively) in the directory '{test_root}'")
-
-          files_to_close = []
-          try:
-            # XL runners have 8 cores, so split the tests into 8 "slices", and run one per thread
-            num_slices = 8
-            procs = []
-
-            for slice in range(1, num_slices+1):
-              test_report_path = os.path.join(runner_temp, f"test_report_{runner_os}_{cli_version}_{stdlib_ref_ident}_slice_{slice}_of_{num_slices}.json")
-              os.makedirs(os.path.dirname(test_report_path), exist_ok=True)
-              test_report_file = open(test_report_path, 'w')
-              files_to_close.append(test_report_file)
-              procs.append(subprocess.Popen([codeql_bin, "test", "run", "--failing-exitcode=122", f"--slice={slice}/{num_slices}", "--ram=2048", "--format=json", f'--search-path={language_root}', f'--search-path={language_root}', *test_roots], stdout=test_report_file, stderr=subprocess.PIPE))
-
-            for p in procs:
-              p.wait()
-              if p.returncode != 0:
-                _, err = p.communicate()
-                if p.returncode == 122:
-                  # Failed because a test case failed, so just print the regular output.
-                  # This will allow us to proceed to validate-test-results, which will fail if
-                  # any test cases failed
-                  print(f"{err.decode()}")
-                else:
-                  # Some more serious problem occurred, so print and fail fast
-                  print_error_and_fail(f"Failed to run tests with return code {p.returncode}\n{err.decode()}")
-          finally:
-            for file in files_to_close:
-              file.close()
-
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:

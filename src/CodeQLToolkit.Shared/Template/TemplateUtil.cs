@@ -22,5 +22,14 @@ namespace CodeQLToolkit.Shared.Template
 
             return template;
         }
+
+        public string RawTemplateFromFile(string templateFile)
+        {
+            var templateFilePath = Path.Combine(TemplatePath, templateFile);
+
+            var data = File.ReadAllText(templateFilePath);
+
+            return data;
+        }
     }
 }

@@ -1,0 +1,8 @@
+name: qlt55/stuff-tests
+version: 0.0.0
+description: Default description
+suites: 
+license: 
+extractor: cpp
+dependencies:
+  qlt55/stuff: '*'

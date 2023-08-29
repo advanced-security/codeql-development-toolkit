@@ -8,6 +8,7 @@ namespace CodeQLToolkit.Shared.Types
 {
     public enum AutomationType
     {
+        ANY,
         ACTIONS
     }
 
@@ -22,6 +23,22 @@ namespace CodeQLToolkit.Shared.Types
 
             throw new NotImplementedException();
         }
+
+        public static string ToDirectory(this AutomationType automationType)
+        {
+            if(automationType == AutomationType.ANY)
+            {
+                return "Any";
+            }
+
+            if(automationType == AutomationType.ACTIONS)
+            {
+                return "Actions";
+            }
+
+            throw new NotImplementedException();
+        }
+
     }
 
 
@@ -30,6 +47,11 @@ namespace CodeQLToolkit.Shared.Types
         public static AutomationType AutomationTypeFromString(string automationType)
         {
             return new AutomationType().FromString(automationType);
+        }
+
+        public static string AutomationTypeToString(AutomationType automationType)
+        {
+            return automationType.ToDirectory();
         }
     }
 }

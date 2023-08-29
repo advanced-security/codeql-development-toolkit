@@ -1,0 +1,126 @@
+﻿name: ⚙️ CodeQL - Run Unit Tests ({{language}})
+{% raw %}
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+jobs:
+  create-unit-test-matrix:
+    name: Create CodeQL Unit Test Matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.export-unit-test-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install QLT
+        id: install-qlt
+        uses: ./.github/actions/install-qlt
+        with:
+          qlt-version: 'latest'
+          add-to-path: true
+{% endraw %}
+      - name: Export unit test matrix
+        id: export-unit-test-matrix
+        run: |
+          qlt test run get-matrix --os-version {{ use_runner }}
+{% raw %}
+  run-test-suites:
+    name: Run Unit Tests
+    needs: create-unit-test-matrix
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.create-unit-test-matrix.outputs.matrix) }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install QLT
+        id: install-qlt
+        uses: ./.github/actions/install-qlt
+        with:
+          qlt-version: 'latest'
+          add-to-path: true
+      
+      - name: Install CodeQL
+        id: install-codeql
+        uses: ./.github/actions/install-codeql
+        with:
+          codeql-cli-version: ${{ matrix.codeql_cli }}
+          codeql-stdlib-version: ${{ matrix.codeql_standard_library }}
+          add-to-path: true
+
+      - name: Verify Versions of Tooling
+        shell: bash
+        run: |
+          echo "CodeQL Home: ${{ steps.install-codeql.outputs.codeql-home }}"
+          echo -e "Checking CodeQL Version:"
+          codeql --version 
+          
+          echo -e "Checking QLT Version:"
+          echo "QLT Home: ${{ steps.install-qlt.outputs.qlt-home }}"
+          qlt version
+
+      - name: Install QL Packs
+        shell: bash
+        run: |
+          qlt query run install-packs
+
+      - name: Run test suites
+        id: run-test-suites
+        env:
+          RUNNER_OS: ${{ runner.os }}
+          CODEQL_CLI: ${{ matrix.codeql_cli }}
+          CODEQL_STDLIB: ${{ matrix.codeql_standard_library }}
+          CODEQL_STDLIB_IDENT: ${{matrix.codeql_standard_library_ident}}
+          RUNNER_TMP: ${{ runner.temp }}
+        shell: bash
+        run: |
+{% endraw %}
+          qlt run test unit-tests \ 
+            --num-threads {{ num_threads }} \
+            --language {{ language }} \
+            --runner-os $RUNNER_OS \
+            --cli-version $CODEQL_CLI \
+            --stdlib-ident $CODEQL_STDLIB_IDENT \
+            --work-dir $RUNNER_TMP
+{% raw %}            
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results-${{ runner.os }}-${{ matrix.codeql_cli }}-${{ matrix.codeql_standard_library_ident }}
+          path: |
+            ${{ runner.temp }}/test_report_${{ runner.os }}_${{ matrix.codeql_cli }}_${{ matrix.codeql_standard_library_ident }}_slice_*.json
+          if-no-files-found: error
+
+  validate-test-results:
+    name: Validate test results
+    needs: [run-test-suites]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Collect test results
+        uses: actions/download-artifact@v2
+
+      - name: Validate test results
+        run: |
+          for json_report in test-results-*/test_report_*
+          do
+            jq --raw-output '"PASS \(map(select(.pass == true)) | length)/\(length)'" $json_report\"" "$json_report"
+          done
+          FAILING_TESTS=$(jq --raw-output '.[] | select(.pass == false)' test-results-*/test_report_*.json)
+          if [[ ! -z "$FAILING_TESTS" ]]; then
+            echo "ERROR: The following tests failed:"
+            echo $FAILING_TESTS | jq .
+            exit 1
+          fi
+{% endraw %}

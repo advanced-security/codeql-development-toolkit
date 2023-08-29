@@ -1,0 +1,5 @@
+{
+  "CodeQLCLI": "2.11.6",
+  "CodeQLStandardLibrary": "codeql-cli/v2.11.6",
+  "CodeQLCLIBundle": "codeql-bundle-20221211"
+}

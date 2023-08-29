@@ -1,0 +1,8 @@
+name: qlt2/stuff2-tests
+version: 0.0.0
+description: Default description
+suites: 
+license: 
+extractor: cpp
+dependencies:
+  qlt2/stuff2: '*'
