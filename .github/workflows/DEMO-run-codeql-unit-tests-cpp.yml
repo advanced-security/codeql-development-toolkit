@@ -86,7 +86,7 @@ jobs:
           RUNNER_TMP: ${{ runner.temp }}
         shell: bash
         run: |
-          qlt run test execute-unit-tests \ 
+          qlt test run execute-unit-tests \ 
             --num-threads 4 \
             --language cpp \
             --runner-os $RUNNER_OS \
