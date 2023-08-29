@@ -85,15 +85,15 @@ jobs:
           CODEQL_STDLIB_IDENT: ${{matrix.codeql_standard_library_ident}}
           RUNNER_TMP: ${{ runner.temp }}
         shell: bash
-        run: |
-          qlt test run execute-unit-tests \ 
-            --num-threads 4 \
-            --language cpp \
-            --runner-os $RUNNER_OS \
-            --cli-version $CODEQL_CLI \
-            --stdlib-ident $CODEQL_STDLIB_IDENT \
-            --work-dir $RUNNER_TMP \
-            --base example/
+        run: >
+          qlt test run execute-unit-tests 
+          --num-threads 4 
+          --language cpp 
+          --runner-os $RUNNER_OS 
+          --cli-version $CODEQL_CLI 
+          --stdlib-ident $CODEQL_STDLIB_IDENT 
+          --work-dir $RUNNER_TMP 
+          --base example/
 
             
       - name: Upload test results
