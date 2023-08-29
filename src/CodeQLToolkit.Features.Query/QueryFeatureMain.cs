@@ -1,4 +1,5 @@
 ﻿using CodeQLToolkit.Features.Query.Commands;
+using CodeQLToolkit.Features.Query.Lifecycle;
 using CodeQLToolkit.Features.Query.Scaffolding;
 using CodeQLToolkit.Shared.Feature;
 using CodeQLToolkit.Shared.Logging;
@@ -12,6 +13,8 @@ namespace CodeQLDevelopmentLifecycleToolkit.Features.Query
     {
         readonly QueryScaffoldFeature scaffoldFeature;
         readonly QueryCommandFeature commandFeature;
+        readonly QueryLifecycleFeature lifecycleFeature;
+
 
         readonly static QueryFeatureMain instance;
 
@@ -22,6 +25,7 @@ namespace CodeQLDevelopmentLifecycleToolkit.Features.Query
         {
             scaffoldFeature = new QueryScaffoldFeature();
             commandFeature = new QueryCommandFeature();
+            lifecycleFeature = new QueryLifecycleFeature();
         }
 
         public static QueryFeatureMain Instance { get { return instance; } }
@@ -41,6 +45,7 @@ namespace CodeQLDevelopmentLifecycleToolkit.Features.Query
 
             scaffoldFeature.Register(queryCommand);
             commandFeature.Register(queryCommand);
+            lifecycleFeature.Register(queryCommand);
             
         }
     }

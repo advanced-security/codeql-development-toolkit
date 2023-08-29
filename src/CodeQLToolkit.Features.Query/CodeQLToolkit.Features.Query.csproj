@@ -28,6 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Templates\Query\codeql-workspace.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\Query\cpp\expected.liquid">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
