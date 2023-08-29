@@ -74,10 +74,7 @@ jobs:
       - name: Install QL Packs
         shell: bash
         run: |
-          codeql pack install example/cpp/stuff/src/qlpack.yml
-          codeql pack install example/cpp/stuff2/src/qlpack.yml
-          
-          #qlt query run install-packs --base example/
+          qlt query run install-packs --base example/
 
       - name: Run test suites
         id: run-test-suites
