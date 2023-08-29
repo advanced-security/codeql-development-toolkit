@@ -23,7 +23,7 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
             // get a directory to work in 
             var tmpDirectory = WorkDirectory;
 
-            var languageRoot = Path.Combine(Base, Language);
+            var languageRoot = Path.Combine(Base, Language);            
 
             // check if the language root exists
             if (!Directory.Exists(languageRoot)){
@@ -41,10 +41,10 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
                 Log<ExecuteUnitTestsCommandTarget>.G().LogInformation($"Found test directory: {dir}");
             }
 
+            var transformedDirs = dirs.Select(dir => Path.GetRelativePath(Base, dir));
+          
             Parallel.For(0, NumThreads,
                  slice => {
-
-                     var testPathString = string.Join(" ", dirs);
 
                      TestReport report = new TestReport()
                      {
@@ -56,24 +56,30 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
                          NumSlices = NumThreads
                      };
 
+                     var workingDirectory = Path.GetFullPath(Base);
+                     var testPathString = string.Join(" ", transformedDirs);
                      var outFileReport = Path.Combine(tmpDirectory, report.FileName);
 
-                     Log<ExecuteUnitTestsCommandTarget>.G().LogInformation($"Running unit tests for slice {slice} to file {outFileReport}...");
+                     Log<ExecuteUnitTestsCommandTarget>.G().LogInformation($"Executing tests in working directory {workingDirectory}.");
+                     Log<ExecuteUnitTestsCommandTarget>.G().LogInformation($"Test Paths: {testPathString}");
+                     Log<ExecuteUnitTestsCommandTarget>.G().LogInformation($"Slice: {slice} of {NumThreads}");
+                     Log<ExecuteUnitTestsCommandTarget>.G().LogInformation($"Report File: {outFileReport}...");
 
                      using (Process process = new Process())
                      {
                          process.StartInfo.FileName = "codeql";
-                         process.StartInfo.WorkingDirectory = Base;
+                         process.StartInfo.WorkingDirectory = workingDirectory;
                          process.StartInfo.UseShellExecute = false;
                          process.StartInfo.RedirectStandardOutput = true;
                          process.StartInfo.RedirectStandardError = false;
                          process.StartInfo.Arguments = $"test run --failing-exitcode=122 --slice={slice+1}/{NumThreads} --ram=2048 --format=json --search-path={Language} {testPathString}";
-                         process.StartInfo.FileName = outFileReport;
                          
                          process.Start();
 
                          // needed for STDOUT redirection
-                         process.StandardOutput.ReadToEnd();
+                         var output = process.StandardOutput.ReadToEnd();
+
+                         File.WriteAllText(outFileReport, output);
 
                          process.WaitForExit();
 
