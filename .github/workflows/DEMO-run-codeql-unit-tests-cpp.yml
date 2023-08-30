@@ -109,6 +109,8 @@ jobs:
     needs: [run-test-suites]
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Install QLT
         id: install-qlt
