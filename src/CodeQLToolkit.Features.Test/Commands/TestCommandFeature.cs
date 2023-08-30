@@ -1,4 +1,5 @@
-﻿using CodeQLToolkit.Features.Test.Lifecycle;
+﻿using CodeQLToolkit.Features.Test.Commands.Targets;
+using CodeQLToolkit.Features.Test.Lifecycle;
 using CodeQLToolkit.Shared.Types;
 using Microsoft.VisualBasic;
 using System;
@@ -100,6 +101,19 @@ namespace CodeQLToolkit.Features.Test.Commands
                 featureTarget.Run();
 
             }, Globals.BasePathOption, Globals.AutomationTypeOption, numThreadsOption, workDirectoryOption, languageOption, runnerOSOption, cliVersionOption, stdLibIdentOption);
+
+
+            validateUnitTestsCommand.SetHandler((resultsDirectory) =>
+            {
+                Log<TestCommandFeature>.G().LogInformation("Executing validate-unit-tests command...");
+
+                new ValidateUnitTestsCommand()
+                {
+                    ResultsDirectory = resultsDirectory
+                }.Run();
+
+
+            }, resultsDirectoryOption);
         }
 
         public int Run()
