@@ -58,32 +58,57 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets
                 Log<ValidateUnitTestsCommand>.G().LogError($"One or more unit tests failed. Details below:");
                 Log<ValidateUnitTestsCommand>.G().LogError($"---------------------------------------------");
 
+                int totalCases = failures.Count;
+                int currentCase = 0;
+
+
                 foreach (var item in failures)
                 {
+                    currentCase++;
 
                     if(item.failureStage == "RESULT")
                     {
-                        Log<ValidateUnitTestsCommand>.G().LogError($"Test: {item.test}");
-                        Log<ValidateUnitTestsCommand>.G().LogError($"--------------------------------------------------");
-                        Log<ValidateUnitTestsCommand>.G().LogError($"Diff of Expected vs Actual");
-                        Log<ValidateUnitTestsCommand>.G().LogError($"--------------------------------------------------");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"+----------------------------------------------+");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"| TEST CASE ({currentCase} of {totalCases})    : {Path.GetFileName(item.test)}");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"+----------------------------------------------+");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"| STATUS                : FAILED ");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"| FAILURE TYPE          : RESULT");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"+----------------------------------------------+");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"| TEST DIFFERENCES                             |");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"+----------------------------------------------+");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"| FULL PATH             : {item.test}");
+
 
                         foreach(var diff in item.diff)
                         {
-                            Log<ValidateUnitTestsCommand>.G().LogError($"{diff}");
+                            Log<ValidateUnitTestsCommand>.G().LogError($"| {diff}");
                         }
+                        Log<ValidateUnitTestsCommand>.G().LogError($"+----------------------------------------------+");
 
                         Log<ValidateUnitTestsCommand>.G().LogError($"\n\n\n\n");
 
                     }
                     else
                     {
-                        Log<ValidateUnitTestsCommand>.G().LogError($"Non-test content related failure:");
-                        Log<ValidateUnitTestsCommand>.G().LogError($"Test: {item.test}");
-                        Log<ValidateUnitTestsCommand>.G().LogError($"Failure Description: {item.failureDescription}");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"+----------------------------------------------+");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"| TEST CASE ({currentCase} of {totalCases})    : {Path.GetFileName(item.test)}");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"+----------------------------------------------+");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"| STATUS                : FAILED ");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"| FAILURE TYPE          : {item.failureStage}");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"+----------------------------------------------+");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"| FAILURE DESCRIPTION                          |");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"+----------------------------------------------+");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"| FULL PATH             : {item.test}");
+                        Log<ValidateUnitTestsCommand>.G().LogError($"| {item.failureDescription}");
+
+
+                        Log<ValidateUnitTestsCommand>.G().LogError($"+----------------------------------------------+");
+
+                        Log<ValidateUnitTestsCommand>.G().LogError($"\n\n\n\n");
+
                     }
                 }
-                Log<ValidateUnitTestsCommand>.G().LogError($"---------------------------------------------");
+                Log<ValidateUnitTestsCommand>.G().LogError($"--------------------END OF RESULTS-------------------------");
 
                 DieWithError("One or more failures during run unit tests.");
             }
