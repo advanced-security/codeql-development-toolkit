@@ -113,6 +113,11 @@ namespace CodeQLToolkit.Shared.Utils
                 return "cpp";
             }
 
+            if(Language == "javascript")
+            {
+                return "javascript";
+            }
+
             throw new NotImplementedException();
         }
 
