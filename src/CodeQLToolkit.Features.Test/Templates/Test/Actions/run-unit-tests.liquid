@@ -87,7 +87,7 @@ jobs:
         shell: bash
         run: >
 {% endraw %}
-          qlt test execute-unit-tests  
+          qlt test run execute-unit-tests  
           --num-threads {{ num_threads }} 
           --language {{ language }} 
           --runner-os $RUNNER_OS 
