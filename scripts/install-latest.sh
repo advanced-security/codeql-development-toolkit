@@ -9,7 +9,7 @@ else
 fi
 
 # download the actual bundle 
-gh release download -R github/codeql-development-lifecycle-toolkit --pattern 'qlt-linux-x86_64.zip' -D /opt/codeql-development-lifecycle-toolkit-downloads
+gh release download -R advanced-security/codeql-development-toolkit --pattern 'qlt-linux-x86_64.zip' -D /opt/codeql-development-lifecycle-toolkit-downloads
 
 # unzip the bundle
 unzip /opt/codeql-development-lifecycle-toolkit-downloads/qlt-linux-x86_64.zip -d /opt/qlt/
