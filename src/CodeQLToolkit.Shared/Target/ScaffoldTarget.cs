@@ -1,5 +1,6 @@
 ﻿using CodeQLToolkit.Shared.Logging;
 using CodeQLToolkit.Shared.Template;
+using CodeQLToolkit.Shared.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace CodeQLToolkit.Shared.Target
@@ -8,7 +9,7 @@ namespace CodeQLToolkit.Shared.Target
     {
        
         public string Name { get; set; }
-        public string Language { get; set; }
+        public LanguageType Language { get; set; }
         public bool OverwriteExisting { get; set; }
         public string FeatureName { get; set; }
 
@@ -18,12 +19,7 @@ namespace CodeQLToolkit.Shared.Target
         {
             var languagePath = Language;
 
-            if(languagePath == "c")
-            {
-                languagePath = "cpp";
-
-            }
-            return Path.Combine("Templates", FeatureName, languagePath, templateName + ".liquid");
+            return Path.Combine("Templates", FeatureName, Language.ToDirectory(), templateName + ".liquid");
         }
 
         

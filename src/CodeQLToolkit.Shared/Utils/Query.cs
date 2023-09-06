@@ -9,7 +9,7 @@ namespace CodeQLToolkit.Shared.Utils
     public class Query
     {
         public string Base { get; set; }
-        public string Language { get; set; }
+        public LanguageType Language { get; set; }
         public string QueryPackName { get; set; }
         public string Scope { get; set; }
         public string Name { get; set; }
@@ -18,7 +18,7 @@ namespace CodeQLToolkit.Shared.Utils
         {
             get
             {
-                return Path.Combine(Base, Language, QueryPackName, "src");
+                return Path.Combine(Base, Language.ToDirectory(), QueryPackName, "src");
             }
         }
 
@@ -52,7 +52,7 @@ namespace CodeQLToolkit.Shared.Utils
         {
             get
             {
-                return Path.Combine(Base, Language, QueryPackName, "test");
+                return Path.Combine(Base, Language.ToDirectory(), QueryPackName, "test");
             }
         }
 
@@ -68,7 +68,7 @@ namespace CodeQLToolkit.Shared.Utils
         {
             get
             {
-                return Path.Combine(QueryFileTestDir, $"{Name}.{GetExtensionForLanguage()}");
+                return Path.Combine(QueryFileTestDir, $"{Name}.{Language.ToExtension()}");
             }
         }
 
@@ -108,26 +108,7 @@ namespace CodeQLToolkit.Shared.Utils
 
         public string GetLanguageImportForLangauge()
         {
-            if (Language == "cpp" || Language == "c")
-            {
-                return "cpp";
-            }
-
-            if(Language == "javascript")
-            {
-                return "javascript";
-            }
-
-            throw new NotImplementedException();
+            return Language.ToImport();
         }
-
-
-        public string GetExtensionForLanguage()
-        {
-            // todo - refine this. 
-            return Language;
-        }
-
-
     }
 }

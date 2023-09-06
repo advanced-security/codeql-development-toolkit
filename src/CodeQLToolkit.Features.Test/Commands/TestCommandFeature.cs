@@ -1,6 +1,7 @@
 ﻿using CodeQLToolkit.Features.Test.Commands.Targets;
 using CodeQLToolkit.Features.Test.Lifecycle;
 using CodeQLToolkit.Shared.Types;
+using CodeQLToolkit.Shared.Utils;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,16 @@ namespace CodeQLToolkit.Features.Test.Commands
 {
     public class TestCommandFeature : FeatureBase, IToolkitLifecycleFeature
     {
-        public override string[] SupportedLangauges { get => new string[] { "c", "cpp", "javascript", "go", "python", "ql", "java", "ruby" }; }
+        public override LanguageType[] SupportedLangauges { get => new LanguageType[] { 
+            LanguageType.C,
+            LanguageType.CPP,
+            LanguageType.CSHARP,
+            LanguageType.JAVA,
+            LanguageType.JAVASCRIPT,
+            LanguageType.GO,
+            LanguageType.RUBY,
+            LanguageType.PYTHON            
+        }; }
 
         public TestCommandFeature()
         {
@@ -39,7 +49,7 @@ namespace CodeQLToolkit.Features.Test.Commands
             
             var numThreadsOption = new Option<int>("--num-threads", () => 4, "The number of threads to use for runner. For best performance, do not exceed the number of physical cores on your system.") { IsRequired = true };
             var workDirectoryOption = new Option<string>("--work-dir", () => Path.GetTempPath(), "Where to place intermediate execution output files.") { IsRequired = true };
-            var languageOption = new Option<string>("--language", $"The language to run tests for.") { IsRequired = true }.FromAmong(SupportedLangauges);
+            var languageOption = new Option<string>("--language", $"The language to run tests for.") { IsRequired = true }.FromAmong(SupportedLangauges.Select(x => x.ToOptionString()).ToArray());
             var runnerOSOption = new Option<string>("--runner-os", $"Label for the operating system running these tests.") { IsRequired = true };
             var cliVersionOption = new Option<string>("--cli-version", $"The version of the cli running the tests.") { IsRequired = true };
             var stdLibIdentOption = new Option<string>("--stdlib-ident", $"A string identifying the standard library used.") { IsRequired = true };

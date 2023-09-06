@@ -1,6 +1,7 @@
 ﻿using CodeQLToolkit.Features.Query.Scaffolding.Targets;
 using CodeQLToolkit.Shared.Feature;
 using CodeQLToolkit.Shared.Options;
+using CodeQLToolkit.Shared.Utils;
 using System.CommandLine;
 
 namespace CodeQLToolkit.Features.Query.Scaffolding
@@ -10,7 +11,7 @@ namespace CodeQLToolkit.Features.Query.Scaffolding
         public QueryScaffoldFeature() {
             FeatureName = "Query";
         }
-        public override string[] SupportedLangauges { get => new string[] { "c", "cpp", "javascript" }; }
+        public override LanguageType[] SupportedLangauges { get => new LanguageType[] { LanguageType.C, LanguageType.CPP, LanguageType.JAVASCRIPT}; }
 
         public void Register(Command parentCommand)
         {
@@ -27,7 +28,8 @@ namespace CodeQLToolkit.Features.Query.Scaffolding
 
             var createTestsOption = new Option<bool>("--create-tests", ()=> true, "Create a new unit test for this query if it doesn't already exist.");
             var queryNameOption = new Option<string>("--query-name", "Name of the query. Note: Do not specify the `.ql` extension in naming your query.") { IsRequired = true };
-            var queryLanguageOption = new Option<string>("--language", $"The language to generate a query for.") { IsRequired = true}.FromAmong(SupportedLangauges);
+            var queryLanguageOption = new Option<string>("--language", $"The language to generate a query for.") { IsRequired = true}
+            .FromAmong(SupportedLangauges.Select(x => x.ToOptionString()).ToArray());
             var queryPackOption = new Option<string>("--pack", "The name of the query pack to place this query in.") { IsRequired = true };
             var queryPackScopeOption = new Option<string>("--scope", "The scope to use") { IsRequired = true };
 
@@ -53,7 +55,7 @@ namespace CodeQLToolkit.Features.Query.Scaffolding
                     new NewQueryScaffoldTarget()
                     {
                         Name = queryName,
-                        Language = queryLangauge,
+                        Language = LanguageTypeHelper.LanguageTypeFromOptionString(queryLangauge),
                         Base = basePath,
                         QueryPack = queryPack,
                         QueryPackScope = queryPackScope,

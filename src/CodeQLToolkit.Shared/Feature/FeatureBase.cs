@@ -12,8 +12,14 @@ namespace CodeQLToolkit.Shared.Feature
     {
         public string FeatureName { get; set; }
 
-        public virtual string[] SupportedLangauges { get; } = { };
+        public virtual LanguageType[] SupportedLangauges { get; } = { };
         public bool IsSupportedLangauge(string language)
+        {
+            var strLangauges = SupportedLangauges.Select(x => x.ToOptionString()).ToArray();
+            return strLangauges.Contains(language);
+        }
+
+        public bool IsSupportedLangauge(LanguageType language)
         {
             return SupportedLangauges.Contains(language);
         }

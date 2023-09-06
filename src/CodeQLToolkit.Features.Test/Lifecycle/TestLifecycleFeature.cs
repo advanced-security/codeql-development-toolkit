@@ -1,5 +1,6 @@
 ﻿using CodeQLToolkit.Features.Test.Lifecycle.Targets;
 using CodeQLToolkit.Features.Test.Lifecycle.Targets.Actions;
+using CodeQLToolkit.Shared.Utils;
 using System.CommandLine;
 using System.Reflection;
 
@@ -12,7 +13,19 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
             FeatureName = "Test";
         }
 
-        public override string[] SupportedLangauges { get => new string[] { "c", "cpp", "javascript", "go", "python", "ql", "java", "ruby" }; }
+        public override LanguageType[] SupportedLangauges
+        {
+            get => new LanguageType[] {
+            LanguageType.C,
+            LanguageType.CPP,
+            LanguageType.CSHARP,
+            LanguageType.JAVA,
+            LanguageType.JAVASCRIPT,
+            LanguageType.GO,
+            LanguageType.RUBY,
+            LanguageType.PYTHON
+        };
+        }
 
         public void Register(Command parentCommand)
         {
@@ -23,7 +36,7 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
             var overwriteExistingOption = new Option<bool>("--overwrite-existing", () => false, "Overwrite exiting files (if they exist).");
             var numThreadsOption = new Option<int>("--num-threads", () => 4, "Number of threads to use during test execution.");
             var useRunnerOption = new Option<string>("--use-runner", () => "ubuntu-latest", "The runner(s) to use. Should be a comma-seperated list of actions runners.");
-            var languageOption = new Option<string>("--language", $"The language to generate automation for.") { IsRequired = true }.FromAmong(SupportedLangauges);
+            var languageOption = new Option<string>("--language", $"The language to generate automation for.") { IsRequired = true }.FromAmong(SupportedLangauges.Select(x => x.ToOptionString()).ToArray());
 
             initCommand.AddOption(overwriteExistingOption);
             initCommand.AddOption(numThreadsOption);
