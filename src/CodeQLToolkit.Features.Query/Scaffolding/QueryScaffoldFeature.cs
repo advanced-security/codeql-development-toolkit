@@ -10,7 +10,7 @@ namespace CodeQLToolkit.Features.Query.Scaffolding
         public QueryScaffoldFeature() {
             FeatureName = "Query";
         }
-        public override string[] SupportedLangauges { get => new string[] { "c", "cpp" }; }
+        public override string[] SupportedLangauges { get => new string[] { "c", "cpp", "javascript" }; }
 
         public void Register(Command parentCommand)
         {
