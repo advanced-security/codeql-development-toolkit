@@ -127,7 +127,9 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets
                 }
             }
 
-            if (unitTestResults.Select(x => x.pass == false).Count() > 0)
+            var failedTests = unitTestResults.Select(x=>x).Where(x=>x.pass==false).ToArray();
+
+            if (failedTests.Length > 0)
             {
                 DieWithError("One or more failures during run unit tests.");
             }
