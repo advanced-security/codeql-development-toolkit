@@ -14,6 +14,7 @@ namespace CodeQLToolkit.Features.Test.Commands
         public string RunnerOS { get; set; }
         public string CLIVersion { get; set; }
         public string STDLibIdent { get; set; }
+        public string ExtraCodeQLArgs { get; set; }
     }
 }
 

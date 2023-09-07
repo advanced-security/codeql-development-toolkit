@@ -37,19 +37,20 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
             var numThreadsOption = new Option<int>("--num-threads", () => 4, "Number of threads to use during test execution.");
             var useRunnerOption = new Option<string>("--use-runner", () => "ubuntu-latest", "The runner(s) to use. Should be a comma-seperated list of actions runners.");
             var languageOption = new Option<string>("--language", $"The language to generate automation for.") { IsRequired = true }.FromAmong(SupportedLangauges.Select(x => x.ToOptionString()).ToArray());
+            var extraCodeQLOptions = new Option<string>("--codeql-args", $"Extra arguments to pass to CodeQL.") { IsRequired = false };
 
             initCommand.AddOption(overwriteExistingOption);
             initCommand.AddOption(numThreadsOption);
             initCommand.AddOption(useRunnerOption);
             initCommand.AddOption(languageOption);
-
+            initCommand.AddOption(extraCodeQLOptions);
 
 
             parentCommand.Add(initCommand);
 
 
             
-            initCommand.SetHandler((basePath, automationType, overwriteExisting, numThreads, useRunner, language) =>
+            initCommand.SetHandler((basePath, automationType, overwriteExisting, numThreads, useRunner, language, extraArgs) =>
             {
                 Log<TestLifecycleFeature>.G().LogInformation("Executing init command...");
 
@@ -65,10 +66,10 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
                 featureTarget.NumThreads = numThreads;
                 featureTarget.UseRunner = useRunner;    
                 featureTarget.Language = language;
-
+                featureTarget.ExtraArgs = extraArgs;
                 featureTarget.Run();
 
-            }, Globals.BasePathOption, Globals.AutomationTypeOption, overwriteExistingOption, numThreadsOption, useRunnerOption, languageOption);
+            }, Globals.BasePathOption, Globals.AutomationTypeOption, overwriteExistingOption, numThreadsOption, useRunnerOption, languageOption, extraCodeQLOptions);
 
         }
 

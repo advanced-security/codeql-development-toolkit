@@ -72,7 +72,7 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
                          process.StartInfo.UseShellExecute = false;
                          process.StartInfo.RedirectStandardOutput = true;
                          process.StartInfo.RedirectStandardError = false;
-                         process.StartInfo.Arguments = $"test run --failing-exitcode=122 --slice={slice+1}/{NumThreads} --ram=2048 --format=json --search-path={Language} {testPathString}";
+                         process.StartInfo.Arguments = $"test run {ExtraCodeQLArgs} --failing-exitcode=122 --slice={slice+1}/{NumThreads} --ram=2048 --format=json --search-path={Language} {testPathString}";
                          
                          process.Start();
 

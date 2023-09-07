@@ -11,5 +11,7 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
         public int NumThreads { get; set; }     
         public string UseRunner { get; set; }   
 
+        public string ExtraArgs { get; set; }
+
     }
 }

@@ -88,11 +88,10 @@ jobs:
         run: >
 {% endraw %}
           qlt test run execute-unit-tests  
+          --codeql-args "{{ codeql_args }}"
           --num-threads {{ num_threads }} 
           --language {{ language }} 
           --runner-os $RUNNER_OS 
-          --cli-version $CODEQL_CLI
-          --stdlib-ident $CODEQL_STDLIB_IDENT 
           --work-dir $RUNNER_TMP
 {% raw %}            
       - name: Upload test results

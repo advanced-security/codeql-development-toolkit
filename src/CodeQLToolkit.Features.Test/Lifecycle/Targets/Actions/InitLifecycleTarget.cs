@@ -21,13 +21,21 @@ namespace CodeQLToolkit.Features.Test.Lifecycle.Targets.Actions
             var tmpLanguage = Language;
             Language = null;
 
+            var codeqlArgs = "--threads=0";
+
+            if(ExtraArgs!= null && ExtraArgs.Length > 0) 
+            {
+                codeqlArgs = $"{codeqlArgs} {ExtraArgs}";
+            }
+
             WriteTemplateIfOverwriteOrNotExists("install-codeql", Path.Combine(Base, ".github", "actions", "install-codeql", "action.yml"), "install-codeql action");
             WriteTemplateIfOverwriteOrNotExists("install-qlt", Path.Combine(Base, ".github", "actions", "install-qlt", "action.yml"), "install-qlt action");
             WriteTemplateIfOverwriteOrNotExists("run-unit-tests", Path.Combine(Base, ".github", "workflows", $"run-codeql-unit-tests-{tmpLanguage}.yml"), $"Run CodeQL Unit Tests ({Language})", new
             {
                 numThreads = NumThreads,
                 useRunner = UseRunner,
-                language = tmpLanguage
+                language = tmpLanguage,
+                codeqlArgs = codeqlArgs
             });
 
             Language = tmpLanguage; 

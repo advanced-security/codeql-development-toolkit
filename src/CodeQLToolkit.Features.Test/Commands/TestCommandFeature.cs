@@ -51,15 +51,17 @@ namespace CodeQLToolkit.Features.Test.Commands
             var workDirectoryOption = new Option<string>("--work-dir", () => Path.GetTempPath(), "Where to place intermediate execution output files.") { IsRequired = true };
             var languageOption = new Option<string>("--language", $"The language to run tests for.") { IsRequired = true }.FromAmong(SupportedLangauges.Select(x => x.ToOptionString()).ToArray());
             var runnerOSOption = new Option<string>("--runner-os", $"Label for the operating system running these tests.") { IsRequired = true };
-            var cliVersionOption = new Option<string>("--cli-version", $"The version of the cli running the tests.") { IsRequired = true };
-            var stdLibIdentOption = new Option<string>("--stdlib-ident", $"A string identifying the standard library used.") { IsRequired = true };
+            //var cliVersionOption = new Option<string>("--cli-version", $"The version of the cli running the tests.") { IsRequired = true };
+            //var stdLibIdentOption = new Option<string>("--stdlib-ident", $"A string identifying the standard library used.") { IsRequired = true };
+            var extraCodeQLOptions = new Option<string>("--codeql-args", $"Extra arguments to pass to CodeQL.") { IsRequired = false };
 
             unitTestsCommand.Add(numThreadsOption); 
             unitTestsCommand.Add(workDirectoryOption);
             unitTestsCommand.Add(languageOption);
             unitTestsCommand.Add(runnerOSOption);
-            unitTestsCommand.Add(cliVersionOption);
-            unitTestsCommand.Add(stdLibIdentOption);
+            //unitTestsCommand.Add(cliVersionOption);
+            //unitTestsCommand.Add(stdLibIdentOption);
+            unitTestsCommand.Add(extraCodeQLOptions);
 
             // a command validates the tests 
             var validateUnitTestsCommand = new Command("validate-unit-tests", "Validates a unit test run in a fashion suitable for use in CI/CD systems.");
@@ -89,8 +91,8 @@ namespace CodeQLToolkit.Features.Test.Commands
 
             }, Globals.BasePathOption, Globals.AutomationTypeOption, matrixOSVersion);
 
-
-            unitTestsCommand.SetHandler((basePath, automationType, numThreads, workDirectory, language, runnerOS, cliVersion, stdLibIdent) => {
+            //stdLibIdent
+            unitTestsCommand.SetHandler((basePath, automationType, numThreads, workDirectory, language, runnerOS, extraArgs) => {
 
                 Log<TestCommandFeature>.G().LogInformation("Executing execute-unit-tests command...");
 
@@ -100,17 +102,38 @@ namespace CodeQLToolkit.Features.Test.Commands
                     AutomationTypeHelper.AutomationTypeFromString(automationType)
                     );
 
+                // lookup cliVersion and stdLibIdent 
+                var c = new QLTConfig()
+                {
+                    Base = basePath
+                };
+
+                if (!File.Exists(c.CodeQLConfigFilePath))
+                {
+                    ProcessUtils.DieWithError($"Cannot read values from missing file {c.CodeQLConfigFilePath}");
+                }
+
+                var config = c.FromFile();
+
                 featureTarget.Base = basePath;
                 featureTarget.NumThreads = numThreads;
                 featureTarget.WorkDirectory = workDirectory;
                 featureTarget.Language = language;
                 featureTarget.RunnerOS = runnerOS;
-                featureTarget.CLIVersion = cliVersion;
-                featureTarget.STDLibIdent = stdLibIdent;
+                featureTarget.CLIVersion = c.CodeQLCLI;
+                featureTarget.STDLibIdent = c.CodeQLStandardLibrary;
+                featureTarget.ExtraCodeQLArgs = extraArgs;
 
                 featureTarget.Run();
 
-            }, Globals.BasePathOption, Globals.AutomationTypeOption, numThreadsOption, workDirectoryOption, languageOption, runnerOSOption, cliVersionOption, stdLibIdentOption);
+            }, Globals.BasePathOption, 
+               Globals.AutomationTypeOption, 
+               numThreadsOption,
+               workDirectoryOption, 
+               languageOption, 
+               runnerOSOption, 
+               extraCodeQLOptions
+            );
 
 
             validateUnitTestsCommand.SetHandler((resultsDirectory) =>
