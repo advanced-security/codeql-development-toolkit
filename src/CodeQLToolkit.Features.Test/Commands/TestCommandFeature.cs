@@ -67,13 +67,15 @@ namespace CodeQLToolkit.Features.Test.Commands
             var validateUnitTestsCommand = new Command("validate-unit-tests", "Validates a unit test run in a fashion suitable for use in CI/CD systems.");
 
             var resultsDirectoryOption = new Option<string>("--results-directory", "Where to find the intermediate execution output files.") { IsRequired = true };
+            var prettyPrintOption = new Option<bool>("--pretty-print", () => false, "Pretty print test output in a compact format.") { IsRequired = true };
 
             validateUnitTestsCommand.Add(resultsDirectoryOption);
+            validateUnitTestsCommand.Add(prettyPrintOption);
 
             runCommand.Add(getMatrixTestCommand);
             runCommand.Add(unitTestsCommand);
             runCommand.Add(validateUnitTestsCommand);
-
+            
             getMatrixTestCommand.SetHandler((basePath, automationType, osVersions) => {
 
                 Log<TestCommandFeature>.G().LogInformation("Executing get-matrix command...");
@@ -136,17 +138,18 @@ namespace CodeQLToolkit.Features.Test.Commands
             );
 
 
-            validateUnitTestsCommand.SetHandler((resultsDirectory) =>
+            validateUnitTestsCommand.SetHandler((resultsDirectory, prettyPrint) =>
             {
                 Log<TestCommandFeature>.G().LogInformation("Executing validate-unit-tests command...");
 
                 new ValidateUnitTestsCommand()
                 {
-                    ResultsDirectory = resultsDirectory
+                    ResultsDirectory = resultsDirectory,
+                    PrettyPrint = prettyPrint
                 }.Run();
 
 
-            }, resultsDirectoryOption);
+            }, resultsDirectoryOption, prettyPrintOption);
         }
 
         public int Run()

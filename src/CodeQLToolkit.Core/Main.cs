@@ -17,7 +17,9 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
         public static async Task<int> Main(string[] args)
         {
             Log<QLT>.G().LogInformation("QLT Startup...");
-            
+
+            Console.OutputEncoding = System.Text.Encoding.UTF8; 
+
             var rootCommand = new RootCommand();
 
             // Add global option for the root directory          
