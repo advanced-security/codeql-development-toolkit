@@ -49,7 +49,7 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
                     codeql_standard_library = config.CodeQLStandardLibrary,
                     codeql_cli_bundle = config.CodeQLCLIBundle,
                     os = os,
-                    codeql_standard_library_ident = $"codeql-cli_v{config.CodeQLCLI}"
+                    codeql_standard_library_ident = config.CodeQLStandardLibraryIdent
                 });
             }
 

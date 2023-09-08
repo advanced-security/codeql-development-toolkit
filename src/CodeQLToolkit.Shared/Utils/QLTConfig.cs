@@ -13,6 +13,12 @@ namespace CodeQLToolkit.Shared.Utils
         public string CodeQLStandardLibrary { get; set; }
         public string CodeQLCLIBundle { get; set; }
 
+        public string CodeQLStandardLibraryIdent { 
+            get  {
+                return CodeQLStandardLibrary.Replace("/", "_");
+            } 
+        }
+
 
         [JsonIgnore]
         public string Base { get; set; }
