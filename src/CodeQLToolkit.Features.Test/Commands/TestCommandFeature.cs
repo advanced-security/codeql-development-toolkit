@@ -67,7 +67,7 @@ namespace CodeQLToolkit.Features.Test.Commands
             var validateUnitTestsCommand = new Command("validate-unit-tests", "Validates a unit test run in a fashion suitable for use in CI/CD systems.");
 
             var resultsDirectoryOption = new Option<string>("--results-directory", "Where to find the intermediate execution output files.") { IsRequired = true };
-            var prettyPrintOption = new Option<bool>("--pretty-print", () => false, "Pretty print test output in a compact format.") { IsRequired = true };
+            var prettyPrintOption = new Option<bool>("--pretty-print", () => false, "Pretty print test output in a compact format. Note this will not exit with a failure code if tests fail.") { IsRequired = true };
 
             validateUnitTestsCommand.Add(resultsDirectoryOption);
             validateUnitTestsCommand.Add(prettyPrintOption);
