@@ -14,7 +14,7 @@ Below is a guide showing you how to perform the most common tasks with the CodeQ
 
 # Installation
 
-You can install QLT by grabbing a release on the releases page. We currently ship builds for Linux x86_64. There are no dependencies to install. Just unpack the bundle and run the binary `qlt` in the unpacked directory. 
+You can install QLT by grabbing a release on the releases page. We currently ship builds for Linux x86_64 and MacOS. There are no dependencies to install. Just unpack the bundle and run the binary `qlt` in the unpacked directory. 
 
 # General Command Structure 
 
