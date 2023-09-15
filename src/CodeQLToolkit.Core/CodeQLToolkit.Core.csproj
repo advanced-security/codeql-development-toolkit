@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CodeQLToolkit.Features.CodeQL\CodeQLToolkit.Features.CodeQL.csproj" />
+    <ProjectReference Include="..\CodeQLToolkit.Features.Pack\CodeQLToolkit.Features.Pack.csproj" />
     <ProjectReference Include="..\CodeQLToolkit.Features.Query\CodeQLToolkit.Features.Query.csproj" />
     <ProjectReference Include="..\CodeQLToolkit.Features.Test\CodeQLToolkit.Features.Test.csproj" />
     <ProjectReference Include="..\CodeQLToolkit.Shared\CodeQLToolkit.Shared.csproj" />
