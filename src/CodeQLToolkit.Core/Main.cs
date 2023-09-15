@@ -44,7 +44,7 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
             // Register the `Test` feature
             TestFeatureMain.Instance.Register(rootCommand);
             // Register the `Pack` feature
-            PackFeatureMain.Instance.Register(rootCommand);
+            PackFeatureMain.Instance.Register(rootCommand);        
              
             await rootCommand.InvokeAsync(args);
 
