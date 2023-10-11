@@ -1,4 +1,5 @@
 ﻿using CodeQLToolkit.Features.Pack.Commands;
+using CodeQLToolkit.Features.Pack.Commands.Validate;
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
@@ -12,7 +13,7 @@ namespace CodeQLToolkit.Features.Pack
     {
 
         readonly static PackFeatureMain instance;
-        readonly PackCommandFeature commandFeature;
+        readonly ValidateFeature validateFeature;
 
         static PackFeatureMain()
         {
@@ -21,7 +22,7 @@ namespace CodeQLToolkit.Features.Pack
 
         private PackFeatureMain()
         {
-            commandFeature = new PackCommandFeature();
+            validateFeature = new ValidateFeature();
         }
         public static PackFeatureMain Instance { get { return instance; } }
 
@@ -31,7 +32,7 @@ namespace CodeQLToolkit.Features.Pack
             parentCommand.Add(packCommand);
 
             Log<PackFeatureMain>.G().LogInformation("Registering scaffolding submodule.");
-            commandFeature.Register(packCommand);
+            validateFeature.Register(packCommand);
         }
 
         public int Run()

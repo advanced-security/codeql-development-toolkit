@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace CodeQLToolkit.Features.Pack.Commands.Targets
 {
@@ -15,7 +17,8 @@ namespace CodeQLToolkit.Features.Pack.Commands.Targets
 
         public override void Run()
         {
-            for(int i = 0; i < Times; i++) { 
+            for (int i = 0; i < Times; i++)
+            {
                 Console.WriteLine($"Hello! My Base Target is: {Base}");
             }
 
