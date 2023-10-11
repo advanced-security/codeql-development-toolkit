@@ -31,9 +31,9 @@ namespace CodeQLToolkit.Features.Pack.Commands.Validate
                 var fileExists = File.Exists(extFilePath);
                 var isYamlFile = Path.GetExtension(extFilePath) == ".yml" || Path.GetExtension(extFilePath) == ".yaml";
                 if (!fileExists)
-                    throw new ArgumentException($"{extFilePath} does not exist.");
+                    DieWithError($"{extFilePath} does not exist.");
                 if (!isYamlFile)
-                    throw new ArgumentException($"{extFilePath} is not a yaml file.");
+                    DieWithError($"{extFilePath} is not a yaml file.");
                 new ValidateSyntaxTarget()
                 {
                     Base = basePath,
@@ -49,9 +49,9 @@ namespace CodeQLToolkit.Features.Pack.Commands.Validate
                     var fileExists = File.Exists(qlpackYmlFile);
                     var isYamlFile = Path.GetExtension(qlpackYmlFile) == ".yml" || Path.GetExtension(qlpackYmlFile) == ".yaml";
                     if (!fileExists)
-                        throw new ArgumentException($"{qlpackYmlFile} does not exist.");
+                        DieWithError($"{qlpackYmlFile} does not exist.");
                     if (!isYamlFile)
-                        throw new ArgumentException($"{qlpackYmlFile} is not a yaml file.");
+                        DieWithError($"{qlpackYmlFile} is not a yaml file.");
                 }
                 new ValidateVersionTarget()
                 {
