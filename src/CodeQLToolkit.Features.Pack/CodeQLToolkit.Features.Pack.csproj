@@ -15,9 +15,4 @@
     <Folder Include="Templates\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Semver" Version="2.3.0" />
-    <PackageReference Include="YamlDotNet" Version="13.4.0" />
-  </ItemGroup>
-
 </Project>
