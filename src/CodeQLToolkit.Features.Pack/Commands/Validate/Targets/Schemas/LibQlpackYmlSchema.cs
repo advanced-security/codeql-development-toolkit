@@ -16,7 +16,7 @@ namespace CodeQLToolkit.Features.Pack.Commands.Validate.Schemas
                 foreach (KeyValuePair<string, string> pair in Dependencies)
                     DependenciesString += $"{pair.Key}: {pair.Value}\n";
 
-            return $@"Test qlpack.yml file:
+            return $@"Lib qlpack.yml file:
                 Library: {Library},
                 Name: {Name},
                 Version: {Version},

@@ -1,3 +1,6 @@
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
+
 namespace CodeQLToolkit.Features.Pack.Commands.Validate.Schemas
 {
     public class SrcQlpackYmlSchema : IYmlSchema
@@ -8,6 +11,8 @@ namespace CodeQLToolkit.Features.Pack.Commands.Validate.Schemas
         public string Suites { get; set; }
         public string Extractor { get; set; }
         public Dictionary<string, string> Dependencies { get; set; }
+
+        [YamlMember(Alias = "default-suite-file", ApplyNamingConventions = false)]
         public string DefaultSuiteFile { get; set; }
 
         public override string ToString()
@@ -17,7 +22,7 @@ namespace CodeQLToolkit.Features.Pack.Commands.Validate.Schemas
                 foreach (KeyValuePair<string, string> pair in Dependencies)
                     DependenciesString += $"{pair.Key}: {pair.Value}\n";
 
-            return $@"Test qlpack.yml file:
+            return $@"Src qlpack.yml file:
                 Library: {Library},
                 Name: {Name},
                 Version: {Version},
