@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CodeQLToolkit.Core": {
+      "commandName": "Project",
+      "commandLineArgs": " --base C:\\QLPACKTEST test init"
+    }
+  }
+}
