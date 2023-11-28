@@ -41,7 +41,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Features.Code
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeQLToolkit.Features.Pack", "CodeQLToolkit.Features.Pack", "{DB21251D-9281-44FA-99CD-BFEE2571C340}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeQLToolkit.Features.Pack", "src\CodeQLToolkit.Features.Pack\CodeQLToolkit.Features.Pack.csproj", "{48CF8986-5E37-43DB-8045-5F64C25076E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Features.Pack", "src\CodeQLToolkit.Features.Pack\CodeQLToolkit.Features.Pack.csproj", "{48CF8986-5E37-43DB-8045-5F64C25076E7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeQLToolkit.Features.Validation", "CodeQLToolkit.Features.Validation", "{6B355B68-9342-4B76-BCA6-B9F47185A9DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeQLToolkit.Features.Validation", "src\CodeQLToolkit.Features.Validation\CodeQLToolkit.Features.Validation.csproj", "{87226A6E-AF29-4616-86D0-63311CA9FD38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +85,10 @@ Global
 		{48CF8986-5E37-43DB-8045-5F64C25076E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48CF8986-5E37-43DB-8045-5F64C25076E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48CF8986-5E37-43DB-8045-5F64C25076E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87226A6E-AF29-4616-86D0-63311CA9FD38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87226A6E-AF29-4616-86D0-63311CA9FD38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87226A6E-AF29-4616-86D0-63311CA9FD38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87226A6E-AF29-4616-86D0-63311CA9FD38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +106,8 @@ Global
 		{FCC3A25B-29D4-4626-816A-B4BD62D14992} = {47F5F5EF-C1F9-4932-878C-2D00C17411F4}
 		{DB21251D-9281-44FA-99CD-BFEE2571C340} = {667B480C-D805-4A9C-AC1F-D9FCCF3DB57C}
 		{48CF8986-5E37-43DB-8045-5F64C25076E7} = {DB21251D-9281-44FA-99CD-BFEE2571C340}
+		{6B355B68-9342-4B76-BCA6-B9F47185A9DC} = {667B480C-D805-4A9C-AC1F-D9FCCF3DB57C}
+		{87226A6E-AF29-4616-86D0-63311CA9FD38} = {6B355B68-9342-4B76-BCA6-B9F47185A9DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF8F3B81-F4DC-4608-A41C-F00F3E5A05CA}
