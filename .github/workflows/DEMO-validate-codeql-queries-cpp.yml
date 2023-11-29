@@ -29,7 +29,7 @@ jobs:
       - name: Export test matrix
         id: export-test-matrix
         run: |
-          qlt test run get-matrix --os-version ubuntu-latest
+          qlt test run get-matrix --os-version ubuntu-latest --base example/
 
   validate-queries:
     name: Validate Queries
