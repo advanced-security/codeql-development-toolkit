@@ -55,6 +55,8 @@ In addition to using QLT to generate your files you can also directly edit this 
 (Hint: If you'd like to regenerate your files, you can use the `--overwrite-existing` option to overwrite the files that are in place now.)";
 
 
+            Log<InitLifecycleTarget>.G().LogInformation(message);
+
 
         }
     }

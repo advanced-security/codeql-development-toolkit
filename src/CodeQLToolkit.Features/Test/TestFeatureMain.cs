@@ -4,7 +4,7 @@ using CodeQLToolkit.Shared.Feature;
 using System.CommandLine;
 
 namespace CodeQLToolkit.Features.Test
-{
+{ 
     public class TestFeatureMain : IToolkitFeature
 
     {

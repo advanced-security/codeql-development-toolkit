@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,28 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Templates\Query\cpp\new-dataflow-query.liquid" />
-    <None Remove="Templates\Query\javascript\new-dataflow-query.liquid" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Templates\Query\cpp\new-dataflow-query.liquid">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Templates\Query\javascript\new-dataflow-query.liquid">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-	<PackageReference Include="NLog" Version="5.2.2" />
-	<PackageReference Include="NLog.Extensions.Logging" Version="5.3.2" />
-
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CodeQLToolkit.Shared\CodeQLToolkit.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="CodeQL\" />
+    <Folder Include="Pack\" />
+    <Folder Include="Templates\Validation\Actions\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +21,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\Query\cpp\expected.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Query\cpp\new-dataflow-query.liquid">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\Query\cpp\new-query.liquid">
@@ -56,6 +44,9 @@
     <None Update="Templates\Query\javascript\expected.liquid">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Query\javascript\new-dataflow-query.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\Query\javascript\new-query.liquid">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -69,6 +60,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\Query\javascript\testref.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Test\Actions\install-codeql.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Test\Actions\install-qlt.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Test\Actions\run-unit-tests.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Validation\Actions\validate-query-metadata.liquid">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

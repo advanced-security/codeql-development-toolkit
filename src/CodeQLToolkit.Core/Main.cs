@@ -9,6 +9,7 @@ using CodeQLToolkit.Shared.Utils;
 using CodeQLToolkit.Features.CodeQL;
 using CodeQLToolkit.Features.Test;
 using CodeQLToolkit.Features.Pack;
+using CodeQLToolkit.Features.Validation;
 
 namespace CodeQLDevelopmentLifecycleToolkit.Core
 {
@@ -44,8 +45,10 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
             // Register the `Test` feature
             TestFeatureMain.Instance.Register(rootCommand);
             // Register the `Pack` feature
-            PackFeatureMain.Instance.Register(rootCommand);        
-             
+            PackFeatureMain.Instance.Register(rootCommand);
+            // Register the `Validation` feature
+            ValidationFeatureMain.Instance.Register(rootCommand);
+
             await rootCommand.InvokeAsync(args);
 
             return 0;            

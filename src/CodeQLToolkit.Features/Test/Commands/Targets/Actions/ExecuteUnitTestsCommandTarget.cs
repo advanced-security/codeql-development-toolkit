@@ -42,6 +42,11 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
             }
 
             var transformedDirs = dirs.Select(dir => Path.GetRelativePath(Base, dir));
+
+            if(dirs.Length == 0)
+            {
+                DieWithError($"No tests detected. Please create unit tests before running this command.");
+            }
           
             Parallel.For(0, NumThreads,
                  slice => {
