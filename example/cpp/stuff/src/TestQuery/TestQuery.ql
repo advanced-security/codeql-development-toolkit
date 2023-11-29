@@ -2,7 +2,7 @@
  * @id cpp/stuff/TestQuery
  * @name TestQuery
  * @description Replace this text with a description of your query.
- * @kind problem
+ * kind problem
  * @precision medium
  * @problem.severity error
  * @tags stuff

@@ -77,8 +77,6 @@ jobs:
         shell: bash
         run: >
 {% endraw %}
-          qlt validation run check-queries --pretty-print 
-          --language {{ language }} 
+          qlt validation run check-queries --pretty-print --language {{ language }} >> $GITHUB_STEP_SUMMARY
 
-          qlt validation run check-queries
-          --language {{ language }} 
+          qlt validation run check-queries --language {{ language }} 

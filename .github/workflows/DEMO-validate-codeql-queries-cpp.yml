@@ -76,8 +76,6 @@ jobs:
       - name: Run validation tests
         shell: bash
         run: >
-          qlt validation run check-queries --pretty-print 
-          --language cpp --base example/
+          qlt validation run check-queries --pretty-print  --language cpp --base example/ >> $GITHUB_STEP_SUMMARY
 
-          qlt validation run check-queries
-          --language cpp --base example/ 
+          qlt validation run check-queries --language cpp --base example/ 
