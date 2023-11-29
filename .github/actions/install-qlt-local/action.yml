@@ -29,8 +29,10 @@ runs:
         dotnet-version: 6.0.x
 
     - name: Restore dependencies
+      shell: bash
       run: dotnet restore
     - name: Build
+      shell: bash
       run: dotnet build -c Release --no-restore
   
       # create archive in \src\CodeQLToolkit.Core\bin\Release\net6.0\publish\linux-x64
