@@ -2,9 +2,7 @@ name: Build Release
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "master" ]
-
+  
 jobs:
   build:
     runs-on: ubuntu-latest
