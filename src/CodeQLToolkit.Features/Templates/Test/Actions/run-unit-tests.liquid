@@ -123,7 +123,7 @@ jobs:
 
       - name: Validate test results
         run: |
-          qlt test run validate-unit-tests --results-directory . 
           qlt test run validate-unit-tests --pretty-print --results-directory . >> $GITHUB_STEP_SUMMARY
+          qlt test run validate-unit-tests --results-directory . 
 
 {% endraw %}
