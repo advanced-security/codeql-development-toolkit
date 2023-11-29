@@ -1,4 +1,5 @@
-﻿using CodeQLToolkit.Shared.Utils;
+﻿using CodeQLToolkit.Features.Validation.Commands.Targets;
+using CodeQLToolkit.Shared.Utils;
 using System.CommandLine;
 
 namespace CodeQLToolkit.Features.Test.Commands
@@ -29,27 +30,29 @@ namespace CodeQLToolkit.Features.Test.Commands
             var runCommand = new Command("run", "Functions pertaining running validation commands.");
             parentCommand.Add(runCommand);
 
-            var getMatrixTestCommand = new Command("check-metadsata", "Checks the query metadata for the specified queries.");
+            var checkQueryQueriesCommand = new Command("check-queries", "Checks the query metadata for the specified language.");
 
             var languageOption = new Option<string>("--language", $"The language to run tests for.") { IsRequired = true }.FromAmong(SupportedLangauges.Select(x => x.ToOptionString()).ToArray());
-            var matrixOSVersion = new Option<string>("--os-version", () => "ubuntu-latest", "A comma-seperated list of operating systems to use. Example: `ubuntu-latest`.") { IsRequired = true };
-            getMatrixTestCommand.Add(matrixOSVersion);
-      
-            runCommand.Add(getMatrixTestCommand);
+            var prettyPrintOption = new Option<bool>("--pretty-print", () => false, "Pretty prints error output in a pretty compact format.") { IsRequired = true };
+
+            checkQueryQueriesCommand.Add(languageOption);
+            checkQueryQueriesCommand.Add(prettyPrintOption);
+
+            runCommand.Add(checkQueryQueriesCommand);
 
 
-            getMatrixTestCommand.SetHandler(() =>
+            checkQueryQueriesCommand.SetHandler((language, basePath, prettyPrint) =>
             {
-                Log<ValidationCommandFeature>.G().LogInformation("Executing validate-unit-tests command...");
+                Log<ValidationCommandFeature>.G().LogInformation("Executing check-query-metadata command...");
 
-                //new ValidateUnitTestsCommand()
-                //{
-                //    ResultsDirectory = resultsDirectory,
-                //    PrettyPrint = prettyPrint
-                //}.Run();
-
-
-            });
+                new CheckQueriesCommandTarget()
+                {
+                    Base = basePath,
+                    Language = language,
+                    PrettyPrint = prettyPrint,                    
+                }.Run();
+                
+            }, languageOption, Globals.BasePathOption, prettyPrintOption);
         }
 
         public int Run()

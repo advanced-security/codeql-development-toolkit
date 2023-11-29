@@ -1,4 +1,5 @@
 ﻿using CodeQLToolkit.Features.Test.Commands;
+using CodeQLToolkit.Features.Validation.Lifecycle;
 using System.CommandLine;
 
 namespace CodeQLToolkit.Features.Validation
@@ -7,6 +8,7 @@ namespace CodeQLToolkit.Features.Validation
 
     {
         readonly ValidationCommandFeature commandFeature;
+        readonly ValidationLifecycleFeature validationLifecycleFeature;
         readonly static ValidationFeatureMain instance;
 
         static ValidationFeatureMain()
@@ -17,6 +19,7 @@ namespace CodeQLToolkit.Features.Validation
         private ValidationFeatureMain()
         {
             commandFeature = new ValidationCommandFeature();  
+            validationLifecycleFeature = new ValidationLifecycleFeature();
         }
         public static ValidationFeatureMain Instance { get { return instance; } }
         
@@ -27,6 +30,9 @@ namespace CodeQLToolkit.Features.Validation
 
             Log<ValidationFeatureMain>.G().LogInformation("Registering command submodule.");
             commandFeature.Register(validationCommand);
+
+            Log<ValidationFeatureMain>.G().LogInformation("Registering lifecycle submodule.");
+            validationLifecycleFeature.Register(validationCommand);
 
         }
 
