@@ -77,10 +77,8 @@ jobs:
         shell: bash
         run: >
 {% endraw %}
-          # run a copy for pretty printing
           qlt validation run check-queries --pretty-print 
           --language {{ language }} 
 
-          # run this version to influence the outcome of the run. 
           qlt validation run check-queries
           --language {{ language }} 
