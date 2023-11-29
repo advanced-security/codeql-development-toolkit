@@ -76,11 +76,8 @@ jobs:
       - name: Run validation tests
         shell: bash
         run: >
-
-          # run a copy for pretty printing
           qlt validation run check-queries --pretty-print 
           --language cpp --base example/
 
-          # run this version to influence the outcome of the run. 
           qlt validation run check-queries
           --language cpp --base example/ 
