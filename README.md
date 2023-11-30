@@ -1,7 +1,12 @@
+<table>
+<tr>
+<td><img src="assets/qlt-logo.png"></td>
+<td><h1>The CodeQL Development Toolkit (QLT)</h1></td>
+</tr>
+</table>
 
-<img src="assets/qlt-logo.png">
 
-# The CodeQL Development Toolkit (QLT)
+
 
 The CodeQL Development toolkit is a tool for making common CodeQL development workflows easier. Some of its key features include:
 
