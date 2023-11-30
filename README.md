@@ -1,13 +1,6 @@
 <div align="center">
-<img src="assets/qlt-logo.png">
+<img src="assets/qlt-logo2.png">
 </div>
-
-<!-- <table style="border: none" cellspacing="0" cellpadding="0">
-<tr>
-<td><img src="assets/qlt-logo.png"></td>
-<td><h1 style="border: none">The CodeQL Development Toolkit (QLT)</h1></td>
-</tr>
-</table> -->
 
 # The CodeQL Development Toolkit (QLT)
 
