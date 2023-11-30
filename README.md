@@ -4,7 +4,7 @@
 
 # The CodeQL Development Toolkit (QLT)
 
-*Please Note: This project is an Open Source Tool maintained by [@advanced-security/es-advanced-security](https://github.com/orgs/advanced-security/teams/es-advanced-security). It is not an officially supported product of Github, Inc and is provided 
+*Please Note: This project is an Open Source Tool maintained by the Expert Services Team. It is not an officially supported product of Github, Inc and is provided 
 "as is", without warranty of any kind, express or implied, including but not limited to
 the warranties of merchantability, fitness ofr a particular purpose and noninfringement.*
 
