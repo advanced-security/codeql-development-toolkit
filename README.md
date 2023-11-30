@@ -1,4 +1,4 @@
-<table>
+<table border="0">
 <tr>
 <td><img src="assets/qlt-logo.png"></td>
 <td><h1>The CodeQL Development Toolkit (QLT)</h1></td>
