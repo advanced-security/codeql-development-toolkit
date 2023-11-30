@@ -1,9 +1,15 @@
-<table style="border: none" cellspacing="0" cellpadding="0">
+<div align="center">
+<img src="assets/qlt-logo.png">
+</div>
+
+<!-- <table style="border: none" cellspacing="0" cellpadding="0">
 <tr>
 <td><img src="assets/qlt-logo.png"></td>
 <td><h1 style="border: none">The CodeQL Development Toolkit (QLT)</h1></td>
 </tr>
-</table>
+</table> -->
+
+# The CodeQL Development Toolkit (QLT)
 
 *Please Note: This project is an Open Source Tool maintained by [@advanced-security/es-advanced-security](https://github.com/orgs/advanced-security/teams/es-advanced-security). It is not an officially supported product of Github, Inc and is provided 
 "as is", without warranty of any kind, express or implied, including but not limited to
