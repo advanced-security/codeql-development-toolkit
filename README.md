@@ -57,6 +57,7 @@ Commands:
 
 # Contributing
 
+We welcome your contribution! Please see our [guidelines for contributing](CONTRIBUTING.md) for more information.
 
 # License 
 
