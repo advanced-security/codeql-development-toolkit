@@ -1,7 +1,7 @@
-<table border="0">
+<table style="border: none" cellspacing="0" cellpadding="0">
 <tr>
 <td><img src="assets/qlt-logo.png"></td>
-<td><h1>The CodeQL Development Toolkit (QLT)</h1></td>
+<td><h1 style="border: none">The CodeQL Development Toolkit (QLT)</h1></td>
 </tr>
 </table>
 
