@@ -54,6 +54,26 @@ Commands:
   validation  Features related to the validation of CodeQL Development Repositories.
 ```
 
+# Cookbook 
+
+**Validate the metadata in your queries**
+
+```
+qlt validation run check-queries --pretty-print --language cpp
+```
+
+
+**Run your unit tests in parallel**
+
+```
+qlt test run execute-unit-tests  --num-threads 4 --language cpp --runner-os "Linux" --work-dir /tmp/my-project
+```
+
+**Validate unit test run data**
+```
+qlt test run validate-unit-tests --pretty-print  --results-directory /tmp/my-project
+```
+
 # Contributing
 
 We welcome your contribution! Please see our [guidelines for contributing](CONTRIBUTING.md) for more information.

@@ -1,5 +1,5 @@
 /**
- * @id cpp/stuff2/TestQuery
+ * @id cpp/stuff2/testquery
  * @name TestQuery
  * @description Replace this text with a description of your query.
  * @kind problem
