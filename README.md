@@ -133,13 +133,63 @@ Repo Root
 **Initialize repo for query development**
 
 ```
-qlt query init
+Usage:
+  qlt query init [options]
+
+Options:
+  --overwrite-existing                    Overwrite exiting files (if they exist). [default: False]
+  --base <base>                           The base path to find the query repository. [default: C:\temp\p1]
+  --automation-type <actions> (REQUIRED)  The base path to find the query repository. [default: actions]
+  -?, -h, --help                          Show help and usage information
 ```
+
+**Set the Version of CodeQL Used**
+
+```
+Usage:
+  qlt codeql set version [options]
+
+Options:
+  --cli-version <cli-version> (REQUIRED)                  The version of the cli to use. Example: `2.11.6`. [default:
+                                                          2.11.6]
+  --standard-library-version <standard-library-version>   The version of the standard library to use. Example:
+  (REQUIRED)                                              `codeql-cli/v2.11.6`. [default: codeql-cli/v2.11.6]
+  --bundle-version <bundle-version> (REQUIRED)            The bundle version to use. Example: `codeql-bundle-20221211`.
+                                                          [default: codeql-bundle-20221211]
+  --base <base>                                           The base path to find the query repository. [default:
+                                                          C:\temp\p1]
+  --automation-type <actions> (REQUIRED)                  The base path to find the query repository. [default: actions]
+  -?, -h, --help                                          Show help and usage information
+```
+
 
 **Initialize CodeQL CI/CD and Unit Testing For Actions**
 
 This command will install a number of workflows into your repository which include the necessary workflows for using QLT in your automation environment as well as the workflows for running CodeQL unit tests for the specified language. 
 
+```
+Usage:
+  qlt test init [options]
+
+Options:
+  --overwrite-existing                                       Overwrite exiting files (if they exist). [default: False]
+  --num-threads <num-threads>                                Number of threads to use during test execution. [default:
+                                                             4]
+  --use-runner <use-runner>                                  The runner(s) to use. Should be a comma-seperated list of
+                                                             actions runners. [default: ubuntu-latest]
+  --language <c|cpp|csharp|go|java|javascript|python|ruby>   The language to generate automation for.
+  (REQUIRED)
+  --codeql-args <codeql-args>                                Extra arguments to pass to CodeQL.
+  --base <base>                                              The base path to find the query repository. [default:
+                                                             C:\temp\p1]
+  --automation-type <actions> (REQUIRED)                     The base path to find the query repository. [default:
+                                                             actions]
+  -?, -h, --help                                             Show help and usage information
+```
+
+
+
+Example usage: 
 ```
 qlt test init  --use-runner ubuntu-latest --num-threads 4 --language c --automation-type actions
 ```
@@ -148,6 +198,24 @@ qlt test init  --use-runner ubuntu-latest --num-threads 4 --language c --automat
 **Validate the metadata in your queries**
 
 ```
+Usage:
+  qlt validation run check-queries [options]
+
+Options:
+  --language <c|cpp|csharp|go|java|javascript|python|ruby>   The language to run tests for.
+  (REQUIRED)
+  --pretty-print (REQUIRED)                                  Pretty prints error output in a pretty compact format.
+                                                             [default: False]
+  --base <base>                                              The base path to find the query repository. [default:
+                                                             C:\temp\p1]
+  --automation-type <actions> (REQUIRED)                     The base path to find the query repository. [default:
+                                                             actions]
+  -?, -h, --help                                             Show help and usage information
+```
+
+
+Example Usage:
+```
 qlt validation run check-queries --pretty-print --language cpp
 ```
 
@@ -155,10 +223,49 @@ qlt validation run check-queries --pretty-print --language cpp
 **Run your unit tests in parallel**
 
 ```
+Usage:
+  qlt test run execute-unit-tests [options]
+
+Options:
+  --num-threads <num-threads> (REQUIRED)                     The number of threads to use for runner. For best
+                                                             performance, do not exceed the number of physical cores on
+                                                             your system. [default: 4]
+  --work-dir <work-dir> (REQUIRED)                           Where to place intermediate execution output files.
+                                                             [default: C:\Users\jsingleton\AppData\Local\Temp\]
+  --language <c|cpp|csharp|go|java|javascript|python|ruby>   The language to run tests for.
+  (REQUIRED)
+  --runner-os <runner-os> (REQUIRED)                         Label for the operating system running these tests.
+  --codeql-args <codeql-args>                                Extra arguments to pass to CodeQL.
+  --base <base>                                              The base path to find the query repository. [default:
+                                                             C:\temp\p1]
+  --automation-type <actions> (REQUIRED)                     The base path to find the query repository. [default:
+                                                             actions]
+  -?, -h, --help                                             Show help and usage information
+```
+
+
+Example Usage:
+```
 qlt test run execute-unit-tests  --num-threads 4 --language cpp --runner-os "Linux" --work-dir /tmp/my-project
 ```
 
 **Validate unit test run data**
+
+```
+Usage:
+  qlt test run validate-unit-tests [options]
+
+Options:
+  --results-directory <results-directory> (REQUIRED)  Where to find the intermediate execution output files.
+  --pretty-print (REQUIRED)                           Pretty print test output in a compact format. Note this will not
+                                                      exit with a failure code if tests fail. [default: False]
+  --base <base>                                       The base path to find the query repository. [default: C:\temp\p1]
+  --automation-type <actions> (REQUIRED)              The base path to find the query repository. [default: actions]
+  -?, -h, --help                                      Show help and usage information
+```
+
+
+Example Usage:
 ```
 qlt test run validate-unit-tests --pretty-print  --results-directory /tmp/my-project
 ```
