@@ -53,8 +53,97 @@ Commands:
   pack        Features CodeQL pack management and publication.
   validation  Features related to the validation of CodeQL Development Repositories.
 ```
+# How to Use QLT
 
-# Cookbook 
+QLT is designed to be used mainly in the context of an automation environment, such as actions. Locally, you can use the tool to scaffold common workflows, for example, running unit tests or validating query metadata, and within the actions environment, the workflows that get generated will in turn rely on QLT to perform specialized work related to those tasks. 
+
+QLT is divided in to **features**. A typical workflow in QLT is that you first `init` a feature, which will install necessary metadata into your repository that is later used to invoke or support the operation of QLT. 
+
+For example, to initialize unit testing in your repository you can run: 
+
+```
+qlt test init  --use-runner ubuntu-latest --num-threads 4 --language c --automation-type actions
+```
+
+Which installs automation for running unit tests for C language queries. Please see the following sections for more information about QLT and its operation as well as see common commands you can use to help manage your CodeQL development. 
+
+## Assumptions About Repository Layout
+
+In order to promote consistency and best practices, QLT takes an opinionated approach to repository layout. These recommendations are based on the experience of our team in deploying CodeQL in a diverse set of environments and we feel offer the best balance of flexibility and functionality. 
+
+Firstly, it is assumed each repository has a `codeql-workspace.yml` file in it in the root. This file can be created with the following command:
+
+```
+qlt query init
+```
+
+Next, it is assumed that each repository has a `qlt.conf.json` file in it, which contains information pertaining to the CodeQL version used by the repository. This file can be created with the command:
+
+```
+qlt codeql set version
+```
+
+Note this uses the default CodeQL version -- you can customize these values on the command line using the `--help` flag and reviewing the available options. Additionally, you may edit the `qlt.conf.json` file directly, though this is not recommended. 
+
+Next, at the top level it is assumed each language resides in it's own directory. For example, `java` queries should be in a `java` subdirectory. And `c` queries should be in a `c` subdirectory. 
+
+Within each language, queries should be structured so that each query resides in its own directory and has a matching directory in a test directory. The `src` and `test` directories should both be in their own CodeQL packs. 
+
+The illustration below details the suggested structure for a repository with two different query packs, each containing a single query. 
+
+```
+Repo Root
+│   codeql-workspace.yml
+│   qlt.conf.json
+│
+└───cpp
+    ├───package1
+    │   ├───src
+    │   │   │   qlpack.yml
+    │   │   │
+    │   │   └───TestQuery
+    │   │           TestQuery.ql
+    │   │
+    │   └───test
+    │       │   qlpack.yml
+    │       │
+    │       └───TestQuery
+    │               TestQuery.cpp
+    │               TestQuery.expected
+    │               TestQuery.qlref
+    │
+    └───package2
+        ├───src
+        │   │   qlpack.yml
+        │   │
+        │   └───TestQuery
+        │           TestQuery.ql
+        │
+        └───test
+            │   qlpack.yml
+            │
+            └───TestQuery
+                    TestQuery.cpp
+                    TestQuery.expected
+                    TestQuery.qlref
+```
+
+## Common Tasks / Cookbook 
+
+**Initialize repo for query development**
+
+```
+qlt query init
+```
+
+**Initialize CodeQL CI/CD and Unit Testing For Actions**
+
+This command will install a number of workflows into your repository which include the necessary workflows for using QLT in your automation environment as well as the workflows for running CodeQL unit tests for the specified language. 
+
+```
+qlt test init  --use-runner ubuntu-latest --num-threads 4 --language c --automation-type actions
+```
+
 
 **Validate the metadata in your queries**
 
