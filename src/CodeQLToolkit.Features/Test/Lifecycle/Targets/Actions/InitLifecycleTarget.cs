@@ -35,7 +35,8 @@ namespace CodeQLToolkit.Features.Test.Lifecycle.Targets.Actions
                 numThreads = NumThreads,
                 useRunner = UseRunner,
                 language = tmpLanguage,
-                codeqlArgs = codeqlArgs
+                codeqlArgs = codeqlArgs,
+                devMode = DevMode
             });
 
             Language = tmpLanguage; 

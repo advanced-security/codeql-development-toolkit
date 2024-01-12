@@ -50,7 +50,7 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
 
 
             
-            initCommand.SetHandler((basePath, automationType, overwriteExisting, numThreads, useRunner, language, extraArgs) =>
+            initCommand.SetHandler((devMode, basePath, automationType, overwriteExisting, numThreads, useRunner, language, extraArgs) =>
             {
                 Log<TestLifecycleFeature>.G().LogInformation("Executing init command...");
 
@@ -67,9 +67,10 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
                 featureTarget.UseRunner = useRunner;    
                 featureTarget.Language = language;
                 featureTarget.ExtraArgs = extraArgs;
+                featureTarget.DevMode = devMode;
                 featureTarget.Run();
 
-            }, Globals.BasePathOption, Globals.AutomationTypeOption, overwriteExistingOption, numThreadsOption, useRunnerOption, languageOption, extraCodeQLOptions);
+            }, Globals.Development, Globals.BasePathOption, Globals.AutomationTypeOption, overwriteExistingOption, numThreadsOption, useRunnerOption, languageOption, extraCodeQLOptions);
 
         }
 

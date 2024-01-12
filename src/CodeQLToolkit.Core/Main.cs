@@ -27,6 +27,7 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
             // Add global option for the root directory          
             rootCommand.AddGlobalOption(Globals.BasePathOption);
             rootCommand.AddGlobalOption(Globals.AutomationTypeOption);
+            rootCommand.AddGlobalOption(Globals.Development);
 
             var versionCommand = new Command("version", "Get the current tool version.");
             rootCommand.Add(versionCommand);

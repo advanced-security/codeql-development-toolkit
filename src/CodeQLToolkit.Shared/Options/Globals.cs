@@ -20,5 +20,10 @@ namespace CodeQLToolkit.Shared.Options
         public static Option<string> AutomationTypeOption { get; } = new Option<string>("--automation-type", () => {
             return "actions";
         }, "The base path to find the query repository.") { IsRequired = true }.FromAmong(SupportedAutomationTypes);
+
+        public static Option<bool> Development { get; } = new Option<bool>("--development", () => {
+            return false;
+        }, "Turns on development mode which enables special features used in the development of QLT.")
+        { IsRequired = true }.FromAmong(SupportedAutomationTypes);
     }
 }
