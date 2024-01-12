@@ -45,7 +45,7 @@ jobs:
           else
             echo "Some files have changed - please check for regressions."
             git status
-            git diff-index HEAD .github
+            git diff .github
             exit 1
           fi
 
