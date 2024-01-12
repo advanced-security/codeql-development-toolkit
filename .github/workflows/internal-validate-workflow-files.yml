@@ -34,7 +34,7 @@ jobs:
       - name: Generate Workflow Files (Test Feature)
         shell: bash
         run: |
-          qlt test init  --use-runner ubuntu-latest --num-threads 4 --language cpp --automation-type actions --development
+          qlt test init  --use-runner ubuntu-latest --num-threads 4 --language cpp --automation-type actions --development --overwrite-existing
 
 
       - name: Check Git Clean Status 
