@@ -1,6 +1,5 @@
 name: ⚙️ Validate Workflow Files
 
-
 on:
   push:
     branches:
@@ -12,7 +11,7 @@ on:
 
 jobs:
   validate-workflow-files:
-    name: Create CodeQL Unit Test Matrix
+    name: Validate Workflow Files
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

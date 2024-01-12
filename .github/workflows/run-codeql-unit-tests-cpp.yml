@@ -64,7 +64,7 @@ jobs:
           codeql-stdlib-version: ${{ matrix.codeql_standard_library }}
           add-to-path: true
 
-      - name: Verify Versions of Tooling
+      - name: Verify Versions of Tooling!
         shell: bash
         run: |
           echo "CodeQL Home: ${{ steps.install-codeql.outputs.codeql-home }}"
