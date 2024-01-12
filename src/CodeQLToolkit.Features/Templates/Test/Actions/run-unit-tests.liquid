@@ -20,7 +20,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 {% endraw %}
-
 {% if dev_mode %}
       - name: Install QLT
         id: install-qlt
@@ -28,11 +27,11 @@ jobs:
         with:
           qlt-version: 'latest'
           add-to-path: true
+
       - name: Export unit test matrix
         id: export-unit-test-matrix
         run: |
           qlt test run get-matrix --os-version {{ use_runner }} --base example/
-
 {% else %}
       - name: Install QLT
         id: install-qlt
@@ -40,12 +39,12 @@ jobs:
         with:
           qlt-version: 'latest'
           add-to-path: true
+
       - name: Export unit test matrix
         id: export-unit-test-matrix
         run: |
           qlt test run get-matrix --os-version {{ use_runner }}
 {% endif %}
-
 {% raw %}
   run-test-suites:
     name: Run Unit Tests
@@ -120,7 +119,7 @@ jobs:
 {% endraw %}
 {% if dev_mode %}
           qlt test run execute-unit-tests  
-          --codeql-args "{{ codeql_args }}"
+          --codeql-args "{{ codeql_args }}" 
           --num-threads {{ num_threads }} 
           --language {{ language }} 
           --runner-os $RUNNER_OS 
