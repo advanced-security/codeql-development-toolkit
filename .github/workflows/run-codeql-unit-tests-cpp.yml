@@ -1,4 +1,4 @@
-name: ⚙️ DEMO CodeQL - Run Unit Tests (cpp)
+name: ⚙️ CodeQL - Run Unit Tests (cpp)
 
 
 on:
@@ -20,6 +20,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+
       - name: Install QLT
         id: install-qlt
         uses: ./.github/actions/install-qlt-local
@@ -31,6 +32,7 @@ jobs:
         id: export-unit-test-matrix
         run: |
           qlt test run get-matrix --os-version ubuntu-latest --base example/
+
 
   run-test-suites:
     name: Run Unit Tests
@@ -45,13 +47,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+
       - name: Install QLT
         id: install-qlt
         uses: ./.github/actions/install-qlt-local
         with:
           qlt-version: 'latest'
           add-to-path: true
-      
+
+
       - name: Install CodeQL
         id: install-codeql
         uses: ./.github/actions/install-codeql
@@ -71,10 +75,12 @@ jobs:
           echo "QLT Home: ${{ steps.install-qlt.outputs.qlt-home }}"
           qlt version
 
+
       - name: Install QL Packs
         shell: bash
         run: |
           qlt query run install-packs --base example/
+
 
       - name: Run test suites
         id: run-test-suites
@@ -86,11 +92,14 @@ jobs:
           RUNNER_TMP: ${{ runner.temp }}
         shell: bash
         run: >
-          qlt test run execute-unit-tests 
+
+
+          qlt test run execute-unit-tests  
+          --codeql-args "--threads=0" 
           --num-threads 4 
           --language cpp 
           --runner-os $RUNNER_OS 
-          --work-dir $RUNNER_TMP 
+          --work-dir $RUNNER_TMP
           --base example/
 
             
@@ -107,8 +116,10 @@ jobs:
     needs: [run-test-suites]
     runs-on: ubuntu-latest
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v3
+
 
       - name: Install QLT
         id: install-qlt
@@ -117,10 +128,12 @@ jobs:
           qlt-version: 'latest'
           add-to-path: true
 
+
       - name: Collect test results
         uses: actions/download-artifact@v2
 
       - name: Validate test results
         run: |
           qlt test run validate-unit-tests --pretty-print --results-directory . >> $GITHUB_STEP_SUMMARY
-          qlt test run validate-unit-tests --results-directory .           
+          qlt test run validate-unit-tests --results-directory . 
+
