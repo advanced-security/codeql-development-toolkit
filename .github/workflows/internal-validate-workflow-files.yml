@@ -40,7 +40,7 @@ jobs:
       - name: Check Git Clean Status 
         shell: bash
         run: |
-          if git diff-index --quiet HEAD .github ; then
+          if git diff --quiet .github ; then
             echo "Git is clean - generation is as expected."
           else
             echo "Some files have changed - please check for regressions."
