@@ -23,7 +23,7 @@ jobs:
     - name: Build
       run: dotnet build -c Release --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test -c Release 
     
     # create archive in \src\CodeQLToolkit.Core\bin\Release\net6.0\publish\linux-x64
     - name: Create Build Bundle (Linux)
