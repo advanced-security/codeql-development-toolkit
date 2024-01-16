@@ -27,8 +27,8 @@ jobs:
           qlt-version: 'latest'
           add-to-path: true
 
-      - name: Export unit test matrix
-        id: export-unit-test-matrix
+      - name: Export test matrix
+        id: export-test-matrix
         run: |
           qlt test run get-matrix --os-version {{ use_runner }} --base example/
 {% else %}
@@ -92,12 +92,18 @@ jobs:
           echo -e "Checking QLT Version:"
           echo "QLT Home: ${{ steps.install-qlt.outputs.qlt-home }}"
           qlt version
-
+{% endraw %}
+{% if dev_mode %}
+      - name: Install QL Packs
+        shell: bash
+        run: |
+          qlt query run install-packs --base example/
+{% else %}
       - name: Install QL Packs
         shell: bash
         run: |
           qlt query run install-packs
-{% endraw %}
+{% endif %}
 {% if dev_mode %}
       - name: Run validation tests
         shell: bash
