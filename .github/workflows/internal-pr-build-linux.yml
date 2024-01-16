@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
   
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     
     steps:
@@ -22,10 +22,9 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build -c Release --no-restore
-    # - name: Test
-    #   run: dotnet test --no-build --verbosity normal
+    - name: Test
+      run: dotnet test -c Release 
     
-    # create archive in \src\CodeQLToolkit.Core\bin\Release\net6.0\publish\linux-x64
     - name: Create Build Bundle (Linux)
       shell: pwsh
       run: |
