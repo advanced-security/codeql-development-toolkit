@@ -18,6 +18,16 @@ namespace CodeQLToolkit.Shared.Tests.Utils
         {
             var dir = FileUtils.CreateTempDirectory();           
             Assert.IsTrue(Directory.Exists(dir));
+            Assert.IsTrue(dir.StartsWith(Path.GetTempPath()));
+        }
+
+        [Test]
+        public void TestCreateTempDirectoryWithPath()
+        {
+            var dir = FileUtils.CreateTempDirectory(Path.GetTempPath());
+            Assert.IsTrue(Directory.Exists(dir));
+            Assert.IsTrue(dir.StartsWith(Path.GetTempPath()));
+
         }
     }
 }
