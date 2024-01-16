@@ -50,9 +50,7 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
             // Register the `Validation` feature
             ValidationFeatureMain.Instance.Register(rootCommand);
 
-            await rootCommand.InvokeAsync(args);
-
-            return 0;            
+            return await rootCommand.InvokeAsync(args);
         }
     }
 }
