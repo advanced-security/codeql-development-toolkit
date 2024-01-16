@@ -46,7 +46,7 @@ namespace CodeQLToolkit.Features.Validation.Lifecycle
 
             parentCommand.Add(initCommand);
 
-            initCommand.SetHandler((basePath, automationType, overwriteExisting, language, useRunner) =>
+            initCommand.SetHandler((devMode, basePath, automationType, overwriteExisting, language, useRunner) =>
             {
                 Log<TestLifecycleFeature>.G().LogInformation("Executing init command...");
 
@@ -61,9 +61,10 @@ namespace CodeQLToolkit.Features.Validation.Lifecycle
                 featureTarget.UseRunner = useRunner;
                 featureTarget.OverwriteExisting = overwriteExisting;
                 featureTarget.Language = language;
+                featureTarget.DevMode = devMode;
                 featureTarget.Run();
 
-            }, Globals.BasePathOption, Globals.AutomationTypeOption, overwriteExistingOption, languageOption, useRunnerOption);
+            }, Globals.Development, Globals.BasePathOption, Globals.AutomationTypeOption, overwriteExistingOption, languageOption, useRunnerOption);
 
         }
 

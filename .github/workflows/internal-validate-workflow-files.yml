@@ -1,0 +1,62 @@
+name: ⚙️ Validate Workflow Files
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+jobs:
+  validate-workflow-files:
+    name: Validate Workflow Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install QLT
+        id: install-qlt
+        uses: ./.github/actions/install-qlt-local
+        with:
+          qlt-version: 'latest'
+          add-to-path: true
+
+      - name: Validate QLT Installation
+        shell: bash
+        run: |
+          echo -e "Checking QLT Version:"
+          echo "QLT Home: ${{ steps.install-qlt.outputs.qlt-home }}"
+          qlt version
+
+      - name: Generate Workflow Files (Test Feature)
+        shell: bash
+        run: |
+          if ! qlt test init --use-runner ubuntu-latest --num-threads 4 --language cpp --automation-type actions --development --overwrite-existing ; then
+            echo "Failed to generate test workflow files."
+            exit 1
+          fi
+
+      - name: Generate Workflow Files (Validation Feature)
+        shell: bash
+        run: |
+          if ! qlt validation init --use-runner ubuntu-latest --language cpp --automation-type actions --development --overwrite-existing ; then
+            echo "Failed to generate validation workflow files."
+            exit 1
+          fi
+
+      - name: Check Git Clean Status 
+        shell: bash
+        run: |
+          if git diff --quiet .github ; then
+            echo "Git is clean - generation is as expected."
+          else
+            echo "Some files have changed - please check for regressions."
+            git status
+            git diff .github
+            exit 1
+          fi
+
+

@@ -13,5 +13,7 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
 
         public string ExtraArgs { get; set; }
 
+        
+
     }
 }

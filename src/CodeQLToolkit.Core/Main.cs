@@ -27,6 +27,7 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
             // Add global option for the root directory          
             rootCommand.AddGlobalOption(Globals.BasePathOption);
             rootCommand.AddGlobalOption(Globals.AutomationTypeOption);
+            rootCommand.AddGlobalOption(Globals.Development);
 
             var versionCommand = new Command("version", "Get the current tool version.");
             rootCommand.Add(versionCommand);
@@ -49,9 +50,7 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
             // Register the `Validation` feature
             ValidationFeatureMain.Instance.Register(rootCommand);
 
-            await rootCommand.InvokeAsync(args);
-
-            return 0;            
+            return await rootCommand.InvokeAsync(args);
         }
     }
 }

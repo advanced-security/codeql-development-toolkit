@@ -18,18 +18,32 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+{% endraw %}
+{% if dev_mode %}
+      - name: Install QLT
+        id: install-qlt
+        uses: ./.github/actions/install-qlt-local
+        with:
+          qlt-version: 'latest'
+          add-to-path: true
 
+      - name: Export test matrix
+        id: export-test-matrix
+        run: |
+          qlt test run get-matrix --os-version {{ use_runner }} --base example/
+{% else %}
       - name: Install QLT
         id: install-qlt
         uses: ./.github/actions/install-qlt
         with:
           qlt-version: 'latest'
           add-to-path: true
-{% endraw %}
-      - name: Export test matrix
-        id: export-test-matrix
+
+      - name: Export unit test matrix
+        id: export-unit-test-matrix
         run: |
           qlt test run get-matrix --os-version {{ use_runner }}
+{% endif %}
 {% raw %}
   validate-queries:
     name: Validate Queries
@@ -44,12 +58,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+{% endraw %}
+{% if dev_mode %}
       - name: Install QLT
+        id: install-qlt
+        uses: ./.github/actions/install-qlt-local
+        with:
+          qlt-version: 'latest'
+          add-to-path: true
+{% else %}
+      - name: Install QLT
+        id: install-qlt
         uses: ./.github/actions/install-qlt
         with:
           qlt-version: 'latest'
           add-to-path: true
-      
+{% endif %}
+{% raw %}      
       - name: Install CodeQL
         uses: ./.github/actions/install-codeql
         with:
@@ -67,16 +92,30 @@ jobs:
           echo -e "Checking QLT Version:"
           echo "QLT Home: ${{ steps.install-qlt.outputs.qlt-home }}"
           qlt version
-
+{% endraw %}
+{% if dev_mode %}
+      - name: Install QL Packs
+        shell: bash
+        run: |
+          qlt query run install-packs --base example/
+{% else %}
       - name: Install QL Packs
         shell: bash
         run: |
           qlt query run install-packs
-
+{% endif %}
+{% if dev_mode %}
       - name: Run validation tests
         shell: bash
         run: >
-{% endraw %}
+          qlt validation run check-queries --pretty-print --language {{ language }} --base example/ >> $GITHUB_STEP_SUMMARY
+
+          qlt validation run check-queries --language {{ language }} --base example/
+{% else %}
+      - name: Run validation tests
+        shell: bash
+        run: >
           qlt validation run check-queries --pretty-print --language {{ language }} >> $GITHUB_STEP_SUMMARY
 
           qlt validation run check-queries --language {{ language }} 
+{% endif %}
