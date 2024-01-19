@@ -12,10 +12,16 @@ namespace CodeQLToolkit.Shared.Utils
         public string CodeQLCLI { get; set; }
         public string CodeQLStandardLibrary { get; set; }
         public string CodeQLCLIBundle { get; set; }
+
+        public bool EnableCustomCodeQLBundles { get; set; }
         
         public string CodeQLStandardLibraryIdent { 
             get  {
-                return CodeQLStandardLibrary.Replace("/", "_");
+                if (CodeQLStandardLibrary != null)
+                {
+                    return CodeQLStandardLibrary.Replace("/", "_");
+                }
+                return CodeQLStandardLibrary;
             } 
         }
 
@@ -34,7 +40,11 @@ namespace CodeQLToolkit.Shared.Utils
 
         public QLTConfig FromFile() {
             var data = File.ReadAllText(CodeQLConfigFilePath);
-            return JsonConvert.DeserializeObject<QLTConfig>(data);
+            QLTConfig c = JsonConvert.DeserializeObject<QLTConfig>(data);
+
+
+            c.Base = Base;
+            return c;
         }
 
         public void ToFile()

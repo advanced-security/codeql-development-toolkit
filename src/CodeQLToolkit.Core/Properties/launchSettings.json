@@ -2,7 +2,7 @@
   "profiles": {
     "CodeQLToolkit.Core": {
       "commandName": "Project",
-      "commandLineArgs": " --base C:\\QLPACKTEST test init"
+      "commandLineArgs": "--base C:\\Projects\\codeql-development-lifecycle-toolkit\\example  bundle set enable-custom-bundles"
     }
   }
 }

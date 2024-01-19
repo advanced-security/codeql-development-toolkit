@@ -11,6 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Bundle\Commands\Targets\" />
+    <Folder Include="Bundle\Lifecycle\Targets\Actions\" />
+    <Folder Include="Bundle\Models\" />
     <Folder Include="CodeQL\" />
     <Folder Include="Pack\" />
     <Folder Include="Templates\Validation\Actions\" />
