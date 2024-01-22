@@ -26,7 +26,8 @@ namespace CodeQLToolkit.Features.Validation.Lifecycle.Targets.Actions
             {
                 useRunner = UseRunner,
                 language = tmpLanguage,
-                devMode = DevMode
+                devMode = DevMode,
+                branch = Branch
             });
 
             Language = tmpLanguage;

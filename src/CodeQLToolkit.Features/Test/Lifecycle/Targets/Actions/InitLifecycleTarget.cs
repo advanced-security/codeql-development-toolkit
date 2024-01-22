@@ -21,12 +21,12 @@ namespace CodeQLToolkit.Features.Test.Lifecycle.Targets.Actions
             var tmpLanguage = Language;
             Language = null;
 
-            var codeqlArgs = "--threads=0";
+            var EXcodeqlArgs = "--threads=0";
 
-            if(ExtraArgs!= null && ExtraArgs.Length > 0) 
-            {
-                codeqlArgs = $"{codeqlArgs} {ExtraArgs}";
-            }
+            //if(ExtraArgs!= null && ExtraArgs.Length > 0) 
+            //{
+            //    codeqlArgs = $"{codeqlArgs} {ExtraArgs}";
+            //}
 
             WriteTemplateIfOverwriteOrNotExists("install-codeql", Path.Combine(Base, ".github", "actions", "install-codeql", "action.yml"), "install-codeql action");
             WriteTemplateIfOverwriteOrNotExists("install-qlt", Path.Combine(Base, ".github", "actions", "install-qlt", "action.yml"), "install-qlt action");
@@ -35,8 +35,10 @@ namespace CodeQLToolkit.Features.Test.Lifecycle.Targets.Actions
                 numThreads = NumThreads,
                 useRunner = UseRunner,
                 language = tmpLanguage,
-                codeqlArgs = codeqlArgs,
-                devMode = DevMode
+                codeqlArgs = EXcodeqlArgs,
+                devMode = DevMode,
+                branch = Branch 
+
             });
 
             Language = tmpLanguage; 

@@ -1,15 +1,16 @@
 ﻿name: ⚙️ CodeQL - Run Unit Tests ({{language}})
-{% raw %}
+
 
 on:
   push:
     branches:
-      - '**'
+      - '{{branch}}'
   pull_request:
     branches:
-      - '**'
+      - '{{branch}}'
   workflow_dispatch:
 
+{% raw %}
 jobs:
   create-unit-test-matrix:
     name: Create CodeQL Unit Test Matrix

@@ -39,14 +39,16 @@ namespace CodeQLToolkit.Features.Validation.Lifecycle
             var overwriteExistingOption = new Option<bool>("--overwrite-existing", () => false, "Overwrite exiting files (if they exist).");
             var languageOption = new Option<string>("--language", $"The language to generate automation for.") { IsRequired = true }.FromAmong(SupportedLangauges.Select(x => x.ToOptionString()).ToArray());
             var useRunnerOption = new Option<string>("--use-runner", () => "ubuntu-latest", "The runner(s) to use. Should be a comma-seperated list of actions runners.");
+            var branchOption = new Option<string>("--branch", () => "main", "Branch to use as the target for triggering automation.");
 
             initCommand.AddOption(overwriteExistingOption);
             initCommand.AddOption(languageOption);
             initCommand.AddOption(useRunnerOption);
+            initCommand.AddOption(branchOption);
 
             parentCommand.Add(initCommand);
 
-            initCommand.SetHandler((devMode, basePath, automationType, overwriteExisting, language, useRunner) =>
+            initCommand.SetHandler((devMode, basePath, automationType, overwriteExisting, language, useRunner, branch) =>
             {
                 Log<TestLifecycleFeature>.G().LogInformation("Executing init command...");
 
@@ -62,9 +64,10 @@ namespace CodeQLToolkit.Features.Validation.Lifecycle
                 featureTarget.OverwriteExisting = overwriteExisting;
                 featureTarget.Language = language;
                 featureTarget.DevMode = devMode;
+                featureTarget.Branch = branch;  
                 featureTarget.Run();
 
-            }, Globals.Development, Globals.BasePathOption, Globals.AutomationTypeOption, overwriteExistingOption, languageOption, useRunnerOption);
+            }, Globals.Development, Globals.BasePathOption, Globals.AutomationTypeOption, overwriteExistingOption, languageOption, useRunnerOption, branchOption);
 
         }
 

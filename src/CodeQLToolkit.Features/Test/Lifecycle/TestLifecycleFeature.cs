@@ -37,20 +37,21 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
             var numThreadsOption = new Option<int>("--num-threads", () => 4, "Number of threads to use during test execution.");
             var useRunnerOption = new Option<string>("--use-runner", () => "ubuntu-latest", "The runner(s) to use. Should be a comma-seperated list of actions runners.");
             var languageOption = new Option<string>("--language", $"The language to generate automation for.") { IsRequired = true }.FromAmong(SupportedLangauges.Select(x => x.ToOptionString()).ToArray());
-            var extraCodeQLOptions = new Option<string>("--codeql-args", $"Extra arguments to pass to CodeQL.") { IsRequired = false };
+            //var extraCodeQLOptions = new Option<string>("--codeql-args", $"Extra arguments to pass to CodeQL.") { IsRequired = false };
+            var branchOption = new Option<string>("--branch", () => "main", "Branch to use as the target for triggering automation.");
 
             initCommand.AddOption(overwriteExistingOption);
             initCommand.AddOption(numThreadsOption);
             initCommand.AddOption(useRunnerOption);
             initCommand.AddOption(languageOption);
-            initCommand.AddOption(extraCodeQLOptions);
-
+            //initCommand.AddOption(extraCodeQLOptions);
+            initCommand.AddOption(branchOption);
 
             parentCommand.Add(initCommand);
 
 
             
-            initCommand.SetHandler((devMode, basePath, automationType, overwriteExisting, numThreads, useRunner, language, extraArgs) =>
+            initCommand.SetHandler((devMode, basePath, automationType, overwriteExisting, numThreads, useRunner, language, branch) =>
             {
                 Log<TestLifecycleFeature>.G().LogInformation("Executing init command...");
 
@@ -66,11 +67,12 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
                 featureTarget.NumThreads = numThreads;
                 featureTarget.UseRunner = useRunner;    
                 featureTarget.Language = language;
-                featureTarget.ExtraArgs = extraArgs;
+                //featureTarget.ExtraArgs = extraArgs;
                 featureTarget.DevMode = devMode;
+                featureTarget.Branch = branch; 
                 featureTarget.Run();
 
-            }, Globals.Development, Globals.BasePathOption, Globals.AutomationTypeOption, overwriteExistingOption, numThreadsOption, useRunnerOption, languageOption, extraCodeQLOptions);
+            }, Globals.Development, Globals.BasePathOption, Globals.AutomationTypeOption, overwriteExistingOption, numThreadsOption, useRunnerOption, languageOption, branchOption);
 
         }
 

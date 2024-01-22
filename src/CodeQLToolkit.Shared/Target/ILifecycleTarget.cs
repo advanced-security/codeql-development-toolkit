@@ -12,6 +12,8 @@ namespace CodeQLToolkit.Shared.Target
         public string Language { get; set; }
         public bool OverwriteExisting { get; set; }
         public string FeatureName { get; set; }
+        public string Branch { get; set; }
+
         public bool DevMode { get; set; }
         public AutomationType AutomationType { get; set; } = AutomationType.ANY;
 
