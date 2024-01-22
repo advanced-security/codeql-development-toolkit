@@ -1,14 +1,15 @@
 ﻿name: ⚙️ CodeQL - Validate Queries ({{language}})
-{% raw %}
+
 on:
   push:
     branches:
-      - '**'
+      - '{{ branch }}'
   pull_request:
     branches:
-      - '**'
+      - '{{ branch }}'
   workflow_dispatch:
 
+{% raw %}
 jobs:
   create-matrix:
     name: Create CodeQL Test Matrix

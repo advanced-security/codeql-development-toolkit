@@ -3,11 +3,12 @@ name: ⚙️ CodeQL - Validate Queries (cpp)
 on:
   push:
     branches:
-      - '**'
+      - 'main'
   pull_request:
     branches:
-      - '**'
+      - 'main'
   workflow_dispatch:
+
 
 jobs:
   create-matrix:

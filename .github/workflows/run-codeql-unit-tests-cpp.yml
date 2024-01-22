@@ -4,11 +4,12 @@ name: ⚙️ CodeQL - Run Unit Tests (cpp)
 on:
   push:
     branches:
-      - '**'
+      - 'main'
   pull_request:
     branches:
-      - '**'
+      - 'main'
   workflow_dispatch:
+
 
 jobs:
   create-unit-test-matrix:
