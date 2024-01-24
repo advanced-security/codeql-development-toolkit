@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -14,7 +14,6 @@
     <Folder Include="Bundle\Commands\Targets\" />
     <Folder Include="Bundle\Lifecycle\Targets\Actions\" />
     <Folder Include="Bundle\Models\" />
-    <Folder Include="CodeQL\" />
     <Folder Include="Pack\" />
     <Folder Include="Templates\Validation\Actions\" />
   </ItemGroup>
