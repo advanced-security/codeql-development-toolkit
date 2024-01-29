@@ -19,6 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="LibGit2Sharp" Version="0.29.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Templates\Query\codeql-workspace.liquid">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

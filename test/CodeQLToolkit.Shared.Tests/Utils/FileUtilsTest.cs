@@ -29,5 +29,29 @@ namespace CodeQLToolkit.Shared.Tests.Utils
             Assert.IsTrue(dir.StartsWith(Path.GetTempPath()));
 
         }
+
+
+        [Test]
+        public void TestSanitizeFilename()
+        {
+            string[] paths = new string[]{ 
+                "invalid:#!/\\/path",
+                "codeql/cli-1.1.2"
+            };
+
+            string[] expected = new string[]{
+                "invalid_#!___path",
+                "codeql_cli-1.1.2"
+            };
+
+            for (int i= 0; i < paths.Length; i++)
+            {
+                Console.WriteLine(i + "Actual: " + FileUtils.SanitizeFilename(paths[i]));
+                Console.WriteLine(i + "Expected: " + expected[i]);
+
+                Assert.IsTrue(FileUtils.SanitizeFilename(paths[i]) == expected[i]);
+            }
+
+        }
     }
 }

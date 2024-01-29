@@ -1,4 +1,5 @@
-﻿using CodeQLToolkit.Features.Test.Commands.Targets;
+﻿using CodeQLToolkit.Features.CodeQL.Commands.Targets;
+using CodeQLToolkit.Features.Test.Commands.Targets;
 using CodeQLToolkit.Features.Test.Lifecycle;
 using CodeQLToolkit.Shared.Types;
 using CodeQLToolkit.Shared.Utils;
@@ -43,15 +44,16 @@ namespace CodeQLToolkit.Features.CodeQL.Commands
 
             runCommand.Add(installCommand);
             runCommand.Add(useCommand);
-            runCommand.Add(listCommand);
+            //runCommand.Add(listCommand);
 
            
             installCommand.SetHandler((basePath, automationType) =>
             {
-                Log<CodeQLCommandFeature>.G().LogInformation("Executing validate-unit-tests command...");
+                Log<CodeQLCommandFeature>.G().LogInformation("Executing install command...");
 
-                new ValidateUnitTestsCommand()
+                new InstallCommand()
                 {
+                    Base = basePath,
                 }.Run();
 
 
