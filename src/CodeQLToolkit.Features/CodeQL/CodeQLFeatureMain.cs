@@ -36,9 +36,9 @@ namespace CodeQLToolkit.Features.CodeQL
         {
             var queryCommand = new Command("codeql", "Use the features related to managing the version of CodeQL used by this repository.");
             parentCommand.Add(queryCommand);
+            
             Log<CodeQLFeatureMain>.G().LogInformation("Registering scaffolding submodule.");
             lifecycleFeature.Register(queryCommand);
-
 
             Log<CodeQLFeatureMain>.G().LogInformation("Registering command submodule.");
             commandFeature.Register(queryCommand);
