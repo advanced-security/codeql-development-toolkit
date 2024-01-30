@@ -6,7 +6,7 @@
 
 *Please Note: This project is an Open Source Tool maintained by the Expert Services Team. It is not an officially supported product of Github, Inc and is provided 
 "as is", without warranty of any kind, express or implied, including but not limited to
-the warranties of merchantability, fitness ofr a particular purpose and noninfringement.*
+the warranties of merchantability, fitness for a particular purpose and noninfringement.*
 
 The CodeQL Development toolkit is a tool for making common CodeQL development workflows easier. Some of its key features include:
 
