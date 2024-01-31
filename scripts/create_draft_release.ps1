@@ -4,13 +4,12 @@ param(
     $Version,
     [Parameter(Mandatory=$false)] 
     [string]
-    $Branch = "master",
-    [Parameter(Mandatory=$true)] 
+    $Branch = "main",
+    [Parameter(Mandatory=$false)] 
     [string]
     $ArchiveDir       
 )
 
-$VERSION_FILE = Join-Path "src" "CodeQLToolkit.Core" "ver.txt"
 
 if (-not $Version) {
     Write-Host "Detecting version from version file..."
@@ -20,7 +19,7 @@ if (-not $Version) {
 Write-Host "Creating draft release for version $Version on branch $Branch..."
 
 # create checksums 
-Get-FileHash -Algorithm SHA256 $ArchiveDir/* | ForEach-Object { (Get-Item $_.Path).Name + " (SHA256): " + $_.Hash } | Out-File -Path $ArchiveDir/checksums.txt
+#Get-FileHash -Algorithm SHA256 $ArchiveDir/* | ForEach-Object { (Get-Item $_.Path).Name + " (SHA256): " + $_.Hash } | Out-File -Path $ArchiveDir/checksums.txt
 
-gh release create "v$Version" -d --target "$Branch" -t "v$Version" $ArchiveDir/*
+gh release create "v$Version" -d --target "$Branch" -t "v$Version" # $ArchiveDir/*
 

@@ -1,56 +1,29 @@
-name: Build Release
+name: Build and Publish Release
 
 on:
   workflow_dispatch:
+    inputs:
+        version:
+          description: |
+            The version to release. (eg: 0.1.2, exclude the 'v'.). 
+          required: true
+          type: string 
   
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    
+  create-draft-release:
+    runs-on: ubuntu-latest 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build -c Release --no-restore
-    # - name: Test
-    #   run: dotnet test --no-build --verbosity normal
-    
-    # create archive in \src\CodeQLToolkit.Core\bin\Release\net6.0\publish\linux-x64
-    - name: Build Bundle (Linux)
-      shell: bash
-      run: |
-        echo "Current Directory $(pwd)"
-        # build the project 
-        dotnet publish ./src/CodeQLToolkit.Core/CodeQLToolkit.Core.csproj /p:PublishProfile=./src/CodeQLToolkit.Core/Properties/PublishProfiles/Linux-Profile.pubxml
-        cp ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/CodeQLToolkit.Core ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/qlt
-        
-        # repair permissions
-        chmod +x ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/qlt
-        chmod +r -R ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64        
-        
-        # create bundle 
-        ARCHIVE="$(pwd)/qlt-linux-x86_64.zip"        
-        pushd ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64
-        zip -r $ARCHIVE .
-        popd
-
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: qlt-dist
-        path: qlt*.zip
 
     - name: Create Draft Release 
       shell: pwsh
       run: |
         Write-Host (Get-Location)
-        New-Item -ItemType "directory" -Path . -Name "artifacts"
-        Move-Item qlt-linux-x86_64.zip artifacts\
-        .\scripts\create_draft_release.ps1 -ArchiveDir (Get-Item "artifacts").FullName
+        .\scripts\create_draft_release.ps1 -Version ${{inputs.version}}
       env:
         GH_TOKEN: ${{ github.token }}
+
+  build-linux64:
+    uses: ./.github/workflows/internal-build-release-linux64.yml
+    needs: create-draft-release
+    with:
+      version: ${{inputs.version}}
