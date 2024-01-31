@@ -34,8 +34,30 @@ jobs:
         
         # repair permissions
         chmod +x ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/macos-arm64/qlt
-        chmod -R +r ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/macos-arm64        
-        
+        chmod -R +r ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/macos-arm64                    
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Build CodeQL Bundle Tool for Packaging
+      shell: pwsh 
+      run: |
+        # need this for the bundling to work.
+        pip install poetry 
+        pip install -U pyinstaller 
+
+        # run the packaging 
+        ./scripts/build_codeql_bundle_dist.ps1 -Version 0.2.0 -WorkDirectory dist -DestinationDirectory ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/macos-arm64/tools/
+      env:
+        GH_TOKEN: ${{ github.token }}
+
+
+    - name: Build Bundle Archive
+      shell: bash
+      run: |
+        echo "Current Directory $(pwd)"
+
         # create bundle 
         ARCHIVE="$(pwd)/qlt-macos-arm64.zip"        
         pushd ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/macos-arm64
