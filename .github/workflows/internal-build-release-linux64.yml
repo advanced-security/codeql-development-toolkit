@@ -53,6 +53,6 @@ jobs:
       shell: pwsh
       run: |
         Write-Host (Get-Location)
-        gh release upload ${{inputs.version}} ./qlt-linux-x86_64.zip
+        gh release upload v${{inputs.version}} ./qlt-linux-x86_64.zip
       env:
         GH_TOKEN: ${{ github.token }}
