@@ -34,7 +34,7 @@ jobs:
         
         # repair permissions
         chmod +x ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/macos-arm64/qlt
-        chmod +r -R ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/macos-arm64        
+        chmod -R +r ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/macos-arm64        
         
         # create bundle 
         ARCHIVE="$(pwd)/qlt-macos-arm64.zip"        
