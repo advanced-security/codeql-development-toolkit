@@ -4,23 +4,29 @@ param(
     $Version,
     [Parameter(Mandatory=$true)] 
     [string]
-    $OutputDirectory       
+    $WorkDirectory,      
+
+    [Parameter(Mandatory=$true)] 
+    [string]
+    $DestinationDirectory       
 )
 
+if (-not (Test-Path $WorkDirectory)) {
+    New-Item -ItemType Directory -Path $WorkDirectory | Out-Null
+}
 
-# create output directory if it doesn't exist 
-if (-not (Test-Path $OutputDirectory)) {
-    New-Item -ItemType Directory -Path $OutputDirectory | Out-Null
+if (-not (Test-Path $DestinationDirectory)) {
+    New-Item -ItemType Directory -Path $DestinationDirectory | Out-Null
 }
 
 # download a copy of the release from GitHub
-gh release download "v$Version" --repo https://github.com/rvermeulen/codeql-bundle  -D $OutputDirectory -A zip
+gh release download "v$Version" --repo https://github.com/rvermeulen/codeql-bundle  -D $WorkDirectory -A zip
 
 # extract the zip file
-Expand-Archive -Path "$OutputDirectory\codeql-bundle-$Version.zip" -DestinationPath $OutputDirectory
+Expand-Archive -Path "$WorkDirectory\codeql-bundle-$Version.zip" -DestinationPath $WorkDirectory
 
 # creates a directory named `codeql-bundle-<version>`
-$ArchiveDirectory = Join-Path $OutputDirectory "codeql-bundle-$Version"
+$ArchiveDirectory = Join-Path $WorkDirectory "codeql-bundle-$Version"
 
 Push-Location $ArchiveDirectory
 
@@ -36,13 +42,17 @@ Push-Location "codeql_bundle"
 # pyinstaller should also be installed  
 pyinstaller -F -n codeql_bundle cli.py
 
-
 Pop-Location 
 Pop-Location 
 
-$OutputFile = Join-Path $ArchiveDirectory "codeql_bundle" "dist" "codeql_bundle.exe"
+if($IsWindows){
+    $OutputFile = Join-Path $ArchiveDirectory "codeql_bundle" "dist" "codeql_bundle.exe"
+}else{
+    $OutputFile = Join-Path $ArchiveDirectory "codeql_bundle" "dist" "codeql_bundle"
+}
+
 
 # this will output the binary in the `dist` directory - we should copy that binary the toplevel directory.
-Copy-Item -Path $OutputFile -Destination $OutputDirectory
+Copy-Item -Path $OutputFile -Destination $DestinationDirectory
 
 

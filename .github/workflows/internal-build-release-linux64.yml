@@ -37,11 +37,32 @@ jobs:
         chmod +x ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/qlt
         chmod +r -R ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64        
         
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Build CodeQL Bundle Tool for Packaging
+      shell: pwsh 
+      run: |
+        # need this for the bundling to work. 
+        pip install -U pyinstaller 
+
+        ./scripts/build_codeql_bundle_dist.ps1 -Version 0.2.0 -WorkDirectory dist -DestinationDirectory ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/tools/
+
+
+    - name: Build Bundle Archive
+      shell: bash
+      run: |
+        echo "Current Directory $(pwd)"
+
         # create bundle 
         ARCHIVE="$(pwd)/qlt-linux-x86_64.zip"        
         pushd ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64
         zip -r $ARCHIVE .
         popd
+
+
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3

@@ -30,6 +30,5 @@
     <None Update="ver.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
+  </ItemGroup>	
 </Project>
