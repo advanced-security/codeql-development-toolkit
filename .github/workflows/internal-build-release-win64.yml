@@ -27,11 +27,31 @@ jobs:
     - name: Build Bundle
       shell: pwsh
       run: |
-        echo "Current Directory $(pwd)"
+        echo "Current Directory $(Get-Location)"
         # build the project 
         dotnet publish .\src\CodeQLToolkit.Core\CodeQLToolkit.Core.csproj /p:PublishProfile=.\src\CodeQLToolkit.Core\Properties\PublishProfiles\Windows-x64.pubxml
         Copy-Item .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\windows-x64\CodeQLToolkit.Core.exe .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\windows-x64\qlt.exe
         
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Build CodeQL Bundle Tool for Packaging
+      shell: pwsh 
+      run: |
+        # need this for the bundling to work.
+        pip install poetry 
+        pip install -U pyinstaller 
+
+        # run the packaging 
+        .\scripts\build_codeql_bundle_dist.ps1 -Version 0.2.0 -WorkDirectory dist -DestinationDirectory .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\windows-x64\tools\
+      env:
+        GH_TOKEN: ${{ github.token }}
+
+    - name: Build Bundle Archive
+      shell: pwsh
+      run: |
         # create bundle 
         $ARCHIVE="$(Get-Location)/qlt-windows-x64.zip"        
         Push-Location .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\windows-x64
