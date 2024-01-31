@@ -45,7 +45,8 @@ jobs:
     - name: Build CodeQL Bundle Tool for Packaging
       shell: pwsh 
       run: |
-        # need this for the bundling to work. 
+        # need this for the bundling to work.
+        pip install poetry 
         pip install -U pyinstaller 
 
         # run the packaging 
