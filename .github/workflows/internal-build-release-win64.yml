@@ -1,4 +1,4 @@
-name: 🐧 Build Release (Linux x64)
+name: 🪟 Build Release (Windows x64)
 
 on:
   workflow_call:
@@ -8,11 +8,10 @@ on:
             The version to release. (eg: 0.1.2, exclude the 'v'.). 
           required: true
           type: string 
-  
-  
+          
 jobs:
-  build-linux64:
-    runs-on: ubuntu-latest
+  build-win64:
+    runs-on: windows-latest 
     
     steps:
     - uses: actions/checkout@v3
@@ -25,21 +24,21 @@ jobs:
     - name: Build
       run: dotnet build -c Release --no-restore
 
-    - name: Build Bundle (Linux)
+    - name: Build Bundle (MacOS)
       shell: bash
       run: |
         echo "Current Directory $(pwd)"
         # build the project 
-        dotnet publish ./src/CodeQLToolkit.Core/CodeQLToolkit.Core.csproj /p:PublishProfile=./src/CodeQLToolkit.Core/Properties/PublishProfiles/Linux-Profile.pubxml
-        cp ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/CodeQLToolkit.Core ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/qlt
+        dotnet publish ./src/CodeQLToolkit.Core/CodeQLToolkit.Core.csproj /p:PublishProfile=./src/CodeQLToolkit.Core/Properties/PublishProfiles/Windows-x64-Profile.pubxml
+        cp ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/windows-x64/CodeQLToolkit.Core ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/windows-x64/qlt
         
         # repair permissions
-        chmod +x ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/qlt
-        chmod +r -R ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64        
+        chmod +x ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/windows-x64/qlt
+        chmod +r -R ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/windows-x64        
         
         # create bundle 
-        ARCHIVE="$(pwd)/qlt-linux-x86_64.zip"        
-        pushd ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64
+        ARCHIVE="$(pwd)/qlt-windows-x64.zip"        
+        pushd ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/windows-x64
         zip -r $ARCHIVE .
         popd
 
@@ -53,6 +52,6 @@ jobs:
       shell: pwsh
       run: |
         Write-Host (Get-Location)
-        gh release upload v${{inputs.version}} ./qlt-linux-x86_64.zip
+        gh release upload v${{inputs.version}} ./qlt-windows-x64.zip
       env:
         GH_TOKEN: ${{ github.token }}

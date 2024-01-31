@@ -29,3 +29,15 @@ jobs:
     needs: create-draft-release
     with:
       version: ${{inputs.version}}
+
+  build-macos64:
+    uses: ./.github/workflows/internal-build-release-macos64.yml
+    needs: create-draft-release
+    with:
+      version: ${{inputs.version}}
+
+  build-win64:
+      uses: ./.github/workflows/internal-build-release-win64.yml
+      needs: create-draft-release
+      with:
+        version: ${{inputs.version}}
