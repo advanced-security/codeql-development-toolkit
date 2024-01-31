@@ -24,17 +24,13 @@ jobs:
     - name: Build
       run: dotnet build -c Release --no-restore
 
-    - name: Build Bundle (MacOS)
+    - name: Build Bundle
       shell: bash
       run: |
         echo "Current Directory $(pwd)"
         # build the project 
-        dotnet publish ./src/CodeQLToolkit.Core/CodeQLToolkit.Core.csproj /p:PublishProfile=./src/CodeQLToolkit.Core/Properties/PublishProfiles/Windows-x64-Profile.pubxml
+        dotnet publish ./src/CodeQLToolkit.Core/CodeQLToolkit.Core.csproj /p:PublishProfile=./src/CodeQLToolkit.Core/Properties/PublishProfiles/Windows-x64.pubxml
         cp ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/windows-x64/CodeQLToolkit.Core ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/windows-x64/qlt
-        
-        # repair permissions
-        chmod +x ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/windows-x64/qlt
-        chmod +r -R ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/windows-x64        
         
         # create bundle 
         ARCHIVE="$(pwd)/qlt-windows-x64.zip"        

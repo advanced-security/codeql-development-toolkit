@@ -24,7 +24,7 @@ jobs:
     - name: Build
       run: dotnet build -c Release --no-restore
 
-    - name: Build Bundle (MacOS)
+    - name: Build Bundle
       shell: bash
       run: |
         echo "Current Directory $(pwd)"
