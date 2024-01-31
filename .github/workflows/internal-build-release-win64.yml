@@ -25,18 +25,18 @@ jobs:
       run: dotnet build -c Release --no-restore
 
     - name: Build Bundle
-      shell: bash
+      shell: pwsh
       run: |
         echo "Current Directory $(pwd)"
         # build the project 
-        dotnet publish ./src/CodeQLToolkit.Core/CodeQLToolkit.Core.csproj /p:PublishProfile=./src/CodeQLToolkit.Core/Properties/PublishProfiles/Windows-x64.pubxml
-        cp ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/windows-x64/CodeQLToolkit.Core ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/windows-x64/qlt
+        dotnet publish .\src\CodeQLToolkit.Core\CodeQLToolkit.Core.csproj /p:PublishProfile=.\src\CodeQLToolkit.Core\Properties\PublishProfiles\Windows-x64.pubxml
+        Copy-Item .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\windows-x64\CodeQLToolkit.Core.exe .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\windows-x64\qlt.exe
         
         # create bundle 
-        ARCHIVE="$(pwd)/qlt-windows-x64.zip"        
-        pushd ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/windows-x64
-        zip -r $ARCHIVE .
-        popd
+        $ARCHIVE="$(Get-Location)/qlt-windows-x64.zip"        
+        Push-Location .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\windows-x64
+        Compress-Archive -Path "*" -DestinationPath $ARCHIVE 
+        Pop-Location
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
