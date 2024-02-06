@@ -28,6 +28,11 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
             {
                 Log<InstallCommand>.G().LogInformation($"Installing CodeQL...");
                 installation.Install();
+
+                // set the environment variable
+                Environment.SetEnvironmentVariable("QLT_CODEQL_HOME", installation.CodeQLHome);
+                Environment.SetEnvironmentVariable("QLT_CODEQL_PATH", installation.CodeQLToolBinary);
+
             }
 
 
