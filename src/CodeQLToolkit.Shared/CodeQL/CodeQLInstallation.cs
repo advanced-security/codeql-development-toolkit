@@ -98,6 +98,7 @@ namespace CodeQLToolkit.Shared.CodeQL
             }
         }
 
+        
         public void Install()
         {
             // each time we download the file; however, 
@@ -256,13 +257,19 @@ namespace CodeQLToolkit.Shared.CodeQL
 
         }
 
-        public string CodeQLHome { get {
-                return "";
+        public string CodeQLHome { 
+            get {
+                return CodeQLDirectory;
             } 
         }
 
-        public string CodeQLToolBinary { get {
-                return Path.Combine("", "");
+        public string CodeQLToolBinary { 
+            get {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return Path.Combine(CodeQLDirectory, "codeql.exe");
+                }
+                return Path.Combine(CodeQLDirectory, "codeql");
             } 
         }
 

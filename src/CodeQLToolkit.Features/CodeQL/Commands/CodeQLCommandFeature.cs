@@ -39,11 +39,11 @@ namespace CodeQLToolkit.Features.CodeQL.Commands
             parentCommand.Add(runCommand);
             
             var installCommand = new Command("install", "Installs CodeQL (bundle or release distribution) locally.");
-            var useCommand = new Command("use", "Switches tooling to use a different CodeQL version and updates the paths accordingly.");
-            var listCommand = new Command("list", "Lists versions of CodeQL available locally.");
+            //var useCommand = new Command("use", "Switches tooling to use a different CodeQL version and updates the paths accordingly.");
+            //var listCommand = new Command("list", "Lists versions of CodeQL available locally.");
 
             runCommand.Add(installCommand);
-            runCommand.Add(useCommand);
+            //runCommand.Add(useCommand);
             //runCommand.Add(listCommand);
 
            
