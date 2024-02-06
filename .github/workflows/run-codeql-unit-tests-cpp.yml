@@ -59,11 +59,10 @@ jobs:
 
       - name: Install CodeQL
         id: install-codeql
-        uses: ./.github/actions/install-codeql
-        with:
-          codeql-cli-version: ${{ matrix.codeql_cli }}
-          codeql-stdlib-version: ${{ matrix.codeql_standard_library }}
-          add-to-path: true
+        shell: bash
+        run: |
+          echo "Installing CodeQL"
+          qlt codeql run install --base example/
 
       - name: Verify Versions of Tooling
         shell: bash
