@@ -1,4 +1,5 @@
 ﻿using CodeQLToolkit.Shared.CodeQL;
+using CodeQLToolkit.Shared.Types;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -29,9 +30,19 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
                 Log<InstallCommand>.G().LogInformation($"Installing CodeQL...");
                 installation.Install();
 
+
                 // set the environment variable
+                Log<InstallCommand>.G().LogInformation($"Setting QLT_CODEQL_HOME to {installation.CodeQLHome}...");
+                Log<InstallCommand>.G().LogInformation($"Setting QLT_CODEQL_PATH to {installation.CodeQLToolBinary}...");
+
                 Environment.SetEnvironmentVariable("QLT_CODEQL_HOME", installation.CodeQLHome);
                 Environment.SetEnvironmentVariable("QLT_CODEQL_PATH", installation.CodeQLToolBinary);
+
+                if (AutomationTypeHelper.AutomationTypeFromString(AutomationTarget) == AutomationType.ACTIONS)
+                {
+                    File.AppendAllText(Environment.GetEnvironmentVariable("GITHUB_ENV"), $"QLT_CODEQL_HOME={installation.CodeQLHome}" + "\n");
+                    File.AppendAllText(Environment.GetEnvironmentVariable("GITHUB_ENV"), $"QLT_CODEQL_PATH={installation.CodeQLToolBinary}" + "\n");
+                }
 
             }
 
