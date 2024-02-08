@@ -9,5 +9,6 @@ namespace CodeQLToolkit.Shared.Target
     public abstract class CommandTarget : ITarget
     {
         public string Language { get; set; }
+        public string AutomationTarget { get; set; }
     }
 }

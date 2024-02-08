@@ -54,6 +54,7 @@ namespace CodeQLToolkit.Features.CodeQL.Commands
                 new InstallCommand()
                 {
                     Base = basePath,
+                    AutomationTarget = automationType,
                 }.Run();
 
 
