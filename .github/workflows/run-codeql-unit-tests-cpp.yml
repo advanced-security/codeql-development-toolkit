@@ -63,6 +63,8 @@ jobs:
         run: |
           echo "Installing CodeQL"
           qlt codeql run install --base example/
+          echo "QLT_CODEQL_HOME=$QLT_CODEQL_HOME" >> $GITHUB_ENV
+          echo "QLT_CODEQL_PATH=$QLT_CODEQL_PATH" >> $GITHUB_ENV
 
       - name: Verify Versions of Tooling
         shell: bash
