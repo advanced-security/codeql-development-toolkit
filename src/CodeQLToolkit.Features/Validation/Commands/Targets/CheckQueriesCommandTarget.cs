@@ -1,5 +1,6 @@
 ﻿using CodeQLToolkit.Features.Query.Commands.Targets;
 using CodeQLToolkit.Features.Validation.Models;
+using CodeQLToolkit.Shared.CodeQL;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,12 @@ namespace CodeQLToolkit.Features.Validation.Commands.Targets
         {
             Log<CheckQueriesCommandTarget>.G().LogInformation($"Validating query metadata for {Language}...");
 
+            var installation = CodeQLInstallation.LoadFromConfig(Base);
+
+
             using (Process process = new Process())
             {
-                process.StartInfo.FileName = "codeql";
+                process.StartInfo.FileName = installation.CodeQLToolBinary;
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.WorkingDirectory = Base;
                 process.StartInfo.RedirectStandardOutput = true;
