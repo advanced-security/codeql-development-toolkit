@@ -28,7 +28,7 @@ namespace CodeQLToolkit.Features.Test.Lifecycle.Targets.Actions
             //    codeqlArgs = $"{codeqlArgs} {ExtraArgs}";
             //}
 
-            WriteTemplateIfOverwriteOrNotExists("install-codeql", Path.Combine(Base, ".github", "actions", "install-codeql", "action.yml"), "install-codeql action");
+            //WriteTemplateIfOverwriteOrNotExists("install-codeql", Path.Combine(Base, ".github", "actions", "install-codeql", "action.yml"), "install-codeql action");
             WriteTemplateIfOverwriteOrNotExists("install-qlt", Path.Combine(Base, ".github", "actions", "install-qlt", "action.yml"), "install-qlt action");
             WriteTemplateIfOverwriteOrNotExists("run-unit-tests", Path.Combine(Base, ".github", "workflows", $"run-codeql-unit-tests-{tmpLanguage}.yml"), $"Run CodeQL Unit Tests ({Language})", new
             {

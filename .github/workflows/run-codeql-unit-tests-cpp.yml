@@ -5,11 +5,9 @@ on:
   push:
     branches:
       - 'main'
-      - 'jsinglet/**'
   pull_request:
     branches:
       - 'main'
-      - 'jsinglet/**'
   workflow_dispatch:
 
 
@@ -72,8 +70,6 @@ jobs:
       - name: Verify Versions of Tooling
         shell: bash
         run: |
-          echo "CodeQL Home: $QLT_CODEQL_HOME"
-          echo "CodeQL Binary: $QLT_CODEQL_PATH"
           echo -e "Checking CodeQL Version:"
           $QLT_CODEQL_PATH --version 
           
