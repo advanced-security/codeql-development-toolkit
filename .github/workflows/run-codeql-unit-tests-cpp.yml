@@ -71,7 +71,8 @@ jobs:
         shell: bash
         run: |
           echo -e "Checking CodeQL Version:"
-          $QLT_CODEQL_PATH --version           
+          $QLT_CODEQL_PATH --version
+                     
           echo -e "Checking QLT Version:"
           echo "QLT Home: ${{ steps.install-qlt.outputs.qlt-home }}"
           qlt version
