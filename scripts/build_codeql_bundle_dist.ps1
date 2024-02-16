@@ -20,7 +20,7 @@ if (-not (Test-Path $DestinationDirectory)) {
 }
 
 # download a copy of the release from GitHub
-gh release download "v$Version" --repo https://github.com/rvermeulen/codeql-bundle  -D $WorkDirectory -A zip
+gh release download "v$Version" --repo https://github.com/jsinglet/codeql-bundle  -D $WorkDirectory -A zip
 
 # extract the zip file
 Expand-Archive -Path "$WorkDirectory\codeql-bundle-$Version.zip" -DestinationPath $WorkDirectory
