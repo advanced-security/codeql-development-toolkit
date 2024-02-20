@@ -21,7 +21,9 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
 
             Log<InstallCommand>.G().LogInformation($"Checking for installation...");
 
-            if (installation.IsInstalled())
+            // if it is the case that it is installed but we are in custom bundle mode we RE install it. 
+
+            if (installation.IsInstalled() && !installation.EnableCustomCodeQLBundles)
             {
                 Log<InstallCommand>.G().LogInformation($"CodeQL is already installed at that version. Please delete the installation directory to reinstall.");
             }
@@ -40,8 +42,11 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
 
                 if (AutomationTypeHelper.AutomationTypeFromString(AutomationTarget) == AutomationType.ACTIONS)
                 {
-                    File.AppendAllText(Environment.GetEnvironmentVariable("GITHUB_ENV"), $"QLT_CODEQL_HOME={installation.CodeQLHome}" + "\n");
-                    File.AppendAllText(Environment.GetEnvironmentVariable("GITHUB_ENV"), $"QLT_CODEQL_PATH={installation.CodeQLToolBinary}" + "\n");
+                    if (Environment.GetEnvironmentVariable("GITHUB_ENV") != null && File.Exists(Environment.GetEnvironmentVariable("GITHUB_ENV")))
+                    {
+                        File.AppendAllText(Environment.GetEnvironmentVariable("GITHUB_ENV"), $"QLT_CODEQL_HOME={installation.CodeQLHome}" + "\n");
+                        File.AppendAllText(Environment.GetEnvironmentVariable("GITHUB_ENV"), $"QLT_CODEQL_PATH={installation.CodeQLToolBinary}" + "\n");
+                    }
                 }
 
             }
