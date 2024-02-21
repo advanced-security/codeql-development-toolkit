@@ -10,6 +10,8 @@ namespace CodeQLToolkit.Shared.Target
     public abstract class ITarget
     {
         public string Base { get; set; }
+
+        public bool UseBundle { get; set; }
         public abstract void Run();
 
         public void DieWithError(string message)

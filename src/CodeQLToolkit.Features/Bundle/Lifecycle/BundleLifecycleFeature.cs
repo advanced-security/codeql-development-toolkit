@@ -32,22 +32,22 @@ namespace CodeQLToolkit.Features.Bundle.Lifecycle
 
         public void Register(Command parentCommand)
         {
-            Log<BundleLifecycleFeature>.G().LogInformation("Registering lifecycle submodule.");
+            //Log<BundleLifecycleFeature>.G().LogInformation("Registering lifecycle submodule.");
 
             var setCommand = new Command("set", "Functions pertaining to setting variables related to custom CodeQL bundles.");
-            parentCommand.Add(setCommand);
+            //parentCommand.Add(setCommand);
 
             var enableCommand = new Command("enable-custom-bundles", "Enables custom CodeQL Bundles.");            
-            setCommand.Add(enableCommand);
+            //setCommand.Add(enableCommand);
 
             var disableCommand = new Command("disable-custom-bundles", "Disables custom CodeQL Bundles.");
-            setCommand.Add(disableCommand);
+            //setCommand.Add(disableCommand);
 
             var getCommand = new Command("get", "Functions pertaining to getting variables related to CodeQL Bundles.");
-            parentCommand.Add(getCommand);
+            //parentCommand.Add(getCommand);
 
             var getEnabledCommand = new Command("enabled", "Determines if custom CodeQL Bundles are enabled.");
-            getCommand.Add(getEnabledCommand);
+            //getCommand.Add(getEnabledCommand);
 
             {
                 enableCommand.SetHandler((basePath) =>

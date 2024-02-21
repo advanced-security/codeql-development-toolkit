@@ -29,6 +29,7 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
             rootCommand.AddGlobalOption(Globals.BasePathOption);
             rootCommand.AddGlobalOption(Globals.AutomationTypeOption);
             rootCommand.AddGlobalOption(Globals.Development);
+            rootCommand.AddGlobalOption(Globals.UseBundle);
 
             var versionCommand = new Command("version", "Get the current tool version.");
             rootCommand.Add(versionCommand);

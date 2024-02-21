@@ -94,7 +94,7 @@ namespace CodeQLToolkit.Features.Test.Commands
             }, Globals.BasePathOption, Globals.AutomationTypeOption, matrixOSVersion);
 
             //stdLibIdent
-            unitTestsCommand.SetHandler((basePath, automationType, numThreads, workDirectory, language, runnerOS, extraArgs) => {
+            unitTestsCommand.SetHandler((basePath, automationType, numThreads, workDirectory, language, runnerOS, extraArgs, useBundle) => {
 
                 Log<TestCommandFeature>.G().LogInformation("Executing execute-unit-tests command...");
 
@@ -125,6 +125,7 @@ namespace CodeQLToolkit.Features.Test.Commands
                 featureTarget.CLIVersion = config.CodeQLCLI;
                 featureTarget.STDLibIdent = config.CodeQLStandardLibraryIdent;
                 featureTarget.ExtraCodeQLArgs = extraArgs;
+                featureTarget.UseBundle = useBundle;
 
                 featureTarget.Run();
 
@@ -134,7 +135,8 @@ namespace CodeQLToolkit.Features.Test.Commands
                workDirectoryOption, 
                languageOption, 
                runnerOSOption, 
-               extraCodeQLOptions
+               extraCodeQLOptions,
+               Globals.UseBundle
             );
 
 

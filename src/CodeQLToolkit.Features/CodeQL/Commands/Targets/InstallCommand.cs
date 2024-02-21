@@ -11,13 +11,33 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
 {
     public class InstallCommand : CommandTarget
     {
-
+        public bool CustomBundles { get; set; }
+        public bool QuickBundles { get; set; }
+        public string[] Packs { get; set; }
         public override void Run()
         {
             Log<InstallCommand>.G().LogInformation($"Running Install command");
 
             // First, check if CodeQL is installed.
             var installation = CodeQLInstallation.LoadFromConfig(Base);
+            if(CustomBundles || QuickBundles)
+            {
+                installation.EnableCustomCodeQLBundles = true;
+                if (Packs!=null && Packs.Length > 0)
+                {
+                    Log<InstallCommand>.G().LogInformation($"Overriding Packs on the command line. The following Packs will be packaged:");
+                    installation.ExportedCustomizationPacks = Packs;
+                }
+                else
+                {
+                    Log<InstallCommand>.G().LogInformation($"Using `qlt.conf.json` to build list of packs to bundle. The following Packs will be packaged:");
+                }
+
+                installation.LogPacksToBeBuilt();
+
+
+                installation.QuickBundle = QuickBundles;
+            }
 
             Log<InstallCommand>.G().LogInformation($"Checking for installation...");
 
@@ -31,7 +51,6 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
             {
                 Log<InstallCommand>.G().LogInformation($"Installing CodeQL...");
                 installation.Install();
-
 
                 // set the environment variable
                 Log<InstallCommand>.G().LogInformation($"Setting QLT_CODEQL_HOME to {installation.CodeQLHome}...");

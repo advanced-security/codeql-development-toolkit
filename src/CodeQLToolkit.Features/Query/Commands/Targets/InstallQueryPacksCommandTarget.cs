@@ -1,4 +1,5 @@
 ﻿using CodeQLToolkit.Shared.CodeQL;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,6 +23,10 @@ namespace CodeQLToolkit.Features.Query.Commands.Targets
 
             var installation = CodeQLInstallation.LoadFromConfig(Base);
 
+
+            installation.EnableCustomCodeQLBundles = UseBundle;
+
+            installation.IsInstalledOrDie();
 
             foreach ( string file in files )
             {

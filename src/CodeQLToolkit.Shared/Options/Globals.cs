@@ -25,5 +25,12 @@ namespace CodeQLToolkit.Shared.Options
             return false;
         }, "Turns on development mode which enables special features used in the development of QLT.")
         { IsRequired = true }.FromAmong(SupportedAutomationTypes);
+
+        public static Option<bool> UseBundle { get; } = new Option<bool>("--use-bundle", () => {
+            return false;
+        }, "Switching QLT from using the distribution versions of CodeQL to using a Custom Bundle.")
+        { IsRequired = true }.FromAmong(SupportedAutomationTypes);
+
+
     }
 }

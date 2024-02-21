@@ -19,6 +19,7 @@ namespace CodeQLToolkit.Shared.CodeQL
         public string StandardLibraryIdent { get; set; }
         public bool EnableCustomCodeQLBundles { get; set; }
         public string[] ExportedCustomizationPacks { get; set; }
+        public bool QuickBundle {  get; set; }
         public string Base { get; set; }
 
         public static CodeQLInstallation LoadFromConfig(string Base)
@@ -38,7 +39,6 @@ namespace CodeQLToolkit.Shared.CodeQL
 
             return new CodeQLInstallation
             {
-                EnableCustomCodeQLBundles = config.EnableCustomCodeQLBundles,
                 CLIVersion = config.CodeQLCLI,
                 CLIBundle = config.CodeQLCLIBundle,
                 StandardLibraryIdent = config.CodeQLStandardLibraryIdent,
@@ -48,6 +48,17 @@ namespace CodeQLToolkit.Shared.CodeQL
             };
 
 
+        }
+
+        public void LogPacksToBeBuilt()
+        {
+            if(ExportedCustomizationPacks != null)
+            {
+                foreach(var p in ExportedCustomizationPacks)
+                {
+                    Log<CodeQLInstallation>.G().LogInformation($"Pack: {p}");
+                }
+            }
         }
 
         public ArtifactKind Kind 
@@ -280,7 +291,15 @@ namespace CodeQLToolkit.Shared.CodeQL
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = false;
                 process.StartInfo.RedirectStandardError = false;
-                process.StartInfo.Arguments = $"-b {customBundleSource} -o {CustomBundleOutputDirectory} -w {workingDirectory} {packs}";
+                if (QuickBundle)
+                {
+                    Log<CodeQLInstallation>.G().LogInformation($"Note: Quick Bundles enabled and pre-compilation will be disabled...");
+                    process.StartInfo.Arguments = $"-nc -b {customBundleSource} -o {CustomBundleOutputDirectory} -w {workingDirectory} {packs}";
+                }
+                else
+                {
+                    process.StartInfo.Arguments = $"-b {customBundleSource} -o {CustomBundleOutputDirectory} -w {workingDirectory} {packs}";
+                }
 
                 process.Start();
 
@@ -355,12 +374,32 @@ namespace CodeQLToolkit.Shared.CodeQL
 
             throw new NotImplementedException();
         }
-        // TODO -- need to check environment variables to see if custom bundle is "installed"
+
+        public bool IsInstalledOrDie()
+        {
+            var installed = IsInstalled();
+
+            if (!installed)
+            {
+                ProcessUtils.DieWithError("CodeQL not installed. Please run `qlt codeql run install --help` for more info.");
+            }
+
+            return true;
+        }
+
         public bool IsInstalled()
         {
             Log<CodeQLInstallation>.G().LogInformation($"Checking if codeql is installed...");
-            Log<CodeQLInstallation>.G().LogInformation($"Requested CLI Version {CLIVersion}, Standard Library Ident: {StandardLibraryIdent}, CLIBundle: {CLIBundle}, Using Custom Bundles: {EnableCustomCodeQLBundles}");
 
+            if (EnableCustomCodeQLBundles)
+            {
+                Log<CodeQLInstallation>.G().LogInformation($"Requested Custom Bundle Based on Bundle {CLIBundle}");
+            }
+            else
+            {
+                Log<CodeQLInstallation>.G().LogInformation($"Requested CLI Version {CLIVersion} with Standard Library Ident: {StandardLibraryIdent}");
+            }
+           
             Log<CodeQLInstallation>.G().LogInformation($"Checking for existance of required directories...");
 
             if (!Directory.Exists(InstallationDirectory))

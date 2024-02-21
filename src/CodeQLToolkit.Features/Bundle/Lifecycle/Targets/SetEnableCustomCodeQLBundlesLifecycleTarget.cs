@@ -21,7 +21,7 @@ namespace CodeQLToolkit.Features.Bundle.Lifecycle.Targets
 
             var config = c.FromFile();
 
-            config.EnableCustomCodeQLBundles = true;
+            //config.EnableCustomCodeQLBundles = true;
 
             config.ToFile();
 

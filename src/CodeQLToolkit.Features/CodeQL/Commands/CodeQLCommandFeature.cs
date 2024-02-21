@@ -39,15 +39,17 @@ namespace CodeQLToolkit.Features.CodeQL.Commands
             parentCommand.Add(runCommand);
             
             var installCommand = new Command("install", "Installs CodeQL (bundle or release distribution) locally.");
-            //var useCommand = new Command("use", "Switches tooling to use a different CodeQL version and updates the paths accordingly.");
-            //var listCommand = new Command("list", "Lists versions of CodeQL available locally.");
+            var customBundleOption = new Option<bool>("--custom-bundle", () => false, "Build a custom bundle and compile the bundle.") { IsRequired = true};
+            var quickBundleOption = new Option<bool>("--quick-bundle", () => false,  "Build a custom bundle and DO NOT compile the bundle.") { IsRequired = true};
+            var packsOption = new Option<string[]>("--packs", "When creating bundles, this specifies the packs to include, Example `pack1 pack2 pack3`. You may specify also as `--pack pack1 --pack2 --pack3`") { IsRequired = false, AllowMultipleArgumentsPerToken = true };
+
+            installCommand.Add(customBundleOption);
+            installCommand.Add(quickBundleOption);
+            installCommand.Add(packsOption);
 
             runCommand.Add(installCommand);
-            //runCommand.Add(useCommand);
-            //runCommand.Add(listCommand);
-
-           
-            installCommand.SetHandler((basePath, automationType) =>
+            
+            installCommand.SetHandler((basePath, automationType, customBundleOption, quickBundleOption, packs) =>
             {
                 Log<CodeQLCommandFeature>.G().LogInformation("Executing install command...");
 
@@ -55,10 +57,13 @@ namespace CodeQLToolkit.Features.CodeQL.Commands
                 {
                     Base = basePath,
                     AutomationTarget = automationType,
+                    CustomBundles = customBundleOption,
+                    QuickBundles = quickBundleOption,
+                    Packs = packs
                 }.Run();
 
 
-            }, Globals.BasePathOption, Globals.AutomationTypeOption);
+            }, Globals.BasePathOption, Globals.AutomationTypeOption, customBundleOption, quickBundleOption, packsOption);
         }
 
         public int Run()

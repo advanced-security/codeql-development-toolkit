@@ -30,7 +30,8 @@ namespace CodeQLToolkit.Features.Query.Commands
 
             runCommand.Add(installPacksQueryCommand);
 
-            installPacksQueryCommand.SetHandler((basePath) => new InstallQueryPacksCommandTarget() { Base = basePath }.Run(), Globals.BasePathOption);
+            installPacksQueryCommand.SetHandler(
+                (basePath, useBundle) => new InstallQueryPacksCommandTarget() { Base = basePath, UseBundle = useBundle}.Run(), Globals.BasePathOption, Globals.UseBundle);
 
         }
 

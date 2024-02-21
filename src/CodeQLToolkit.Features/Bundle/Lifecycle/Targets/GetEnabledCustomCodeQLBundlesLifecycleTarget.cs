@@ -22,7 +22,7 @@ namespace CodeQLToolkit.Features.Bundle.Lifecycle.Targets
             var config = c.FromFile();
 
             Console.WriteLine($"---------current settings---------");
-            Console.WriteLine($"CodeQL Custom Bundles Enabled: {config.EnableCustomCodeQLBundles}");
+            //Console.WriteLine($"CodeQL Custom Bundles Enabled: {config.EnableCustomCodeQLBundles}");
             Console.WriteLine($"----------------------------------");
             Console.WriteLine("(hint: use `qlt bundle set` to modify these values.)");
 

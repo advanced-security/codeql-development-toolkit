@@ -41,7 +41,7 @@ namespace CodeQLToolkit.Features.Test.Commands
             runCommand.Add(checkQueryQueriesCommand);
 
 
-            checkQueryQueriesCommand.SetHandler((language, basePath, prettyPrint) =>
+            checkQueryQueriesCommand.SetHandler((language, basePath, prettyPrint, useBundle) =>
             {
                 Log<ValidationCommandFeature>.G().LogInformation("Executing check-query-metadata command...");
 
@@ -49,10 +49,11 @@ namespace CodeQLToolkit.Features.Test.Commands
                 {
                     Base = basePath,
                     Language = language,
-                    PrettyPrint = prettyPrint,                    
+                    PrettyPrint = prettyPrint,              
+                    UseBundle = useBundle
                 }.Run();
                 
-            }, languageOption, Globals.BasePathOption, prettyPrintOption);
+            }, languageOption, Globals.BasePathOption, prettyPrintOption, Globals.UseBundle);
         }
 
         public int Run()

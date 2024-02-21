@@ -75,11 +75,9 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
                      // Get A Copy of the installation 
                      var installation = CodeQLInstallation.LoadFromConfig(Base);
 
-                     if(!installation.IsInstalled())
-                     {
-                         DieWithError($"Requested CodeQL Version ({CLIVersion}) Not Installed. Run `qlt codeql run install` before running this step.");
-                     }
+                     installation.EnableCustomCodeQLBundles = UseBundle;
 
+                     installation.IsInstalledOrDie();
 
                      using (Process process = new Process())
                      {

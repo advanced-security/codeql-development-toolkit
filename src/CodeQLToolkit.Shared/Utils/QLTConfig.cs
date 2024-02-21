@@ -14,8 +14,6 @@ namespace CodeQLToolkit.Shared.Utils
         public string CodeQLCLIBundle { get; set; }
 
         public string[] ExportedCustomizationPacks { get; set; }
-
-        public bool EnableCustomCodeQLBundles { get; set; }
         
         public string CodeQLStandardLibraryIdent { 
             get  {

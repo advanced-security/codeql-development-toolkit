@@ -23,6 +23,9 @@ namespace CodeQLToolkit.Features.Validation.Commands.Targets
 
             var installation = CodeQLInstallation.LoadFromConfig(Base);
 
+            installation.EnableCustomCodeQLBundles = UseBundle;
+
+            installation.IsInstalledOrDie();
 
             using (Process process = new Process())
             {
