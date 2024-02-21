@@ -41,7 +41,7 @@ jobs:
 
           # ensure bundle runs 
 
-          if ! qlt query run install-packs --base example/  ; then
+          if ! qlt query run install-packs --use-bundle --base example/  ; then
             echo "Failed to install query packs with tool."
             exit 1
           fi
