@@ -5,6 +5,6 @@
   "EnableCustomCodeQLBundles": true,
   "CodeQLStandardLibraryIdent": "codeql-cli_v2.15.5",
   "ExportedCustomizationPacks" : [
-    "qlt2/stuff2"
+    "qlt/cpp-customizations"
   ]
 }

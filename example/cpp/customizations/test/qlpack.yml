@@ -1,0 +1,6 @@
+library: true
+name: qlt/cpp-customizations-tests
+version: 0.0.1
+dependencies:
+  "qlt/cpp-customizations": "*"
+extractor: cpp

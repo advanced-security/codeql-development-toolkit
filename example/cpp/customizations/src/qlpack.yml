@@ -1,0 +1,5 @@
+library: true
+name: qlt/cpp-customizations
+version: 0.0.1
+dependencies:
+  "codeql/cpp-all": "0.12.2"
