@@ -66,13 +66,13 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         queries: security-extended
-        source-root: integration/cpp/src/  # Path containing the example application 
+        source-root: integration-tests/cpp/src/  # Path containing the example application 
         tools: ${{ env.QLT_CODEQL_HOME }}/../out/codeql-bundle.tar.gz
 
     - name: Autobuild
       uses: github/codeql-action/autobuild@v2
       with:
-        working-directory: integration/cpp/src/  # Path containing the example application 
+        working-directory: integration-tests/cpp/src/  # Path containing the example application 
 
     - name: Perform CodeQL Analysis
       id: analysis
@@ -93,13 +93,23 @@ jobs:
           ${{ steps.analysis.outputs.sarif-output }}/*.sarif
         if-no-files-found: error
 
+    - name: Upload Bundle Used
+      uses: actions/upload-artifact@v2
+      with:
+        name: codeql-bundle.tar.gz
+        path: |
+          ${{ env.QLT_CODEQL_HOME }}/../out/codeql-bundle.tar.gz
+        if-no-files-found: error
+
 
     - name: Validate SARIF Results
       shell: bash
       run: |
         # Compare the expected vs the actual 
-        
-        if ! diff integration/cpp/expected.sarif ${{ steps.analysis.outputs.sarif-output }}/cpp.sarif   ; then
+        cat integration-tests/cpp/expected.sarif | jq '.runs' > integration-tests/cpp/expected 
+        cat ${{ steps.analysis.outputs.sarif-output }}/cpp.sarif | jq '.runs' > integration-tests/cpp/actual 
+
+        if ! diff integration-tests/cpp/expected integration-tests/cpp/actual ; then
           echo "Expected file does not match actual. Please check the SARIF file for differences."
           exit 1
         fi
