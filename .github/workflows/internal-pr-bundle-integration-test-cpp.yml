@@ -93,13 +93,13 @@ jobs:
           ${{ steps.analysis.outputs.sarif-output }}/*.sarif
         if-no-files-found: error
 
-    - name: Upload Bundle Used
-      uses: actions/upload-artifact@v2
-      with:
-        name: codeql-bundle.tar.gz
-        path: |
-          ${{ env.QLT_CODEQL_HOME }}/../out/codeql-bundle.tar.gz
-        if-no-files-found: error
+    # - name: Upload Bundle Used
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: codeql-bundle.tar.gz
+    #     path: |
+    #       ${{ env.QLT_CODEQL_HOME }}/../out/codeql-bundle.tar.gz
+    #     if-no-files-found: error
 
 
     - name: Validate SARIF Results
