@@ -106,10 +106,4 @@ jobs:
       shell: bash
       run: |
         # Compare the expected vs the actual 
-        cat integration-tests/cpp/expected.sarif | jq '.runs' > integration-tests/cpp/expected 
-        cat ${{ steps.analysis.outputs.sarif-output }}/cpp.sarif | jq '.runs' > integration-tests/cpp/actual 
-
-        if ! diff integration-tests/cpp/expected integration-tests/cpp/actual ; then
-          echo "Expected file does not match actual. Please check the SARIF file for differences."
-          exit 1
-        fi
+        qlt bundle run validate-integration-tests --expected integration-tests/cpp/expected.sarif --actual ${{ steps.analysis.outputs.sarif-output }}/cpp.sarif        
