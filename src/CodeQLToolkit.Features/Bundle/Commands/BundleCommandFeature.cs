@@ -1,4 +1,5 @@
-﻿using CodeQLToolkit.Shared.Utils;
+﻿using CodeQLToolkit.Features.Bundle.Commands.Targets;
+using CodeQLToolkit.Shared.Utils;
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
@@ -35,29 +36,33 @@ namespace CodeQLToolkit.Features.Bundle.Commands
 
 
             var runCommand = new Command("run", "Functions pertaining running bundle commands.");
+
+
+            var validateIntegrationTestsCommand = new Command("validate-integration-tests", "Validates the results of an integration test using a semantic diff.");
+            var expectedOption = new Option<string>("--expected", "The SARIF file containing the expected results.") { IsRequired = true };
+            var actualOption = new Option<string>("--actual", "The SARIF file containing the actual results.") { IsRequired = true };
+
+            validateIntegrationTestsCommand.Add(expectedOption);
+            validateIntegrationTestsCommand.Add(actualOption);
+
+            runCommand.Add(validateIntegrationTestsCommand);
+
             parentCommand.Add(runCommand);
 
-            //var checkQueryQueriesCommand = new Command("check-queries", "Checks the query metadata for the specified language.");
 
-            //var languageOption = new Option<string>("--language", $"The language to run tests for.") { IsRequired = true }.FromAmong(SupportedLangauges.Select(x => x.ToOptionString()).ToArray());
+            validateIntegrationTestsCommand.SetHandler((basePath, expected, actual) =>
+            {
+                Log<BundleCommandFeature>.G().LogInformation("Executing validate-integration-tests command...");
 
-            //checkQueryQueriesCommand.Add(languageOption);
+                new ValidateIntegrationTestResults()
+                {
+                    Base = basePath,
+                    Expected = expected,
+                    Actual = actual
 
-            //runCommand.Add(checkQueryQueriesCommand);
+                }.Run();
 
-
-            //checkQueryQueriesCommand.SetHandler((language, basePath, prettyPrint) =>
-            //{
-            //    Log<BundleCommandFeature>.G().LogInformation("Executing check-query-metadata command...");
-
-            //    new CheckQueriesCommandTarget()
-            //    {
-            //        Base = basePath,
-            //        Language = language,
-            //        PrettyPrint = prettyPrint,
-            //    }.Run();
-
-            //}, languageOption, Globals.BasePathOption, prettyPrintOption);
+            },Globals.BasePathOption, expectedOption, actualOption);
         }
 
         public int Run()
