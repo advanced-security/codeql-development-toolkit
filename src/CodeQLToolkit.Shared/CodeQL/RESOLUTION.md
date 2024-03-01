@@ -47,9 +47,10 @@ For a bundle installation the mapping is as follows:
 
 - `CodeQLCLIBundle` - The bundle downloaded from `github/codeql-action/releases` to base the bundle on. 
 
-In all cases, at the end of the execution two environment variables are set:
+In all cases, at the end of the execution two to three environment variables are set:
 - `QLT_CODEQL_PATH` - The path to the CodeQL binary. 
 - `QLT_CODEQL_HOME` - The root installation of CodeQL
+- `QLT_CODEQL_BUNDLE_PATH` - The path to the bundle created by QLT.
 
 ## Idents within the Installation Directory 
 

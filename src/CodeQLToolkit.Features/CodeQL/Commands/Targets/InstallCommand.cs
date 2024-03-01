@@ -58,13 +58,22 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
 
                 Environment.SetEnvironmentVariable("QLT_CODEQL_HOME", installation.CodeQLHome);
                 Environment.SetEnvironmentVariable("QLT_CODEQL_PATH", installation.CodeQLToolBinary);
+                if (CustomBundles || QuickBundles)
+                {
+                    Environment.SetEnvironmentVariable("QLT_CODEQL_BUNDLE_PATH", installation.CustomBundleOutputBundle);
+                }
 
                 if (AutomationTypeHelper.AutomationTypeFromString(AutomationTarget) == AutomationType.ACTIONS)
                 {
                     if (Environment.GetEnvironmentVariable("GITHUB_ENV") != null && File.Exists(Environment.GetEnvironmentVariable("GITHUB_ENV")))
                     {
+                        
                         File.AppendAllText(Environment.GetEnvironmentVariable("GITHUB_ENV"), $"QLT_CODEQL_HOME={installation.CodeQLHome}" + "\n");
                         File.AppendAllText(Environment.GetEnvironmentVariable("GITHUB_ENV"), $"QLT_CODEQL_PATH={installation.CodeQLToolBinary}" + "\n");
+                        if (CustomBundles || QuickBundles)
+                        {
+                            File.AppendAllText(Environment.GetEnvironmentVariable("GITHUB_ENV"), $"QLT_CODEQL_BUNDLE_PATH={installation.CustomBundleOutputBundle}" + "\n");
+                        }
                     }
                 }
 
