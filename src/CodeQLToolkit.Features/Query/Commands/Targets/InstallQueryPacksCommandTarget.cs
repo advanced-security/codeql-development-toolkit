@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CodeQLToolkit.Shared.CodeQL;
+using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -18,13 +20,21 @@ namespace CodeQLToolkit.Features.Query.Commands.Targets
 
             Log<InstallQueryPacksCommandTarget>.G().LogInformation($"Got {files.Length} packs...");
 
+
+            var installation = CodeQLInstallation.LoadFromConfig(Base);
+
+
+            installation.EnableCustomCodeQLBundles = UseBundle;
+
+            installation.IsInstalledOrDie();
+
             foreach ( string file in files )
             {
                 Log<InstallQueryPacksCommandTarget>.G().LogInformation($"Installing qlpack {file}...");
 
                 using(Process  process = new Process())
                 {
-                    process.StartInfo.FileName = "codeql";
+                    process.StartInfo.FileName = installation.CodeQLToolBinary;
                     process.StartInfo.UseShellExecute = false;
                     process.StartInfo.RedirectStandardOutput = false;
                     process.StartInfo.Arguments = $"pack install {file}";

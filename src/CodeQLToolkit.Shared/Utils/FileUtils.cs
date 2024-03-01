@@ -27,5 +27,17 @@ namespace CodeQLToolkit.Shared.Utils
             return tempDirectory;
         }
 
+        public static string SanitizeFilename(string filename)
+        {
+            string f = filename;
+
+            foreach(var c in Path.GetInvalidFileNameChars())
+            {
+                f = f.Replace(c, '_');
+            }
+
+            return f;
+        }
+
     }
 }

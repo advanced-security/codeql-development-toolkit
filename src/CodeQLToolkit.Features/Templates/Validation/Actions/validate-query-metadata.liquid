@@ -77,19 +77,21 @@ jobs:
 {% endif %}
 {% raw %}      
       - name: Install CodeQL
-        uses: ./.github/actions/install-codeql
-        with:
-          codeql-cli-version: ${{ matrix.codeql_cli }}
-          codeql-stdlib-version: ${{ matrix.codeql_standard_library }}
-          add-to-path: true
+        id: install-codeql
+        shell: bash
+        run: |
+          echo "Installing CodeQL"
+          qlt codeql run install --base example/
+          echo "-----------------------------"
+          echo "CodeQL Home: $QLT_CODEQL_HOME"
+          echo "CodeQL Binary: $QLT_CODEQL_PATH"
 
       - name: Verify Versions of Tooling
         shell: bash
         run: |
-          echo "CodeQL Home: ${{ steps.install-codeql.outputs.codeql-home }}"
           echo -e "Checking CodeQL Version:"
-          codeql --version 
-          
+          $QLT_CODEQL_PATH --version
+                     
           echo -e "Checking QLT Version:"
           echo "QLT Home: ${{ steps.install-qlt.outputs.qlt-home }}"
           qlt version

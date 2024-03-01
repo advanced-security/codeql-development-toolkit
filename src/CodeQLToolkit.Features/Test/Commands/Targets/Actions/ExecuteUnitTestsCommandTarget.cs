@@ -1,4 +1,5 @@
 ﻿using CodeQLToolkit.Features.Test.Lifecycle.Models;
+using CodeQLToolkit.Shared.CodeQL;
 using CodeQLToolkit.Shared.Utils;
 using System;
 using System.Collections.Generic;
@@ -70,9 +71,17 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
                      Log<ExecuteUnitTestsCommandTarget>.G().LogInformation($"Slice: {slice} of {NumThreads}");
                      Log<ExecuteUnitTestsCommandTarget>.G().LogInformation($"Report File: {outFileReport}...");
 
+
+                     // Get A Copy of the installation 
+                     var installation = CodeQLInstallation.LoadFromConfig(Base);
+
+                     installation.EnableCustomCodeQLBundles = UseBundle;
+
+                     installation.IsInstalledOrDie();
+
                      using (Process process = new Process())
                      {
-                         process.StartInfo.FileName = "codeql";
+                         process.StartInfo.FileName = installation.CodeQLToolBinary;
                          process.StartInfo.WorkingDirectory = workingDirectory;
                          process.StartInfo.UseShellExecute = false;
                          process.StartInfo.RedirectStandardOutput = true;

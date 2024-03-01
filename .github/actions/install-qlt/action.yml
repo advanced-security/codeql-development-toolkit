@@ -30,6 +30,8 @@ runs:
         ADD_TO_PATH: ${{ inputs.add-to-path }}
         QLT_VERSION: ${{ inputs.qlt-version }}
         QLT_HOME: ${{ inputs.qlt-home }}
+        GITHUB_TOKEN: ${{ github.token }}
+
       shell: bash
       run: |
         echo -e "\e[0;32m[QLT]\e[0m Determining QLT release for $RUNNER_OS"
