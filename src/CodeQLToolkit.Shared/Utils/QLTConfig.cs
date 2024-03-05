@@ -52,5 +52,21 @@ namespace CodeQLToolkit.Shared.Utils
             var data = JsonConvert.SerializeObject(this, Formatting.Indented);
             File.WriteAllText(CodeQLConfigFilePath, data);
         }
+
+        public static QLTConfig? LoadFromFile(string baseDir)
+        {
+            var config = new QLTConfig()
+            {
+                Base = baseDir
+            };
+            
+
+            if (File.Exists(config.CodeQLConfigFilePath))
+            {
+                return config.FromFile();
+            }
+
+            return null;
+        }
     }
 }
