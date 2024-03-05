@@ -6,6 +6,7 @@ using CodeQLToolkit.Shared.Logging;
 using LibGit2Sharp;
 using System.IO.Compression;
 using System.Diagnostics;
+using System;
 
 
 
@@ -284,6 +285,17 @@ namespace CodeQLToolkit.Shared.CodeQL
             // next, we run the bundling tool. 
             // typical command line:
             // codeql_bundle -b .\scratch\codeql-bundle-win64.tar.gz -o scratch\out -w .\tests\workspace\ --help
+            var bundleArgs = $"--log DEBUG -b {customBundleSource} -o {CustomBundleOutputDirectory} -w {workingDirectory} {packs}";
+
+            if (QuickBundle)
+            {
+                Log<CodeQLInstallation>.G().LogInformation($"Note: Quick Bundles enabled and pre-compilation will be disabled...");
+                bundleArgs = $"--log DEBUG -nc -b {customBundleSource} -o {CustomBundleOutputDirectory} -w {workingDirectory} {packs}";
+            }
+
+            Log<CodeQLInstallation>.G().LogInformation($"Executing Bundle Tool with Working Directory: `{workingDirectory}`");
+            Log<CodeQLInstallation>.G().LogInformation($"Executing Bundle Tool with Arguments: `{bundleArgs}`");
+
             using (Process process = new Process())
             {
                 process.StartInfo.FileName = ToolUtil.GetTool("codeql_bundle");
@@ -294,11 +306,11 @@ namespace CodeQLToolkit.Shared.CodeQL
                 if (QuickBundle)
                 {
                     Log<CodeQLInstallation>.G().LogInformation($"Note: Quick Bundles enabled and pre-compilation will be disabled...");
-                    process.StartInfo.Arguments = $"-nc -b {customBundleSource} -o {CustomBundleOutputDirectory} -w {workingDirectory} {packs}";
+                    process.StartInfo.Arguments = bundleArgs;
                 }
                 else
                 {
-                    process.StartInfo.Arguments = $"-b {customBundleSource} -o {CustomBundleOutputDirectory} -w {workingDirectory} {packs}";
+                    process.StartInfo.Arguments = bundleArgs;
                 }
 
                 process.Start();
