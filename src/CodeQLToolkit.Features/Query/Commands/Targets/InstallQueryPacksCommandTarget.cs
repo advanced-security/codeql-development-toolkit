@@ -1,4 +1,5 @@
 ﻿using CodeQLToolkit.Shared.CodeQL;
+using CodeQLToolkit.Shared.Utils;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,35 @@ namespace CodeQLToolkit.Features.Query.Commands.Targets
 
             installation.EnableCustomCodeQLBundles = UseBundle;
 
+            //
             installation.IsInstalledOrDie();
+            //
+
+
+            // filter the packs that are part of a custom bundle if we are using bundles.
+            if(UseBundle)
+            {
+                // load the config
+                var config = QLTConfig.LoadFromFile(Base);
+
+                Log<InstallQueryPacksCommandTarget>.G().LogInformation("In bundle mode so filtering bundled packs...");
+
+                
+                foreach (var pack in config.ExportedCustomizationPacks)
+                {
+                    Log<InstallQueryPacksCommandTarget>.G().LogInformation($"Pack {pack} will NOT installed because it is part of the bundle...");
+                }
+
+                files = files.Where(f => !config.ExportedCustomizationPacks.Any(p => CodeQLPackReader.read(f).Name == p)).ToArray();
+
+                Log<InstallQueryPacksCommandTarget>.G().LogInformation($"Got {files.Length} packs after filtering...");
+
+                foreach (var file in files)
+                {
+                    Log<InstallQueryPacksCommandTarget>.G().LogInformation($"Pack {CodeQLPackReader.read(file).Name} in {file} will installed because it is not part of the bundle...");
+                }
+            }
+
 
             foreach ( string file in files )
             {
