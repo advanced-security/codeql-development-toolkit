@@ -19,7 +19,7 @@ namespace CodeQLToolkit.Shared.CodeQL
         public string CLIBundle { get; set; }
         public string StandardLibraryIdent { get; set; }
         public bool EnableCustomCodeQLBundles { get; set; }
-        public string[] ExportedCustomizationPacks { get; set; }
+        public QLTCustomizationPack[] CustomizationPacks { get; set; }
         public bool QuickBundle {  get; set; }
         public string Base { get; set; }
 
@@ -44,7 +44,7 @@ namespace CodeQLToolkit.Shared.CodeQL
                 CLIBundle = config.CodeQLCLIBundle,
                 StandardLibraryIdent = config.CodeQLStandardLibraryIdent,
                 StandardLibraryVersion = config.CodeQLStandardLibrary,
-                ExportedCustomizationPacks = config.ExportedCustomizationPacks,
+                CustomizationPacks = config.CustomizationPacks,
                 Base = config.Base                
             };
 
@@ -53,9 +53,9 @@ namespace CodeQLToolkit.Shared.CodeQL
 
         public void LogPacksToBeBuilt()
         {
-            if(ExportedCustomizationPacks != null)
+            if(CustomizationPacks != null)
             {
-                foreach(var p in ExportedCustomizationPacks)
+                foreach(var p in CustomizationPacks)
                 {
                     Log<CodeQLInstallation>.G().LogInformation($"Pack: {p}");
                 }
@@ -274,14 +274,16 @@ namespace CodeQLToolkit.Shared.CodeQL
 
             var workingDirectory = Path.GetFullPath(Base);
 
-            if(ExportedCustomizationPacks == null || ExportedCustomizationPacks.Length == 0)
+            if(CustomizationPacks == null || CustomizationPacks.Length == 0)
             {
                 throw new Exception("No packs are set to be exported. Please add at least one pack to export in your `qlt.conf.json` file under the property `ExportedCustomizationPacks`.");
             }
 
             Log<CodeQLInstallation>.G().LogInformation($"Building custom bundle. This may take a while...");
 
-            var packs = string.Join(" ", ExportedCustomizationPacks);
+            var packsToExport = CustomizationPacks.Where(p => p.Export == true).Select(p => p.Name).ToArray();  
+
+            var packs = string.Join(" ", packsToExport);
             // next, we run the bundling tool. 
             // typical command line:
             // codeql_bundle -b .\scratch\codeql-bundle-win64.tar.gz -o scratch\out -w .\tests\workspace\ --help
