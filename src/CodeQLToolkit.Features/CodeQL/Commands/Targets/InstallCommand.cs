@@ -1,5 +1,6 @@
 ﻿using CodeQLToolkit.Shared.CodeQL;
 using CodeQLToolkit.Shared.Types;
+using CodeQLToolkit.Shared.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,10 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
                 if (Packs!=null && Packs.Length > 0)
                 {
                     Log<InstallCommand>.G().LogInformation($"Overriding Packs on the command line. The following Packs will be packaged:");
-                    installation.ExportedCustomizationPacks = Packs;
+                    installation.CustomizationPacks = Packs.Select(p => new QLTCustomizationPack()
+                    {
+                        Name = p
+                    }).ToArray();
                 }
                 else
                 {
