@@ -2,7 +2,7 @@
   "profiles": {
     "CodeQLToolkit.Core": {
       "commandName": "Project",
-      "commandLineArgs": "--base C:\\Projects\\codeql-development-lifecycle-toolkit\\example  bundle set enable-custom-bundles"
+      "commandLineArgs": "bundle init --use-runner ubuntu-latest --language cpp --automation-type actions --development --overwrite-existing"
     }
   }
 }

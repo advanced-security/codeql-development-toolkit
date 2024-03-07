@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CodeQLToolkit.Features.Bundle.Lifecycle.Targets.Actions
 {
+    [AutomationType(AutomationType.ACTIONS)]
     public class InitLifecycleTarget : BaseLifecycleTarget
     {
 

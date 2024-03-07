@@ -1,12 +1,7 @@
-﻿using CodeQLToolkit.Features.CodeQL.Lifecycle.Targets;
-using CodeQLToolkit.Features.CodeQL.Lifecycle;
-using CodeQLToolkit.Features.Test.Lifecycle.Targets;
-using CodeQLToolkit.Features.Test.Lifecycle.Targets.Actions;
+﻿using CodeQLToolkit.Features.CodeQL.Lifecycle;
 using CodeQLToolkit.Shared.Utils;
 using System.CommandLine;
-using System.Reflection;
 using CodeQLToolkit.Features.Bundle.Lifecycle.Targets;
-using CodeQLToolkit.Features.Test.Lifecycle;
 
 namespace CodeQLToolkit.Features.Bundle.Lifecycle
 {
