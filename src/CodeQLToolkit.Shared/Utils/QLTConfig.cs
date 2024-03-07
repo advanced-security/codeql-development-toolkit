@@ -19,6 +19,8 @@ namespace CodeQLToolkit.Shared.Utils
         public string CodeQLStandardLibrary { get; set; }
         public string CodeQLCLIBundle { get; set; }
 
+        public string CodeQLConfiguration { get; set; }
+
         public QLTCustomizationPack[] CustomizationPacks { get; set; }
         
         public string CodeQLStandardLibraryIdent { 
@@ -31,6 +33,8 @@ namespace CodeQLToolkit.Shared.Utils
             } 
         }
 
+        [JsonIgnore]
+        public string CodeQLConfigurationPath { get { return Path.Combine(Base, CodeQLConfiguration); } }
 
         [JsonIgnore]
         public string Base { get; set; }

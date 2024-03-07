@@ -16,6 +16,9 @@ namespace CodeQLToolkit.Shared.CodeQL
     {
         public string CLIVersion { get; set; }
         public string StandardLibraryVersion { get; set; }
+
+        public string CodeQLConfiguration { get; set; }
+
         public string CLIBundle { get; set; }
         public string StandardLibraryIdent { get; set; }
         public bool EnableCustomCodeQLBundles { get; set; }
@@ -45,7 +48,8 @@ namespace CodeQLToolkit.Shared.CodeQL
                 StandardLibraryIdent = config.CodeQLStandardLibraryIdent,
                 StandardLibraryVersion = config.CodeQLStandardLibrary,
                 CustomizationPacks = config.CustomizationPacks,
-                Base = config.Base                
+                Base = config.Base,
+                CodeQLConfiguration = config.CodeQLConfiguration
             };
 
 
@@ -292,7 +296,17 @@ namespace CodeQLToolkit.Shared.CodeQL
             if (QuickBundle)
             {
                 Log<CodeQLInstallation>.G().LogInformation($"Note: Quick Bundles enabled and pre-compilation will be disabled...");
-                bundleArgs = $"--log DEBUG -nc -b {customBundleSource} -o {CustomBundleOutputDirectory} -w {workingDirectory} {packs}";
+                bundleArgs = $"-nc {bundleArgs}";
+            }
+
+            if(CodeQLConfiguration!=null && CodeQLConfiguration.Length > 0)
+            {
+                Log<CodeQLInstallation>.G().LogInformation($"Note: Attempting to include default code scanning configuration ...");
+
+                if (File.Exists(Path.Combine(Base, CodeQLConfiguration)))
+                {
+                    bundleArgs = $"-c \"{Path.Combine(Base, CodeQLConfiguration)}\" {bundleArgs}";
+                }
             }
 
             Log<CodeQLInstallation>.G().LogInformation($"Executing Bundle Tool with Working Directory: `{workingDirectory}`");
