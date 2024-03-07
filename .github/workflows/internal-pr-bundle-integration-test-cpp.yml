@@ -66,13 +66,12 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         queries: security-extended
-        source-root: integration-tests/cpp/src/  # Path containing the example application 
         tools: ${{ env.QLT_CODEQL_BUNDLE_PATH }}
 
     - name: Autobuild
       uses: github/codeql-action/autobuild@v2
       with:
-        working-directory: integration-tests/cpp/src/  # Path containing the example application 
+        working-directory: example/integration-tests/cpp/src/  # Path containing the example application 
 
     - name: Perform CodeQL Analysis
       id: analysis
@@ -105,4 +104,4 @@ jobs:
       shell: bash
       run: |
         # Compare the expected vs the actual 
-        qlt bundle run validate-integration-tests --expected integration-tests/cpp/expected.sarif --actual ${{ steps.analysis.outputs.sarif-output }}/cpp.sarif        
+        qlt bundle run validate-integration-tests --expected example/integration-tests/cpp/expected.sarif --actual ${{ steps.analysis.outputs.sarif-output }}/cpp.sarif        
