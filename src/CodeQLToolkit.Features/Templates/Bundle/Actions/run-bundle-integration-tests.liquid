@@ -1,0 +1,161 @@
+﻿name: ⚙️ Integration Test Bundle ({{language}})
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+jobs:
+  integration-test:
+    name: Run Bundle Integration Test
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'cpp' ]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+{% if dev_mode %}
+    - name: Install QLT
+      id: install-qlt
+      uses: ./.github/actions/install-qlt-local
+      with:
+        qlt-version: 'latest'
+        add-to-path: true
+{% else %}
+    - name: Install QLT
+      id: install-qlt
+      uses: ./.github/actions/install-qlt
+      with:
+        qlt-version: 'latest'
+        add-to-path: true
+{% endif %}
+{% raw %}
+    - name: Validate QLT Installation
+      shell: bash
+      run: |
+        echo -e "Checking QLT Version:"
+        echo "QLT Home: ${{ steps.install-qlt.outputs.qlt-home }}"
+        qlt version
+{% endraw %}
+{% if dev_mode %}
+    - name: Create Bundle (compiled)
+      shell: bash
+      run: |
+        if ! qlt codeql run install --custom-bundle --base example/  ; then
+          echo "Failed to generate bundle."
+          exit 1
+        fi
+
+        # ensure bundle runs 
+
+        if ! qlt query run install-packs --use-bundle --base example/  ; then
+          echo "Failed to install query packs with tool."
+          exit 1
+        fi
+{% else %}
+    - name: Create Bundle (compiled)
+      shell: bash
+      run: |
+        if ! qlt codeql run install --custom-bundle  ; then
+          echo "Failed to generate bundle."
+          exit 1
+        fi
+
+        # ensure bundle runs 
+
+        if ! qlt query run install-packs --use-bundle  ; then
+          echo "Failed to install query packs with tool."
+          exit 1
+        fi
+{% endif %}
+{% raw %}
+    - name: Validate Bundle Existence
+      shell: bash
+      run: |
+        echo "Checking Bundle Existence"
+        ls -l ${{ env.QLT_CODEQL_HOME }}/../out/
+
+    - name: Upload Bundle Used
+      uses: actions/upload-artifact@v2
+      with:
+        name: codeql-bundle.tar.gz
+        path: |
+          ${{ env.QLT_CODEQL_BUNDLE_PATH }}
+        if-no-files-found: error
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+        tools: ${{ env.QLT_CODEQL_BUNDLE_PATH }}
+{% endraw %}
+{% if dev_mode %}
+{% raw %}
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+      with:
+        working-directory: example/integration-tests/${{ matrix.language }}/src/  # Path containing the example application 
+{% endraw %}
+{% else %}
+{% raw %}
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+      with:
+        working-directory: integration-tests/${{ matrix.language }}/src/  # Path containing the example application 
+{% endraw %}
+{% endif %}
+{% raw %}
+    - name: Perform CodeQL Analysis
+      id: analysis
+      uses: github/codeql-action/analyze@v2
+
+    - name: Validate SARIF Location
+      shell: bash
+      run: |
+        # validate we have the actual sarif results
+        echo "Checking SARIF file location at: ${{ steps.analysis.outputs.sarif-output }}"
+        ls -l ${{ steps.analysis.outputs.sarif-output }}
+
+    - name: Upload SARIF Results
+      uses: actions/upload-artifact@v2
+      with:
+        name: actual.sarif
+        path: |
+          ${{ steps.analysis.outputs.sarif-output }}/*.sarif
+        if-no-files-found: error
+
+    - name: Validate SARIF Existence
+      shell: bash
+      run: |        
+        ls -l ${{ steps.analysis.outputs.sarif-output }}/*.sarif
+{% endraw %}
+
+{% if dev_mode %}
+{% raw %}
+    - name: Validate SARIF Results
+      shell: bash
+      run: |
+        # Compare the expected vs the actual 
+        qlt bundle run validate-integration-tests --expected example/integration-tests/${{ matrix.language }}/expected.sarif --actual ${{ steps.analysis.outputs.sarif-output }}/${{ matrix.language }}.sarif        
+{% endraw %}
+{% else %}
+{% raw %}
+	- name: Validate SARIF Results
+	  shell: bash
+	  run: |
+		# Compare the expected vs the actual 
+		qlt bundle run validate-integration-tests --expected integration-tests/${{ matrix.language }}/expected.sarif --actual ${{ steps.analysis.outputs.sarif-output }}/${{ matrix.language }}.sarif        
+{% endraw %}
+{% else %}

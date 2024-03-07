@@ -47,6 +47,15 @@ jobs:
             exit 1
           fi
 
+      - name: Generate Workflow Files (Bundle Feature)
+        shell: bash
+        run: |
+          if ! qlt bundle init --use-runner ubuntu-latest --language cpp --automation-type actions --development --overwrite-existing ; then
+            echo "Failed to generate bundle workflow files."
+            exit 1
+          fi
+
+
       - name: Check Git Clean Status 
         shell: bash
         run: |
