@@ -41,7 +41,7 @@ namespace CodeQLToolkit.Features.Query.Commands.Targets
                 Log<InstallQueryPacksCommandTarget>.G().LogInformation("In bundle mode so filtering bundled packs...");
 
                 
-                foreach (var pack in config.CustomizationPacks)
+                foreach (var pack in config.CodeQLPackConfiguration)
                 {
                     Log<InstallQueryPacksCommandTarget>.G().LogInformation($"Pack {pack.Name} will NOT installed because it is part of the bundle...");
                 }
@@ -49,7 +49,7 @@ namespace CodeQLToolkit.Features.Query.Commands.Targets
                 files = files.Where(f => 
                     // all things that are part of the customization pack must be excluded. 
                     // if it is exported is not relevant here.
-                    !config.CustomizationPacks.Any(p => CodeQLPackReader.read(f).Name == p.Name)
+                    !config.CodeQLPackConfiguration.Any(p => CodeQLPackReader.read(f).Name == p.Name && (p.Bundle==true || p.ReferencesBundle==true))
                 ).ToArray();
 
                 Log<InstallQueryPacksCommandTarget>.G().LogInformation($"Got {files.Length} packs after filtering...");

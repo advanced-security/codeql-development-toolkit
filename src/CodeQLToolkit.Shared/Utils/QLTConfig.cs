@@ -7,19 +7,23 @@ using System.Threading.Tasks;
 
 namespace CodeQLToolkit.Shared.Utils
 {
-    public class QLTCustomizationPack
+    public class CodeQLPackConfiguration
     {
         public string Name { get; set; }
-        public bool Export { get; set; }
-    }   
+        public bool Bundle { get; set; }
+        public bool Publish { get; set;}
+        public bool ReferencesBundle { get; set; }
+
+    }
 
     public class QLTConfig
     {
         public string CodeQLCLI { get; set; }
         public string CodeQLStandardLibrary { get; set; }
         public string CodeQLCLIBundle { get; set; }
+        public string CodeQLConfiguration { get; set; }
 
-        public QLTCustomizationPack[] CustomizationPacks { get; set; }
+        public CodeQLPackConfiguration[] CodeQLPackConfiguration { get; set; }
         
         public string CodeQLStandardLibraryIdent { 
             get  {
@@ -31,6 +35,8 @@ namespace CodeQLToolkit.Shared.Utils
             } 
         }
 
+        [JsonIgnore]
+        public string CodeQLConfigurationPath { get { return Path.Combine(Base, CodeQLConfiguration); } }
 
         [JsonIgnore]
         public string Base { get; set; }

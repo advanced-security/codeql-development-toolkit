@@ -27,9 +27,10 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
                 if (Packs!=null && Packs.Length > 0)
                 {
                     Log<InstallCommand>.G().LogInformation($"Overriding Packs on the command line. The following Packs will be packaged:");
-                    installation.CustomizationPacks = Packs.Select(p => new QLTCustomizationPack()
+                    installation.CodeQLPackConfiguration = Packs.Select(p => new CodeQLPackConfiguration()
                     {
-                        Name = p
+                        Name = p,
+                        Bundle = true
                     }).ToArray();
                 }
                 else

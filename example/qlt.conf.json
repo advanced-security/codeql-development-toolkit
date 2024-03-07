@@ -4,14 +4,15 @@
   "CodeQLCLIBundle": "codeql-bundle-v2.15.5",
   "EnableCustomCodeQLBundles": true,
   "CodeQLStandardLibraryIdent": "codeql-cli_v2.15.5",
-  "CustomizationPacks" : [
+  "CodeQLPackConfiguration" : [
     {
       "Name": "qlt/cpp-customizations",
-      "Export" : true
+      "Bundle" : true
     },
     {
       "Name": "qlt2/stuff2-tests",
-      "Export" : false
+      "Bundle" : false,
+      "ReferencesBundle" : true 
     }
   ]
 }

@@ -16,10 +16,13 @@ namespace CodeQLToolkit.Shared.CodeQL
     {
         public string CLIVersion { get; set; }
         public string StandardLibraryVersion { get; set; }
+
+        public string CodeQLConfiguration { get; set; }
+
         public string CLIBundle { get; set; }
         public string StandardLibraryIdent { get; set; }
         public bool EnableCustomCodeQLBundles { get; set; }
-        public QLTCustomizationPack[] CustomizationPacks { get; set; }
+        public CodeQLPackConfiguration[] CodeQLPackConfiguration { get; set; }
         public bool QuickBundle {  get; set; }
         public string Base { get; set; }
 
@@ -44,8 +47,9 @@ namespace CodeQLToolkit.Shared.CodeQL
                 CLIBundle = config.CodeQLCLIBundle,
                 StandardLibraryIdent = config.CodeQLStandardLibraryIdent,
                 StandardLibraryVersion = config.CodeQLStandardLibrary,
-                CustomizationPacks = config.CustomizationPacks,
-                Base = config.Base                
+                CodeQLPackConfiguration = config.CodeQLPackConfiguration,
+                Base = config.Base,
+                CodeQLConfiguration = config.CodeQLConfiguration
             };
 
 
@@ -53,9 +57,9 @@ namespace CodeQLToolkit.Shared.CodeQL
 
         public void LogPacksToBeBuilt()
         {
-            if(CustomizationPacks != null)
+            if(CodeQLPackConfiguration != null)
             {
-                foreach(var p in CustomizationPacks)
+                foreach(var p in CodeQLPackConfiguration)
                 {
                     Log<CodeQLInstallation>.G().LogInformation($"Pack: {p}");
                 }
@@ -274,14 +278,14 @@ namespace CodeQLToolkit.Shared.CodeQL
 
             var workingDirectory = Path.GetFullPath(Base);
 
-            if(CustomizationPacks == null || CustomizationPacks.Length == 0)
+            if(CodeQLPackConfiguration == null || CodeQLPackConfiguration.Length == 0)
             {
                 throw new Exception("No packs are set to be exported. Please add at least one pack to export in your `qlt.conf.json` file under the property `ExportedCustomizationPacks`.");
             }
 
             Log<CodeQLInstallation>.G().LogInformation($"Building custom bundle. This may take a while...");
 
-            var packsToExport = CustomizationPacks.Where(p => p.Export == true).Select(p => p.Name).ToArray();  
+            var packsToExport = CodeQLPackConfiguration.Where(p => p.Bundle == true).Select(p => p.Name).ToArray();  
 
             var packs = string.Join(" ", packsToExport);
             // next, we run the bundling tool. 
@@ -292,7 +296,17 @@ namespace CodeQLToolkit.Shared.CodeQL
             if (QuickBundle)
             {
                 Log<CodeQLInstallation>.G().LogInformation($"Note: Quick Bundles enabled and pre-compilation will be disabled...");
-                bundleArgs = $"--log DEBUG -nc -b {customBundleSource} -o {CustomBundleOutputDirectory} -w {workingDirectory} {packs}";
+                bundleArgs = $"-nc {bundleArgs}";
+            }
+
+            if(CodeQLConfiguration!=null && CodeQLConfiguration.Length > 0)
+            {
+                Log<CodeQLInstallation>.G().LogInformation($"Note: Attempting to include default code scanning configuration ...");
+
+                if (File.Exists(Path.Combine(Base, CodeQLConfiguration)))
+                {
+                    bundleArgs = $"-c \"{Path.Combine(Base, CodeQLConfiguration)}\" {bundleArgs}";
+                }
             }
 
             Log<CodeQLInstallation>.G().LogInformation($"Executing Bundle Tool with Working Directory: `{workingDirectory}`");
