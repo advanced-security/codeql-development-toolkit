@@ -78,7 +78,7 @@ jobs:
     - name: Autobuild
       uses: github/codeql-action/autobuild@v2
       with:
-        working-directory: integration-tests/${{ matrix.language }}/src/  # Path containing the example application 
+        working-directory: example/integration-tests/${{ matrix.language }}/src/  # Path containing the example application 
 
     - name: Perform CodeQL Analysis
       id: analysis
@@ -108,4 +108,4 @@ jobs:
       shell: bash
       run: |
         # Compare the expected vs the actual 
-        qlt bundle run validate-integration-tests --expected integration-tests/${{ matrix.language }}/expected.sarif --actual ${{ steps.analysis.outputs.sarif-output }}/${{ matrix.language }}.sarif        
+        qlt bundle run validate-integration-tests --expected example/integration-tests/${{ matrix.language }}/expected.sarif --actual ${{ steps.analysis.outputs.sarif-output }}/${{ matrix.language }}.sarif        
