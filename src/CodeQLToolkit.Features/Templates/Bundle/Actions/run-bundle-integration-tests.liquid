@@ -158,4 +158,4 @@ jobs:
 		# Compare the expected vs the actual 
 		qlt bundle run validate-integration-tests --expected integration-tests/${{ matrix.language }}/expected.sarif --actual ${{ steps.analysis.outputs.sarif-output }}/${{ matrix.language }}.sarif        
 {% endraw %}
-{% else %}
+{% endif %}
