@@ -43,14 +43,14 @@ jobs:
     - name: Create Bundle (compiled)
       shell: bash
       run: |
-        if ! qlt codeql run install --custom-bundle  ; then
+        if ! qlt codeql run install --custom-bundle --base example/  ; then
           echo "Failed to generate bundle."
           exit 1
         fi
 
         # ensure bundle runs 
 
-        if ! qlt query run install-packs --use-bundle ; then
+        if ! qlt query run install-packs --use-bundle --base example/  ; then
           echo "Failed to install query packs with tool."
           exit 1
         fi
