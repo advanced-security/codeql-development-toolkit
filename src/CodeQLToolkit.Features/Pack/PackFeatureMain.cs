@@ -23,7 +23,7 @@ namespace CodeQLToolkit.Features.Pack
         {
             commandFeature = new PackCommandFeature();
         }
-        public static PackFeatureMain Instance { get { return instance; } }
+        public static PackFeatureMain Instance => instance;
 
         public void Register(Command parentCommand)
         {

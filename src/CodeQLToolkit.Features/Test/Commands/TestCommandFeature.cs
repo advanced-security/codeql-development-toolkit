@@ -14,7 +14,7 @@ namespace CodeQLToolkit.Features.Test.Commands
 {
     public class TestCommandFeature : FeatureBase, IToolkitLifecycleFeature
     {
-        public override LanguageType[] SupportedLangauges { get => new LanguageType[] { 
+        public override LanguageType[] SupportedLangauges => new LanguageType[] {
             LanguageType.C,
             LanguageType.CPP,
             LanguageType.CSHARP,
@@ -22,8 +22,8 @@ namespace CodeQLToolkit.Features.Test.Commands
             LanguageType.JAVASCRIPT,
             LanguageType.GO,
             LanguageType.RUBY,
-            LanguageType.PYTHON            
-        }; }
+            LanguageType.PYTHON
+        };
 
         public TestCommandFeature()
         {
@@ -46,7 +46,7 @@ namespace CodeQLToolkit.Features.Test.Commands
 
             // a command that runs the actual tests 
             var unitTestsCommand = new Command("execute-unit-tests", "Runs unit tests within a repository based on the current configuration.");
-            
+
             var numThreadsOption = new Option<int>("--num-threads", () => 4, "The number of threads to use for runner. For best performance, do not exceed the number of physical cores on your system.") { IsRequired = true };
             var workDirectoryOption = new Option<string>("--work-dir", () => Path.GetTempPath(), "Where to place intermediate execution output files.") { IsRequired = true };
             var languageOption = new Option<string>("--language", $"The language to run tests for.") { IsRequired = true }.FromAmong(SupportedLangauges.Select(x => x.ToOptionString()).ToArray());
@@ -55,7 +55,7 @@ namespace CodeQLToolkit.Features.Test.Commands
             //var stdLibIdentOption = new Option<string>("--stdlib-ident", $"A string identifying the standard library used.") { IsRequired = true };
             var extraCodeQLOptions = new Option<string>("--codeql-args", $"Extra arguments to pass to CodeQL.") { IsRequired = false };
 
-            unitTestsCommand.Add(numThreadsOption); 
+            unitTestsCommand.Add(numThreadsOption);
             unitTestsCommand.Add(workDirectoryOption);
             unitTestsCommand.Add(languageOption);
             unitTestsCommand.Add(runnerOSOption);
@@ -75,8 +75,9 @@ namespace CodeQLToolkit.Features.Test.Commands
             runCommand.Add(getMatrixTestCommand);
             runCommand.Add(unitTestsCommand);
             runCommand.Add(validateUnitTestsCommand);
-            
-            getMatrixTestCommand.SetHandler((basePath, automationType, osVersions) => {
+
+            getMatrixTestCommand.SetHandler((basePath, automationType, osVersions) =>
+            {
 
                 Log<TestCommandFeature>.G().LogInformation("Executing get-matrix command...");
 
@@ -94,7 +95,8 @@ namespace CodeQLToolkit.Features.Test.Commands
             }, Globals.BasePathOption, Globals.AutomationTypeOption, matrixOSVersion);
 
             //stdLibIdent
-            unitTestsCommand.SetHandler((basePath, automationType, numThreads, workDirectory, language, runnerOS, extraArgs, useBundle) => {
+            unitTestsCommand.SetHandler((basePath, automationType, numThreads, workDirectory, language, runnerOS, extraArgs, useBundle) =>
+            {
 
                 Log<TestCommandFeature>.G().LogInformation("Executing execute-unit-tests command...");
 
@@ -110,9 +112,9 @@ namespace CodeQLToolkit.Features.Test.Commands
                     Base = basePath
                 };
 
-                if (!File.Exists(c.CodeQLConfigFilePath))
+                if (!File.Exists(c.QLTConfigFilePath))
                 {
-                    ProcessUtils.DieWithError($"Cannot read values from missing file {c.CodeQLConfigFilePath}");
+                    ProcessUtils.DieWithError($"Cannot read values from missing file {c.QLTConfigFilePath}");
                 }
 
                 var config = c.FromFile();
@@ -129,12 +131,12 @@ namespace CodeQLToolkit.Features.Test.Commands
 
                 featureTarget.Run();
 
-            }, Globals.BasePathOption, 
-               Globals.AutomationTypeOption, 
+            }, Globals.BasePathOption,
+               Globals.AutomationTypeOption,
                numThreadsOption,
-               workDirectoryOption, 
-               languageOption, 
-               runnerOSOption, 
+               workDirectoryOption,
+               languageOption,
+               runnerOSOption,
                extraCodeQLOptions,
                Globals.UseBundle
             );

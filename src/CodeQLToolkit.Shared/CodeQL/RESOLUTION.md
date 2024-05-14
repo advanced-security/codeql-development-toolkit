@@ -27,7 +27,7 @@ list of packs as the packs to include in the bundle.
 Note this will compile all of the queries and may take a long time. In this case, you may create a bundle as follows:
 
 ```
-qlt codeql install --quick-bundle  [--packs pack1 pack2 pack3]
+qlt codeql install --quick-bundle [--packs pack1 pack2 pack3]
 ```
 
 Which will not compile the packs and queries. 
@@ -47,10 +47,17 @@ For a bundle installation the mapping is as follows:
 
 - `CodeQLCLIBundle` - The bundle downloaded from `github/codeql-action/releases` to base the bundle on. 
 
-In all cases, at the end of the execution two to three environment variables are set:
-- `QLT_CODEQL_PATH` - The path to the CodeQL binary. 
-- `QLT_CODEQL_HOME` - The root installation of CodeQL
-- `QLT_CODEQL_BUNDLE_PATH` - The path to the bundle created by QLT.
+In all cases, two environment variables are set after a run:
+- `QLT_CODEQL_PATH` - The path to the CodeQL binary. (Always set)
+- `QLT_CODEQL_HOME` - The root installation of CodeQL. (Always set)
+
+When using custom bundles, four additional environmental variables are set after a run:
+- `QLT_CODEQL_BUNDLE_PATH` - The path to the current platform bundle created by QLT. (Set when using custom bundles)
+- `QLT_CODEQL_BUNDLE_PATH_WIN64` - The path to the Windows bundle created by QLT. (Set when using custom bundles)
+- `QLT_CODEQL_BUNDLE_PATH_LINUX64` - The path to the Linux bundle created by QLT. (Set when using custom bundles)
+- `QLT_CODEQL_BUNDLE_PATH_OSX64` - The path to the MacOS bundle created by QLT. (Set when using custom bundles)
+
+The environmental variable `QLT_CODE_BUNDLE_PATH` will map to one of the three other bundle variables.
 
 ## Idents within the Installation Directory 
 

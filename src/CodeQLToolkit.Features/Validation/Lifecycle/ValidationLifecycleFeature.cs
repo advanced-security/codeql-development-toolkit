@@ -16,9 +16,7 @@ namespace CodeQLToolkit.Features.Validation.Lifecycle
             FeatureName = "Validation";
         }
 
-        public override LanguageType[] SupportedLangauges
-        {
-            get => new LanguageType[] {
+        public override LanguageType[] SupportedLangauges => new LanguageType[] {
             LanguageType.C,
             LanguageType.CPP,
             LanguageType.CSHARP,
@@ -28,7 +26,6 @@ namespace CodeQLToolkit.Features.Validation.Lifecycle
             LanguageType.RUBY,
             LanguageType.PYTHON
         };
-        }
 
         public void Register(Command parentCommand)
         {
@@ -64,7 +61,7 @@ namespace CodeQLToolkit.Features.Validation.Lifecycle
                 featureTarget.OverwriteExisting = overwriteExisting;
                 featureTarget.Language = language;
                 featureTarget.DevMode = devMode;
-                featureTarget.Branch = branch;  
+                featureTarget.Branch = branch;
                 featureTarget.Run();
 
             }, Globals.Development, Globals.BasePathOption, Globals.AutomationTypeOption, overwriteExistingOption, languageOption, useRunnerOption, branchOption);

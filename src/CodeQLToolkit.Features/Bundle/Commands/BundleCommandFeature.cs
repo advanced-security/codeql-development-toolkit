@@ -11,9 +11,7 @@ namespace CodeQLToolkit.Features.Bundle.Commands
 {
     public class BundleCommandFeature : FeatureBase, IToolkitLifecycleFeature
     {
-        public override LanguageType[] SupportedLangauges
-        {
-            get => new LanguageType[] {
+        public override LanguageType[] SupportedLangauges => new LanguageType[] {
             LanguageType.C,
             LanguageType.CPP,
             LanguageType.CSHARP,
@@ -23,7 +21,6 @@ namespace CodeQLToolkit.Features.Bundle.Commands
             LanguageType.RUBY,
             LanguageType.PYTHON
         };
-        }
 
         public BundleCommandFeature()
         {
@@ -62,7 +59,7 @@ namespace CodeQLToolkit.Features.Bundle.Commands
 
                 }.Run();
 
-            },Globals.BasePathOption, expectedOption, actualOption);
+            }, Globals.BasePathOption, expectedOption, actualOption);
         }
 
         public int Run()

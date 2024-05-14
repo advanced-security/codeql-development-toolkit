@@ -30,16 +30,16 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
                 Base = Base
             };
 
-            if (!File.Exists(c.CodeQLConfigFilePath))
+            if (!File.Exists(c.QLTConfigFilePath))
             {
-                ProcessUtils.DieWithError($"Cannot read values from missing file {c.CodeQLConfigFilePath}");
+                ProcessUtils.DieWithError($"Cannot read values from missing file {c.QLTConfigFilePath}");
             }
 
             var config = c.FromFile();
 
             List<object> configs = new List<object>();
 
-            foreach(var os in OSVersions)
+            foreach (var os in OSVersions)
             {
                 Log<TestCommandFeature>.G().LogInformation($"Creating matrix for {os}");
 
@@ -66,7 +66,7 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
 
             Log<TestCommandFeature>.G().LogInformation($"Writing matrix output {matrixVariable} to {envFile}");
 
-            File.AppendAllText(envFile, matrixVariable );
+            File.AppendAllText(envFile, matrixVariable);
 
             Log<TestCommandFeature>.G().LogInformation($"Done.");
 

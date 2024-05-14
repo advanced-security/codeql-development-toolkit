@@ -8,14 +8,12 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
 {
     public class TestLifecycleFeature : FeatureBase, IToolkitLifecycleFeature
     {
-        public TestLifecycleFeature() 
+        public TestLifecycleFeature()
         {
             FeatureName = "Test";
         }
 
-        public override LanguageType[] SupportedLangauges
-        {
-            get => new LanguageType[] {
+        public override LanguageType[] SupportedLangauges => new LanguageType[] {
             LanguageType.C,
             LanguageType.CPP,
             LanguageType.CSHARP,
@@ -25,7 +23,6 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
             LanguageType.RUBY,
             LanguageType.PYTHON
         };
-        }
 
         public void Register(Command parentCommand)
         {
@@ -50,7 +47,7 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
             parentCommand.Add(initCommand);
 
 
-            
+
             initCommand.SetHandler((devMode, basePath, automationType, overwriteExisting, numThreads, useRunner, language, branch) =>
             {
                 Log<TestLifecycleFeature>.G().LogInformation("Executing init command...");
@@ -62,14 +59,14 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
 
                 // setup common params 
                 featureTarget.FeatureName = FeatureName;
-                featureTarget.Base = basePath;             
+                featureTarget.Base = basePath;
                 featureTarget.OverwriteExisting = overwriteExisting;
                 featureTarget.NumThreads = numThreads;
-                featureTarget.UseRunner = useRunner;    
+                featureTarget.UseRunner = useRunner;
                 featureTarget.Language = language;
                 //featureTarget.ExtraArgs = extraArgs;
                 featureTarget.DevMode = devMode;
-                featureTarget.Branch = branch; 
+                featureTarget.Branch = branch;
                 featureTarget.Run();
 
             }, Globals.Development, Globals.BasePathOption, Globals.AutomationTypeOption, overwriteExistingOption, numThreadsOption, useRunnerOption, languageOption, branchOption);

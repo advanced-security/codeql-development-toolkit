@@ -14,46 +14,23 @@ namespace CodeQLToolkit.Shared.CodeQL
         readonly static string BUNDLE_DIRECTORY = "bundle";
         readonly static string CUSTOM_BUNDLE_DIRECTORY = "custom-bundle";
 
-        public static string GetLocation
-        {
-            get
-            {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".qlt");
-            }
-        }
+        public static string GetLocation => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".qlt");
 
-        public static string PackageLocation
-        {
-            get
-            {
-                return Path.Combine(GetLocation, PAKCAGE_DIRECTORY);
-            }
-        }
+        public static string PackageLocation => Path.Combine(GetLocation, PAKCAGE_DIRECTORY);
 
-        public static string BundleLocation
-        {
-            get
-            {
-                return Path.Combine(GetLocation, BUNDLE_DIRECTORY);
-            }
-        }
+        public static string BundleLocation => Path.Combine(GetLocation, BUNDLE_DIRECTORY);
 
-        public static string CustomBundleLocation
-        {
-            get
-            {
-                return Path.Combine(GetLocation, CUSTOM_BUNDLE_DIRECTORY);
-            }
-        }
+        public static string CustomBundleLocation => Path.Combine(GetLocation, CUSTOM_BUNDLE_DIRECTORY);
 
 
         public static string DirectoryForVersion(ArtifactKind kind, string version)
         {
-            if(kind == ArtifactKind.PACKAGE)
+            if (kind == ArtifactKind.PACKAGE)
             {
                 return Path.Combine(PackageLocation, version);
             }
-            else if (kind == ArtifactKind.BUNDLE) {
+            else if (kind == ArtifactKind.BUNDLE)
+            {
                 return Path.Combine(BundleLocation, version);
             }
             else

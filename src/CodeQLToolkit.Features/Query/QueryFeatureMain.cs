@@ -18,7 +18,8 @@ namespace CodeQLDevelopmentLifecycleToolkit.Features.Query
 
         readonly static QueryFeatureMain instance;
 
-        static QueryFeatureMain() { 
+        static QueryFeatureMain()
+        {
             instance = new QueryFeatureMain();
         }
         private QueryFeatureMain()
@@ -28,7 +29,7 @@ namespace CodeQLDevelopmentLifecycleToolkit.Features.Query
             lifecycleFeature = new QueryLifecycleFeature();
         }
 
-        public static QueryFeatureMain Instance { get { return instance; } }
+        public static QueryFeatureMain Instance => instance;
 
         public int Run()
         {
@@ -46,7 +47,7 @@ namespace CodeQLDevelopmentLifecycleToolkit.Features.Query
             scaffoldFeature.Register(queryCommand);
             commandFeature.Register(queryCommand);
             lifecycleFeature.Register(queryCommand);
-            
+
         }
     }
 }

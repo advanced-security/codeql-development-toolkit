@@ -59,7 +59,6 @@ jobs:
         fi
 
         # ensure bundle runs 
-
         if ! qlt query run install-packs --use-bundle --base example/  ; then
           echo "Failed to install query packs with tool."
           exit 1
@@ -74,7 +73,6 @@ jobs:
         fi
 
         # ensure bundle runs 
-
         if ! qlt query run install-packs --use-bundle  ; then
           echo "Failed to install query packs with tool."
           exit 1
@@ -87,13 +85,16 @@ jobs:
         echo "Checking Bundle Existence"
         ls -l ${{ env.QLT_CODEQL_HOME }}/../out/
 
-    - name: Upload Bundle Used
+    - name: Upload Bundles
       uses: actions/upload-artifact@v2
       with:
-        name: codeql-bundle.tar.gz
+        name: codeql-bundles
         path: |
-          ${{ env.QLT_CODEQL_BUNDLE_PATH }}
+          ${{ env.QLT_CODEQL_BUNDLE_PATH_LINUX64 }}
+          ${{ env.QLT_CODEQL_BUNDLE_PATH_WIN64 }}
+          ${{ env.QLT_CODEQL_BUNDLE_PATH_OSX64 }}
         if-no-files-found: error
+        compression-level: 0
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2

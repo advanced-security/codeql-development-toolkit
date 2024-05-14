@@ -6,12 +6,13 @@ using System.CommandLine;
 
 namespace CodeQLToolkit.Features.Query.Scaffolding
 {
-    public class QueryScaffoldFeature : FeatureBase, IToolkitScaffoldingFeature 
+    public class QueryScaffoldFeature : FeatureBase, IToolkitScaffoldingFeature
     {
-        public QueryScaffoldFeature() {
+        public QueryScaffoldFeature()
+        {
             FeatureName = "Query";
         }
-        public override LanguageType[] SupportedLangauges { get => new LanguageType[] { LanguageType.C, LanguageType.CPP, LanguageType.JAVASCRIPT}; }
+        public override LanguageType[] SupportedLangauges => new LanguageType[] { LanguageType.C, LanguageType.CPP, LanguageType.JAVASCRIPT };
 
         public void Register(Command parentCommand)
         {
@@ -26,9 +27,9 @@ namespace CodeQLToolkit.Features.Query.Scaffolding
             var createQueryPackOption = new Option<bool>("--create-query-pack", () => true, "Create a new query pack if none exists.");
             var overwriteExistingOption = new Option<bool>("--overwrite-existing", () => false, "Overwrite exiting files (if they exist).");
 
-            var createTestsOption = new Option<bool>("--create-tests", ()=> true, "Create a new unit test for this query if it doesn't already exist.");
+            var createTestsOption = new Option<bool>("--create-tests", () => true, "Create a new unit test for this query if it doesn't already exist.");
             var queryNameOption = new Option<string>("--query-name", "Name of the query. Note: Do not specify the `.ql` extension in naming your query.") { IsRequired = true };
-            var queryLanguageOption = new Option<string>("--language", $"The language to generate a query for.") { IsRequired = true}
+            var queryLanguageOption = new Option<string>("--language", $"The language to generate a query for.") { IsRequired = true }
             .FromAmong(SupportedLangauges.Select(x => x.ToOptionString()).ToArray());
             var queryPackOption = new Option<string>("--pack", "The name of the query pack to place this query in.") { IsRequired = true };
             var queryPackScopeOption = new Option<string>("--scope", "The scope to use") { IsRequired = true };
@@ -62,8 +63,8 @@ namespace CodeQLToolkit.Features.Query.Scaffolding
                         CreateTests = createTests,
                         CreateQueryPack = createQueryPack,
                         OverwriteExisting = overwriteExisting,
-                        FeatureName = FeatureName 
-                    }.Run(); 
+                        FeatureName = FeatureName
+                    }.Run();
 
                 }, createQueryPackOption, createTestsOption, queryNameOption, queryLanguageOption, queryPackOption, Globals.BasePathOption, overwriteExistingOption, queryPackScopeOption);
             }

@@ -9,14 +9,8 @@ namespace CodeQLToolkit.Shared.Utils
 {
     public class ToolUtil
     {
-        public static string ToolRoot
-        {
-            get
-            {
-                return Path.Combine(Utils.FileUtils.GetExecutingDirectory().FullName, "tools");
-            }
-        }
-        
+        public static string ToolRoot => Path.Combine(Utils.FileUtils.GetExecutingDirectory().FullName, "tools");
+
         public static string ExecutableExtensionForPlatform
         {
             get

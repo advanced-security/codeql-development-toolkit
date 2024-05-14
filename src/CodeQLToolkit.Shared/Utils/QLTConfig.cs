@@ -11,7 +11,7 @@ namespace CodeQLToolkit.Shared.Utils
     {
         public string Name { get; set; }
         public bool Bundle { get; set; }
-        public bool Publish { get; set;}
+        public bool Publish { get; set; }
         public bool ReferencesBundle { get; set; }
 
     }
@@ -24,37 +24,32 @@ namespace CodeQLToolkit.Shared.Utils
         public string CodeQLConfiguration { get; set; }
 
         public CodeQLPackConfiguration[] CodeQLPackConfiguration { get; set; }
-        
-        public string CodeQLStandardLibraryIdent { 
-            get  {
+
+        public string CodeQLStandardLibraryIdent
+        {
+            get
+            {
                 if (CodeQLStandardLibrary != null)
                 {
                     return CodeQLStandardLibrary.Replace("/", "_");
                 }
                 return CodeQLStandardLibrary;
-            } 
+            }
         }
 
         [JsonIgnore]
-        public string CodeQLConfigurationPath { get { return Path.Combine(Base, CodeQLConfiguration); } }
+        public string CodeQLConfigurationPath => Path.Combine(Base, CodeQLConfiguration);
 
         [JsonIgnore]
         public string Base { get; set; }
 
         [JsonIgnore]
-        public string CodeQLConfigFilePath
+        public string QLTConfigFilePath => Path.Combine(Base, "qlt.conf.json");
+
+        public QLTConfig FromFile()
         {
-            get
-            {
-                return Path.Combine(Base, "qlt.conf.json");
-            }
-        }
-
-        public QLTConfig FromFile() {
-            var data = File.ReadAllText(CodeQLConfigFilePath);
+            var data = File.ReadAllText(QLTConfigFilePath);
             QLTConfig c = JsonConvert.DeserializeObject<QLTConfig>(data);
-
-
             c.Base = Base;
             return c;
         }
@@ -62,7 +57,7 @@ namespace CodeQLToolkit.Shared.Utils
         public void ToFile()
         {
             var data = JsonConvert.SerializeObject(this, Formatting.Indented);
-            File.WriteAllText(CodeQLConfigFilePath, data);
+            File.WriteAllText(QLTConfigFilePath, data);
         }
 
         public static QLTConfig? LoadFromFile(string baseDir)
@@ -71,9 +66,9 @@ namespace CodeQLToolkit.Shared.Utils
             {
                 Base = baseDir
             };
-            
 
-            if (File.Exists(config.CodeQLConfigFilePath))
+
+            if (File.Exists(config.QLTConfigFilePath))
             {
                 return config.FromFile();
             }

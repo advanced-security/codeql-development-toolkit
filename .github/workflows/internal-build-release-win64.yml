@@ -45,7 +45,7 @@ jobs:
         pip install -U pyinstaller 
 
         # run the packaging 
-        .\scripts\build_codeql_bundle_dist.ps1 -Version 0.2.0 -WorkDirectory dist -DestinationDirectory .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\windows-x64\tools\
+        .\scripts\build_codeql_bundle_dist.ps1 -Version 0.3.0 -WorkDirectory dist -DestinationDirectory .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\windows-x64\tools\
       env:
         GH_TOKEN: ${{ github.token }}
 
