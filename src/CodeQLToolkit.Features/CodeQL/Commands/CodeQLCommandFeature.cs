@@ -15,7 +15,7 @@ namespace CodeQLToolkit.Features.CodeQL.Commands
 {
     public class CodeQLCommandFeature : FeatureBase, IToolkitLifecycleFeature
     {
-        public override LanguageType[] SupportedLangauges { get => new LanguageType[] { 
+        public override LanguageType[] SupportedLangauges => new LanguageType[] {
             LanguageType.C,
             LanguageType.CPP,
             LanguageType.CSHARP,
@@ -23,8 +23,8 @@ namespace CodeQLToolkit.Features.CodeQL.Commands
             LanguageType.JAVASCRIPT,
             LanguageType.GO,
             LanguageType.RUBY,
-            LanguageType.PYTHON            
-        }; }
+            LanguageType.PYTHON
+        };
 
         public CodeQLCommandFeature()
         {
@@ -37,10 +37,10 @@ namespace CodeQLToolkit.Features.CodeQL.Commands
 
             var runCommand = new Command("run", "Functions pertaining to running codeql-related commands.");
             parentCommand.Add(runCommand);
-            
+
             var installCommand = new Command("install", "Installs CodeQL (bundle or release distribution) locally.");
-            var customBundleOption = new Option<bool>("--custom-bundle", () => false, "Build a custom bundle and compile the bundle.") { IsRequired = true};
-            var quickBundleOption = new Option<bool>("--quick-bundle", () => false,  "Build a custom bundle and DO NOT compile the bundle.") { IsRequired = true};
+            var customBundleOption = new Option<bool>("--custom-bundle", () => false, "Build a custom bundle and compile the bundle.") { IsRequired = true };
+            var quickBundleOption = new Option<bool>("--quick-bundle", () => false, "Build a custom bundle and DO NOT compile the bundle.") { IsRequired = true };
             var packsOption = new Option<string[]>("--packs", "When creating bundles, this specifies the packs to include, Example `pack1 pack2 pack3`. You may specify also as `--pack pack1 --pack2 --pack3`") { IsRequired = false, AllowMultipleArgumentsPerToken = true };
 
             installCommand.Add(customBundleOption);
@@ -48,7 +48,7 @@ namespace CodeQLToolkit.Features.CodeQL.Commands
             installCommand.Add(packsOption);
 
             runCommand.Add(installCommand);
-            
+
             installCommand.SetHandler((basePath, automationType, customBundleOption, quickBundleOption, packs) =>
             {
                 Log<CodeQLCommandFeature>.G().LogInformation("Executing install command...");

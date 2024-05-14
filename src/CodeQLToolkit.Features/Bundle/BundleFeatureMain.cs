@@ -29,7 +29,7 @@ namespace CodeQLToolkit.Features.Bundle
             commandFeature = new BundleCommandFeature();
             lifecycleFeature = new BundleLifecycleFeature();
         }
-        public static BundleFeatureMain Instance { get { return instance; } }
+        public static BundleFeatureMain Instance => instance;
 
         public void Register(Command parentCommand)
         {

@@ -7,7 +7,7 @@ using CodeQLToolkit.Features.CodeQL.Commands;
 
 namespace CodeQLToolkit.Features.CodeQL
 {
-        public class CodeQLFeatureMain : IToolkitFeature
+    public class CodeQLFeatureMain : IToolkitFeature
     {
         readonly CodeQLLifecycleFeature lifecycleFeature;
         readonly CodeQLCommandFeature commandFeature;
@@ -24,7 +24,7 @@ namespace CodeQLToolkit.Features.CodeQL
             commandFeature = new CodeQLCommandFeature();
         }
 
-        public static CodeQLFeatureMain Instance { get { return instance; } }
+        public static CodeQLFeatureMain Instance => instance;
 
         public int Run()
         {
@@ -36,7 +36,7 @@ namespace CodeQLToolkit.Features.CodeQL
         {
             var queryCommand = new Command("codeql", "Use the features related to managing the version of CodeQL used by this repository.");
             parentCommand.Add(queryCommand);
-            
+
             Log<CodeQLFeatureMain>.G().LogInformation("Registering scaffolding submodule.");
             lifecycleFeature.Register(queryCommand);
 

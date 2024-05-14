@@ -1,4 +1,4 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,97 +14,28 @@ namespace CodeQLToolkit.Shared.Utils
         public string Scope { get; set; }
         public string Name { get; set; }
 
-        public string QuerySrcDir
-        {
-            get
-            {
-                return Path.Combine(Base, Language.ToDirectory(), QueryPackName, "src");
-            }
-        }
+        public string QuerySrcDir => Path.Combine(Base, Language.ToDirectory(), QueryPackName, "src");
 
-        public string QueryFileDir
-        { 
-            get
-            {
-                return Path.Combine(QuerySrcDir, Name);
-            }
-        }
+        public string QueryFileDir => Path.Combine(QuerySrcDir, Name);
 
-        public string QueryFilePath
-        {
-            get
-            {
-                return Path.Combine(QueryFileDir, $"{Name}.ql");
-            }
-        }
+        public string QueryFilePath => Path.Combine(QueryFileDir, $"{Name}.ql");
 
-        public string QueryPackPath
-        {
-            get
-            {
-                return Path.Combine(QuerySrcDir, "qlpack.yml");
-                
-            }
-        }
+        public string QueryPackPath => Path.Combine(QuerySrcDir, "qlpack.yml");
 
         //
-        public string QueryTestDir
-        {
-            get
-            {
-                return Path.Combine(Base, Language.ToDirectory(), QueryPackName, "test");
-            }
-        }
+        public string QueryTestDir => Path.Combine(Base, Language.ToDirectory(), QueryPackName, "test");
 
-        public string QueryFileTestDir
-        {
-            get
-            {
-                return Path.Combine(QueryTestDir, Name);
-            }
-        }
+        public string QueryFileTestDir => Path.Combine(QueryTestDir, Name);
 
-        public string QueryFileTestPath
-        {
-            get
-            {
-                return Path.Combine(QueryFileTestDir, $"{Name}.{Language.ToExtension()}");
-            }
-        }
+        public string QueryFileTestPath => Path.Combine(QueryFileTestDir, $"{Name}.{Language.ToExtension()}");
 
-        public string QueryFileQLRefPath
-        {
-            get
-            {
-                return Path.Combine(QueryFileTestDir, $"{Name}.qlref");
-            }
-        }
+        public string QueryFileQLRefPath => Path.Combine(QueryFileTestDir, $"{Name}.qlref");
 
-        public string QueryPackTestPath
-        {
-            get
-            {
-                return Path.Combine(QueryTestDir, "qlpack.yml");
+        public string QueryPackTestPath => Path.Combine(QueryTestDir, "qlpack.yml");
 
-            }
-        }
+        public string QueryTestExpectedFile => Path.Combine(QueryFileTestDir, $"{Name}.expected");
 
-        public string QueryTestExpectedFile
-        {
-            get
-            {
-                return Path.Combine(QueryFileTestDir, $"{Name}.expected");
-
-            }
-        }
-
-        public string QueryTestPackName
-        {
-            get
-            {
-                return $"{QueryPackName}-tests";
-            }
-        }
+        public string QueryTestPackName => $"{QueryPackName}-tests";
 
         public string GetLanguageImportForLangauge()
         {

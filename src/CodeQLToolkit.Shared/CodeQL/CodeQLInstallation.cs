@@ -8,8 +8,6 @@ using System.IO.Compression;
 using System.Diagnostics;
 using System;
 
-
-
 namespace CodeQLToolkit.Shared.CodeQL
 {
     public class CodeQLInstallation
@@ -17,13 +15,14 @@ namespace CodeQLToolkit.Shared.CodeQL
         public string CLIVersion { get; set; }
         public string StandardLibraryVersion { get; set; }
 
-        public string CodeQLConfiguration { get; set; }
+        public string CodeScanningConfig { get; set; }
+        public string QLTConfigFilePath { get; private set; }
 
         public string CLIBundle { get; set; }
         public string StandardLibraryIdent { get; set; }
         public bool EnableCustomCodeQLBundles { get; set; }
         public CodeQLPackConfiguration[] CodeQLPackConfiguration { get; set; }
-        public bool QuickBundle {  get; set; }
+        public bool QuickBundle { get; set; }
         public string Base { get; set; }
 
         public static CodeQLInstallation LoadFromConfig(string Base)
@@ -33,13 +32,12 @@ namespace CodeQLToolkit.Shared.CodeQL
                 Base = Base
             };
 
-            return LoadFromConfig(c.FromFile());           
+            return LoadFromConfig(c.FromFile());
         }
 
         public static CodeQLInstallation LoadFromConfig(QLTConfig c)
         {
             var config = c.FromFile();
-
 
             return new CodeQLInstallation
             {
@@ -49,24 +47,23 @@ namespace CodeQLToolkit.Shared.CodeQL
                 StandardLibraryVersion = config.CodeQLStandardLibrary,
                 CodeQLPackConfiguration = config.CodeQLPackConfiguration,
                 Base = config.Base,
-                CodeQLConfiguration = config.CodeQLConfiguration
+                CodeScanningConfig = config.CodeQLConfiguration,
+                QLTConfigFilePath = config.QLTConfigFilePath
             };
-
-
         }
 
         public void LogPacksToBeBuilt()
         {
-            if(CodeQLPackConfiguration != null)
+            if (CodeQLPackConfiguration != null)
             {
-                foreach(var p in CodeQLPackConfiguration)
+                foreach (var p in CodeQLPackConfiguration)
                 {
                     Log<CodeQLInstallation>.G().LogInformation($"Pack: {p}");
                 }
             }
         }
 
-        public ArtifactKind Kind 
+        public ArtifactKind Kind
         {
             get
             {
@@ -82,8 +79,6 @@ namespace CodeQLToolkit.Shared.CodeQL
                 return ArtifactKind.PACKAGE;
             }
         }
-
-
 
         public string PlatformID
         {
@@ -108,16 +103,9 @@ namespace CodeQLToolkit.Shared.CodeQL
             }
         }
 
-        public string PlatformExtension
-        {
-            get
-            {
-                // for now they are all zips,
-                return "zip";
-            }
-        }
+        public string PlatformExtension => "zip";
 
-        
+
         public void Install()
         {
             // each time we download the file; however, 
@@ -126,71 +114,44 @@ namespace CodeQLToolkit.Shared.CodeQL
             // .qlt/repo/bundle/ident
 
             // https://github.com/github/codeql-cli-binaries/releases/download/v2.16.0/codeql-linux64.zip
-            
+
             // workout a destination directory for this 
 
-            if(Kind == ArtifactKind.CUSTOM_BUNDLE)
+            if (Kind == ArtifactKind.CUSTOM_BUNDLE)
             {
                 CustomBundleInstall();
-            }else if(Kind == ArtifactKind.BUNDLE)
+            }
+            else if (Kind == ArtifactKind.BUNDLE)
             {
-                BundleInstall();                
-            }else
+                BundleInstall();
+            }
+            else
             {
                 PackageInstall();
             }
-
-
-
-
         }
 
-        public string CustomBundleOutputBundle
-        {
-            get
-            {
-                return Path.Combine(CustomBundleOutputDirectory, "codeql-bundle.tar.gz");
-            }
-        }
-        public string CustomBundleOutputDirectory
-        {
-            get
-            {
-                return Path.Combine(InstallationDirectory, "out");
-            }
-        }
+        public string CustomBundleOutputBundleCurrentPlatform => Path.Combine(CustomBundleOutputDirectory, $"codeql-bundle-{PlatformID}.tar.gz");
+        public string CustomBundleOutputBundleLinux => Path.Combine(CustomBundleOutputDirectory, "codeql-bundle-linux64.tar.gz");
+        public string CustomBundleOutputBundleWindows => Path.Combine(CustomBundleOutputDirectory, "codeql-bundle-win64.tar.gz");
+        public string CustomBundleOutputBundleOSX => Path.Combine(CustomBundleOutputDirectory, "codeql-bundle-osx64.tar.gz");
 
-        public string StdLibDirectory
-        {
-            get
-            {
-                return Path.Combine(InstallationDirectory, "codeql-stdlib");
+        public string CustomBundleOutputDirectory => Path.Combine(InstallationDirectory, "out");
 
-            }
-        }
+        public string StdLibDirectory => Path.Combine(InstallationDirectory, "codeql-stdlib");
+        public string CodeQLDirectory => Path.Combine(InstallationDirectory, "codeql");
 
-        public string CodeQLDirectory
-        {
-            get
-            {
-                return Path.Combine(InstallationDirectory, "codeql");
-
-            }
-        }
 
         private void PackageInstall()
         {
             Log<CodeQLInstallation>.G().LogInformation($"Begin Installation ");
-            Log<CodeQLInstallation>.G().LogInformation($"Requested CLI Version {CLIVersion}, Standard Library Ident: {StandardLibraryIdent}");            
+            Log<CodeQLInstallation>.G().LogInformation($"Requested CLI Version {CLIVersion}, Standard Library Ident: {StandardLibraryIdent}");
 
             Log<CodeQLInstallation>.G().LogInformation($"Create installation directory {InstallationDirectory}");
-            
             Directory.CreateDirectory(InstallationDirectory);
-
 
             Log<CodeQLInstallation>.G().LogInformation($"Download CodeQL CLI...");
 
-            
             var downloadFile = $"codeql-{PlatformID}.{PlatformExtension}";
 
             // first, download the cli. 
@@ -217,20 +178,20 @@ namespace CodeQLToolkit.Shared.CodeQL
             using (var repo = new Repository(repoPath))
             {
                 var tag = repo.Tags[$"refs/tags/{StandardLibraryVersion}"];
-                
+
                 if (tag == null)
                 {
                     Log<CodeQLInstallation>.G().LogInformation($"Unknown standard library version: {StandardLibraryVersion}");
                     throw new Exception($"Unknown standard library version: {StandardLibraryVersion}");
-                }                
-                
+                }
+
                 Branch b = Commands.Checkout(repo, $"refs/tags/{StandardLibraryVersion}");
             }
         }
 
         private void CustomBundleInstall()
         {
-            Log<CodeQLInstallation>.G().LogInformation($"Begin Installation ");
+            Log<CodeQLInstallation>.G().LogInformation($"Begin Installation");
             Log<CodeQLInstallation>.G().LogInformation($"Requested Base Bundle Version {CLIBundle}");
             Log<CodeQLInstallation>.G().LogInformation($"Create installation directory {InstallationDirectory}");
 
@@ -239,35 +200,33 @@ namespace CodeQLToolkit.Shared.CodeQL
                 Directory.CreateDirectory(InstallationDirectory);
             }
 
-            Log<CodeQLInstallation>.G().LogInformation($"Download CodeQL Bundle Base...");
+            // Download the platform-independent bundle.
+            Log<CodeQLInstallation>.G().LogInformation($"Downloading CodeQL base bundle...");
 
-            var downloadFile = $"codeql-bundle-{PlatformID}.tar.gz";
-            var customBundleSource = Path.Combine(InstallationDirectory, downloadFile);
-               
-            Log<CodeQLInstallation>.G().LogInformation($"Checking if a existing source bundle is present...");
+            var downloadFile = $"codeql-bundle.tar.gz";
+            var customBundlePath = Path.Combine(InstallationDirectory, downloadFile);
 
-            if (File.Exists(customBundleSource))
+            Log<CodeQLInstallation>.G().LogInformation($"Checking if existing source bundle {downloadFile} is present...");
+
+            if (File.Exists(customBundlePath))
             {
                 Log<CodeQLInstallation>.G().LogInformation($"Bundle exists, will skip download");
             }
             else
             {
-                using (var client = new WebClient())
-                {
-                    string uri = $"https://github.com/github/codeql-action/releases/download/{CLIBundle}/{downloadFile}";
-                    Log<CodeQLInstallation>.G().LogInformation($"Remote URL: {uri}...");
-
-                    client.DownloadFile(uri, customBundleSource);
-                }
+                using var client = new WebClient();
+                string uri = $"https://github.com/github/codeql-action/releases/download/{CLIBundle}/{downloadFile}";
+                Log<CodeQLInstallation>.G().LogInformation($"Downloading platform-independent bundle from remote URL: {uri}...");
+                client.DownloadFile(uri, customBundlePath);
             }
 
-            // next, we create the output directory that will contain the bundle. 
-            // if it exists, we remove it
+            // Create the output directory that will contain the custom bundles.
+            // If it already exists, delete it and recreate it.
             Log<CodeQLInstallation>.G().LogInformation($"Checking for custom bundle output directory...");
 
             if (Directory.Exists(CustomBundleOutputDirectory))
             {
-                Log<CodeQLInstallation>.G().LogInformation($"Exists. Will remove.");
+                Log<CodeQLInstallation>.G().LogInformation($"Exists. Removing...");
                 Directory.Delete(CustomBundleOutputDirectory, true);
                 Directory.CreateDirectory(CustomBundleOutputDirectory);
             }
@@ -278,20 +237,18 @@ namespace CodeQLToolkit.Shared.CodeQL
 
             var workingDirectory = Path.GetFullPath(Base);
 
-            if(CodeQLPackConfiguration == null || CodeQLPackConfiguration.Length == 0)
+            if (CodeQLPackConfiguration == null || CodeQLPackConfiguration.Length == 0)
             {
                 throw new Exception("No packs are set to be exported. Please add at least one pack to export in your `qlt.conf.json` file under the property `ExportedCustomizationPacks`.");
             }
 
-            Log<CodeQLInstallation>.G().LogInformation($"Building custom bundle. This may take a while...");
+            Log<CodeQLInstallation>.G().LogInformation($"Building custom bundles. This may take a while...");
 
-            var packsToExport = CodeQLPackConfiguration.Where(p => p.Bundle == true).Select(p => p.Name).ToArray();  
-
+            var packsToExport = CodeQLPackConfiguration.Where(p => p.Bundle == true).Select(p => p.Name).ToArray();
             var packs = string.Join(" ", packsToExport);
-            // next, we run the bundling tool. 
-            // typical command line:
-            // codeql_bundle -b .\scratch\codeql-bundle-win64.tar.gz -o scratch\out -w .\tests\workspace\ --help
-            var bundleArgs = $"--log DEBUG -b {customBundleSource} -o {CustomBundleOutputDirectory} -w {workingDirectory} {packs}";
+
+            // Run the bundling tool to create the platform-specific custom bundles from the platform-independent bundle
+            var bundleArgs = $"--log DEBUG -a qlt.conf.json -p win64 -p osx64 -p linux64 -b {customBundlePath} -o {CustomBundleOutputDirectory} -w {workingDirectory} {packs}";
 
             if (QuickBundle)
             {
@@ -299,13 +256,13 @@ namespace CodeQLToolkit.Shared.CodeQL
                 bundleArgs = $"-nc {bundleArgs}";
             }
 
-            if(CodeQLConfiguration!=null && CodeQLConfiguration.Length > 0)
+            if (CodeScanningConfig != null && CodeScanningConfig.Length > 0)
             {
                 Log<CodeQLInstallation>.G().LogInformation($"Note: Attempting to include default code scanning configuration ...");
 
-                if (File.Exists(Path.Combine(Base, CodeQLConfiguration)))
+                if (File.Exists(Path.Combine(Base, CodeScanningConfig)))
                 {
-                    bundleArgs = $"-c \"{Path.Combine(Base, CodeQLConfiguration)}\" {bundleArgs}";
+                    bundleArgs = $"-c \"{Path.Combine(Base, CodeScanningConfig)}\" {bundleArgs}";
                 }
             }
 
@@ -330,7 +287,6 @@ namespace CodeQLToolkit.Shared.CodeQL
                 }
 
                 process.Start();
-
                 process.WaitForExit();
 
                 if (process.ExitCode != 0)
@@ -340,12 +296,8 @@ namespace CodeQLToolkit.Shared.CodeQL
                 }
             }
 
-            // once that is complete we expand the archive that is generated. 
-            // it will be `codeql-bundle.tar.gz`.
-            //
-            // we will extract it to `InstallationDirectory` since `codeql` will be created by the extraction.
-
-            Log<CodeQLInstallation>.G().LogInformation($"Done. Checking for existance of {CodeQLDirectory}");
+            // Expand the correct platform-specific archive that is generated by the bundle command to `InstallationDirectory`
+            Log<CodeQLInstallation>.G().LogInformation($"Checking for existence of {CodeQLDirectory}");
 
             if (Directory.Exists(CodeQLDirectory))
             {
@@ -353,9 +305,7 @@ namespace CodeQLToolkit.Shared.CodeQL
                 Directory.Delete(CodeQLDirectory, true);
             }
 
-            // Using SharpCompress, extract the tar.gz bundle to the `InstallationDirectory`.           
             Log<CodeQLInstallation>.G().LogInformation($"Extracting bundle to {InstallationDirectory}...");
-
 
             using (Process process = new Process())
             {
@@ -364,10 +314,9 @@ namespace CodeQLToolkit.Shared.CodeQL
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = false;
                 process.StartInfo.RedirectStandardError = false;
-                process.StartInfo.Arguments = $"-zxf {CustomBundleOutputBundle} ";
+                process.StartInfo.Arguments = $"-zxf {CustomBundleOutputBundleCurrentPlatform} ";
 
                 process.Start();
-
                 process.WaitForExit();
 
                 if (process.ExitCode != 0)
@@ -390,11 +339,11 @@ namespace CodeQLToolkit.Shared.CodeQL
         {
             if (k == ArtifactKind.PACKAGE)
             {
-                var ident =  String.Join("", "codeql-cli-" + CLIVersion, "#standard-library-ident-" ,StandardLibraryIdent);
+                var ident = String.Join("", "codeql-cli-" + CLIVersion, "#standard-library-ident-", StandardLibraryIdent);
                 return StringUtils.CreateMD5(FileUtils.SanitizeFilename(ident)).ToLower();
             }
 
-            if( k == ArtifactKind.CUSTOM_BUNDLE)
+            if (k == ArtifactKind.CUSTOM_BUNDLE)
             {
                 var ident = String.Join("", "codeql-bundle-" + CLIBundle);
                 return StringUtils.CreateMD5(FileUtils.SanitizeFilename(ident)).ToLower();
@@ -427,7 +376,7 @@ namespace CodeQLToolkit.Shared.CodeQL
             {
                 Log<CodeQLInstallation>.G().LogInformation($"Requested CLI Version {CLIVersion} with Standard Library Ident: {StandardLibraryIdent}");
             }
-           
+
             Log<CodeQLInstallation>.G().LogInformation($"Checking for existance of required directories...");
 
             if (!Directory.Exists(InstallationDirectory))
@@ -456,12 +405,7 @@ namespace CodeQLToolkit.Shared.CodeQL
             return true;
         }
 
-        public string InstallationDirectory
-        {
-            get {
-                return GetInstallationDirectory(Kind);
-            }
-        }
+        public string InstallationDirectory => GetInstallationDirectory(Kind);
 
         public string GetInstallationDirectory(ArtifactKind k)
         {
@@ -469,21 +413,18 @@ namespace CodeQLToolkit.Shared.CodeQL
 
         }
 
-        public string CodeQLHome { 
-            get {
-                return CodeQLDirectory;
-            } 
-        }
+        public string CodeQLHome => CodeQLDirectory;
 
-        public string CodeQLToolBinary { 
-            get {
+        public string CodeQLToolBinary
+        {
+            get
+            {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     return Path.Combine(CodeQLDirectory, "codeql.exe");
                 }
                 return Path.Combine(CodeQLDirectory, "codeql");
-            } 
+            }
         }
-
     }
 }

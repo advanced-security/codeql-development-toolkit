@@ -15,7 +15,8 @@ namespace CodeQLToolkit.Features.Pack.Commands.Targets
 
         public override void Run()
         {
-            for(int i = 0; i < Times; i++) { 
+            for (int i = 0; i < Times; i++)
+            {
                 Console.WriteLine($"Hello! My Base Target is: {Base}");
             }
 
@@ -25,9 +26,9 @@ namespace CodeQLToolkit.Features.Pack.Commands.Targets
                 Base = Base
             };
 
-            if (!File.Exists(c.CodeQLConfigFilePath))
+            if (!File.Exists(c.QLTConfigFilePath))
             {
-                ProcessUtils.DieWithError($"Cannot read values from missing file {c.CodeQLConfigFilePath}");
+                ProcessUtils.DieWithError($"Cannot read values from missing file {c.QLTConfigFilePath}");
             }
 
             var config = c.FromFile();

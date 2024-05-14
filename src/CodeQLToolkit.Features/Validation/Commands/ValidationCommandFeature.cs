@@ -6,7 +6,7 @@ namespace CodeQLToolkit.Features.Test.Commands
 {
     public class ValidationCommandFeature : FeatureBase, IToolkitLifecycleFeature
     {
-        public override LanguageType[] SupportedLangauges { get => new LanguageType[] { 
+        public override LanguageType[] SupportedLangauges => new LanguageType[] {
             LanguageType.C,
             LanguageType.CPP,
             LanguageType.CSHARP,
@@ -14,8 +14,8 @@ namespace CodeQLToolkit.Features.Test.Commands
             LanguageType.JAVASCRIPT,
             LanguageType.GO,
             LanguageType.RUBY,
-            LanguageType.PYTHON            
-        }; }
+            LanguageType.PYTHON
+        };
 
         public ValidationCommandFeature()
         {
@@ -49,10 +49,10 @@ namespace CodeQLToolkit.Features.Test.Commands
                 {
                     Base = basePath,
                     Language = language,
-                    PrettyPrint = prettyPrint,              
+                    PrettyPrint = prettyPrint,
                     UseBundle = useBundle
                 }.Run();
-                
+
             }, languageOption, Globals.BasePathOption, prettyPrintOption, Globals.UseBundle);
         }
 

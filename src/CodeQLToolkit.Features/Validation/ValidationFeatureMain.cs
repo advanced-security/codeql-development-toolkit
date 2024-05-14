@@ -18,15 +18,15 @@ namespace CodeQLToolkit.Features.Validation
 
         private ValidationFeatureMain()
         {
-            commandFeature = new ValidationCommandFeature();  
+            commandFeature = new ValidationCommandFeature();
             validationLifecycleFeature = new ValidationLifecycleFeature();
         }
-        public static ValidationFeatureMain Instance { get { return instance; } }
-        
+        public static ValidationFeatureMain Instance => instance;
+
         public void Register(Command parentCommand)
         {
             var validationCommand = new Command("validation", "Features related to the validation of CodeQL Development Repositories.");
-            parentCommand.Add(validationCommand);            
+            parentCommand.Add(validationCommand);
 
             Log<ValidationFeatureMain>.G().LogInformation("Registering command submodule.");
             commandFeature.Register(validationCommand);

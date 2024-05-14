@@ -9,7 +9,7 @@ namespace CodeQLToolkit.Features.CodeQL.Lifecycle.Targets
 {
     public class GetVersionLifecycleTarget : ILifecycleTarget
     {
-       
+
         override public void Run()
         {
             Log<GetVersionLifecycleTarget>.G().LogInformation("Running get command...");
@@ -19,11 +19,11 @@ namespace CodeQLToolkit.Features.CodeQL.Lifecycle.Targets
                 Base = Base
             };
 
-            if (!File.Exists(c.CodeQLConfigFilePath))
+            if (!File.Exists(c.QLTConfigFilePath))
             {
-                ProcessUtils.DieWithError($"Cannot read values from missing file {c.CodeQLConfigFilePath}");
+                ProcessUtils.DieWithError($"Cannot read values from missing file {c.QLTConfigFilePath}");
             }
-           
+
             var config = c.FromFile();
 
             // This should be updated so that we can pretty print all the various options:

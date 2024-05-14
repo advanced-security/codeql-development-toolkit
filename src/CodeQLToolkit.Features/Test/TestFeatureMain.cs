@@ -4,7 +4,7 @@ using CodeQLToolkit.Shared.Feature;
 using System.CommandLine;
 
 namespace CodeQLToolkit.Features.Test
-{ 
+{
     public class TestFeatureMain : IToolkitFeature
 
     {
@@ -20,10 +20,10 @@ namespace CodeQLToolkit.Features.Test
         private TestFeatureMain()
         {
             lifecycleFeature = new TestLifecycleFeature();
-            commandFeature = new TestCommandFeature();  
+            commandFeature = new TestCommandFeature();
         }
-        public static TestFeatureMain Instance { get { return instance; } }
-        
+        public static TestFeatureMain Instance => instance;
+
         public void Register(Command parentCommand)
         {
             var testCommand = new Command("test", "Features related to the running and processing of CodeQL Unit Tests.");
