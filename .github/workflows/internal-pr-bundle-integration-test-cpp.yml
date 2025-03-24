@@ -85,7 +85,7 @@ jobs:
         ls -l ${{ steps.analysis.outputs.sarif-output }}
 
     - name: Upload SARIF Results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: actual.sarif
         path: |
@@ -93,7 +93,7 @@ jobs:
         if-no-files-found: error
 
     - name: Upload Bundles
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: codeql-bundles
         path: |

@@ -86,7 +86,7 @@ jobs:
         ls -l ${{ env.QLT_CODEQL_HOME }}/../out/
 
     - name: Upload Bundles
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: codeql-bundles
         path: |
@@ -130,7 +130,7 @@ jobs:
         ls -l ${{ steps.analysis.outputs.sarif-output }}
 
     - name: Upload SARIF Results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: actual.sarif
         path: |
