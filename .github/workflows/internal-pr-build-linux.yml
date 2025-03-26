@@ -33,7 +33,7 @@ jobs:
         Compress-Archive -Path .\src\CodeQLToolkit.Core\bin\Release\net6.0\publish\linux-x64\* -DestinationPath qlt-linux-x86_64.zip
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: qlt-dist
         path: qlt*.zip

@@ -50,7 +50,7 @@ jobs:
         pip install -U pyinstaller 
 
         # run the packaging 
-        ./scripts/build_codeql_bundle_dist.ps1 -Version 0.3.0 -WorkDirectory dist -DestinationDirectory ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/tools/
+        ./scripts/build_codeql_bundle_dist.ps1 -Version 0.4.0 -WorkDirectory dist -DestinationDirectory ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/linux-x64/tools/
       env:
         GH_TOKEN: ${{ github.token }}
 
@@ -69,7 +69,7 @@ jobs:
 
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: qlt-dist
         path: qlt*.zip

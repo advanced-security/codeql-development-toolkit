@@ -15,7 +15,7 @@ Note that we keep recent copies of tools (for local debugging purposes) in the `
 **CodeQL Bundle**
 
 ```
-./scripts/build_codeql_bundle_dist.ps1 -Version 0.3.0 -WorkDirectory dist -DestinationDirectory ./src/CodeQLToolkit.Core/bin/Debug/net6.0/tools
+./scripts/build_codeql_bundle_dist.ps1 -Version 0.4.0 -WorkDirectory dist -DestinationDirectory ./src/CodeQLToolkit.Core/bin/Debug/net6.0/tools
 ```
 
 
