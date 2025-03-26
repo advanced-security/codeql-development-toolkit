@@ -32,6 +32,7 @@ Push-Location $ArchiveDirectory
 
 # at this point python should already be installed as well as poetry
 # export the requirements 
+poetry self add poetry-plugin-export
 poetry export -f requirements.txt > requirements.txt
 
 # install the requirements
