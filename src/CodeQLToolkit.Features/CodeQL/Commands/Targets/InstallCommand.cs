@@ -14,7 +14,7 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
     {
         public bool CustomBundles { get; set; }
         public bool QuickBundles { get; set; }
-        public string[] Packs { get; set; }
+        public string[] Packs { get; set; } = Array.Empty<string>();
 
         void SetEnvironmentVariableMultiTarget(string name, string value)
         {
@@ -22,24 +22,25 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
 
             Environment.SetEnvironmentVariable(name, value);
 
+            // Only attempt to write to GITHUB_ENV if we're running in GitHub Actions
             if (AutomationTypeHelper.AutomationTypeFromString(AutomationTarget) == AutomationType.ACTIONS)
             {
                 string? githubEnvPath = Environment.GetEnvironmentVariable("GITHUB_ENV");
                 try
                 {
-                    if (File.Exists(githubEnvPath))
+                    if (!string.IsNullOrEmpty(githubEnvPath) && File.Exists(githubEnvPath))
                     {
                         File.AppendAllText(githubEnvPath, $"{name}={value}\n");
+                        Log<InstallCommand>.G().LogInformation($"Successfully wrote {name} to GITHUB_ENV file.");
                     }
                     else
                     {
-                        throw new Exception("Could not find GITHUB_ENV file.");
+                        Log<InstallCommand>.G().LogWarning($"GITHUB_ENV file not found. Environment variable {name} set locally only.");
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    Log<InstallCommand>.G().LogError($"Could not write to GITHUB_ENV file.");
-                    throw;
+                    Log<InstallCommand>.G().LogWarning($"Could not write to GITHUB_ENV file: {ex.Message}. Environment variable {name} set locally only.");
                 }
             }
         }
