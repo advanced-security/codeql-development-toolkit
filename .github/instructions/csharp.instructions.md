@@ -1,3 +1,7 @@
+---
+applyTo: "src/**/*.cs"
+description: "C# coding patterns, architecture conventions, and project-specific guidance for CodeQL Development Toolkit"
+---
 # C# Code Instructions for CodeQL Development Toolkit
 
 ## Code Style and Conventions

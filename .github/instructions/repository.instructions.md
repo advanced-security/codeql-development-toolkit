@@ -1,3 +1,7 @@
+---
+applyTo: "**/*"
+description: "High-level project context, repository structure, and development workflow guidance"
+---
 # CodeQL Development Toolkit Repository Instructions
 
 ## Project Overview

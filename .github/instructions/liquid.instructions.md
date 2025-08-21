@@ -1,3 +1,7 @@
+---
+applyTo: "src/**/Templates/**/*.liquid"
+description: "Liquid template structure and conventions for CodeQL file generation"
+---
 # Liquid Template Instructions for CodeQL Development Toolkit
 
 ## Template Purpose and Structure
