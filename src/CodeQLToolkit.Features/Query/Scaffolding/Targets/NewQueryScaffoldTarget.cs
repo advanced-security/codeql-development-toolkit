@@ -40,7 +40,8 @@ namespace CodeQLToolkit.Features.Query.Scaffolding.Targets
                 WriteTemplateIfOverwriteOrNotExists("qlpack-query", query.QueryPackPath, "new query pack", new
                 {
                     queryPackScope = query.Scope,
-                    queryPackName = query.QueryPackName
+                    queryPackName = query.QueryPackName,
+                    ql_language = query.Language.ToDirectory()
                 });
             }
       

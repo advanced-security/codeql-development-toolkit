@@ -12,7 +12,16 @@ namespace CodeQLToolkit.Features.Query.Scaffolding
         {
             FeatureName = "Query";
         }
-        public override LanguageType[] SupportedLangauges => new LanguageType[] { LanguageType.C, LanguageType.CPP, LanguageType.JAVASCRIPT };
+        public override LanguageType[] SupportedLangauges => new LanguageType[] {
+            LanguageType.C,
+            LanguageType.CPP,
+            LanguageType.CSHARP,
+            LanguageType.GO,
+            LanguageType.JAVA,
+            LanguageType.JAVASCRIPT,
+            LanguageType.PYTHON,
+            LanguageType.RUBY
+        };
 
         public void Register(Command parentCommand)
         {

@@ -1,0 +1,30 @@
+/**
+ * @id {{language}}/{{query_pack_name}}/{{query_name}}
+ * @name {{query_name}}
+ * @description {{description}}
+ * @kind path-problem
+ * @precision high
+ * @problem.severity error
+ * @tags {{query_pack_name}}
+ */
+
+ import {{ql_language_import}}
+ import DataFlow::PathGraph
+
+ class Config extends TaintTracking::Configuration {
+   Config() { this = "MyConfig" }
+
+   override predicate isSource(DataFlow::Node source) {
+     // Define your sources here
+     none()
+   }
+
+   override predicate isSink(DataFlow::Node sink) {
+     // Define your sinks here
+     none()
+   }
+ }
+
+ from Config config, DataFlow::PathNode source, DataFlow::PathNode sink
+ where config.hasFlowPath(source, sink)
+ select sink.getNode(), source, sink, "Replace this with your dataflow query."

@@ -58,6 +58,11 @@ namespace CodeQLToolkit.Shared.Utils
                 return LanguageType.CSHARP;
             }
 
+            if (value.ToLower().Equals("python"))
+            {
+                return LanguageType.PYTHON;
+            }
+
             throw new NotImplementedException();
         }
 
