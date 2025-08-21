@@ -362,3 +362,8 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /dist/
+
+# Custom build artifacts
+publish-out/
+publish-out-standalone/
+dotnet-install.sh
