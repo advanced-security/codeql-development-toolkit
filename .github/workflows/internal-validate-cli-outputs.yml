@@ -21,13 +21,13 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '6.0.x'
 
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build project
-        run: dotnet build --no-restore --configuration Release
+      - name: Build
+        run: dotnet build -c Debug --no-restore
 
       - name: Run end-to-end CLI validation
         run: ./scripts/validate-cli-e2e.sh
