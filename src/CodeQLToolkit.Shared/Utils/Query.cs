@@ -37,7 +37,7 @@ namespace CodeQLToolkit.Shared.Utils
 
         public string QueryTestPackName => $"{QueryPackName}-tests";
 
-        public string GetLanguageImportForLangauge()
+        public string GetLanguageImportForLanguage()
         {
             return Language.ToImport();
         }

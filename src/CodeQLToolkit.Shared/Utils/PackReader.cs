@@ -26,7 +26,7 @@ namespace CodeQLToolkit.Shared.Utils
 
                 foreach (var e in root.Children)
                 {
-                    if(e.Key.ToString() == "name")
+                    if (e.Key.ToString() == "name")
                     {
                         pack.Name = e.Value.ToString();
                     }

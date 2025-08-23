@@ -7,13 +7,13 @@ namespace CodeQLToolkit.Shared.Target
 {
     public abstract class ScaffoldTarget : ITarget
     {
-       
+
         public string Name { get; set; }
         public LanguageType Language { get; set; }
         public bool OverwriteExisting { get; set; }
         public string FeatureName { get; set; }
 
-       
+
 
         public string GetTemplatePathForLanguage(string templateName)
         {
@@ -22,7 +22,7 @@ namespace CodeQLToolkit.Shared.Target
             return Path.Combine("Templates", FeatureName, Language.ToDirectory(), templateName + ".liquid");
         }
 
-        
+
 
         public string GetTemplatePath(string templateName)
         {
@@ -33,11 +33,12 @@ namespace CodeQLToolkit.Shared.Target
         {
             if (!File.Exists(path) || OverwriteExisting)
             {
-                Log<ScaffoldTarget>.G().LogInformation($"Writing new {description} in {path}.");
+                Log<ScaffoldTarget>.G().LogInformation($"Writing {description} in {path}.");
 
-                var t = new TemplateUtil().TemplateFromFile(GetTemplatePathForLanguage(template));
+                var templateUtil = new TemplateUtil();
+                var t = templateUtil.TemplateFromFile(GetTemplatePathForLanguage(template));
 
-                var rendered = t.Render(model);
+                var rendered = templateUtil.RenderTemplateStrictly(t, model);
 
                 File.WriteAllText(path, rendered);
             }

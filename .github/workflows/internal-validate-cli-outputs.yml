@@ -1,0 +1,46 @@
+name: ⚙️ Internal - Validate CLI Outputs
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+  workflow_dispatch:
+
+jobs:
+  validate-cli-outputs:
+    name: Validate CLI End-to-End
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build project
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run end-to-end CLI validation
+        run: ./scripts/validate-cli-e2e.sh
+        env:
+          # Use a temporary directory in the runner
+          TEST_DIR: ${{ runner.temp }}/qlt-cli-e2e-test
+
+      - name: Upload test artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-validation-artifacts
+          path: |
+            ${{ runner.temp }}/qlt-cli-e2e-test/**
+          if-no-files-found: warn
+          retention-days: 3

@@ -8,6 +8,6 @@ namespace CodeQLToolkit.Features.Test.Commands
 {
     public abstract class BaseGetMatrixCommandTarget : CommandTarget
     {
-        public string[] OSVersions { get; set; }    
+        public string[] OSVersions { get; set; }
     }
 }

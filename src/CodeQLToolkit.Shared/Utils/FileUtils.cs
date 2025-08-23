@@ -31,7 +31,7 @@ namespace CodeQLToolkit.Shared.Utils
         {
             string f = filename;
 
-            foreach(var c in Path.GetInvalidFileNameChars())
+            foreach (var c in Path.GetInvalidFileNameChars())
             {
                 f = f.Replace(c, '_');
             }

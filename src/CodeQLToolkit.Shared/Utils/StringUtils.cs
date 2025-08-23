@@ -16,7 +16,7 @@ namespace CodeQLToolkit.Shared.Utils
                 byte[] inputBytes = Encoding.ASCII.GetBytes(input);
                 byte[] hashBytes = md5.ComputeHash(inputBytes);
 
-                return Convert.ToHexString(hashBytes); 
+                return Convert.ToHexString(hashBytes);
             }
         }
     }

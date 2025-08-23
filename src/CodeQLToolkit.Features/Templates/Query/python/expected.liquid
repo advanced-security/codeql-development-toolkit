@@ -1,2 +1,16 @@
-edges
-| {{ query_name }}.py:0:0:0:0 | {{ query_name }} |
+{% if query_kind == "path-problem" %}
+{% comment %}Path-problem queries with none() source and sink return no results{% endcomment %}
+{% else %}
+{% comment %}Problem queries that select all expressions return results for each expression{% endcomment %}
+| {{ test_file_prefix }}.py:1:5:1:7 | Replace this with your query. |
+| {{ test_file_prefix }}.py:2:5:2:12 | Replace this with your query. |
+| {{ test_file_prefix }}.py:2:9:2:12 | Replace this with your query. |
+| {{ test_file_prefix }}.py:3:5:3:18 | Replace this with your query. |
+| {{ test_file_prefix }}.py:3:9:3:10 | Replace this with your query. |
+| {{ test_file_prefix }}.py:3:13:3:18 | Replace this with your query. |
+| {{ test_file_prefix }}.py:3:17:3:18 | Replace this with your query. |
+| {{ test_file_prefix }}.py:4:5:4:12 | Replace this with your query. |
+| {{ test_file_prefix }}.py:4:12:4:13 | Replace this with your query. |
+| {{ test_file_prefix }}.py:5:1:5:13 | Replace this with your query. |
+| {{ test_file_prefix }}.py:5:6:5:13 | Replace this with your query. |
+{% endif %}

@@ -31,17 +31,20 @@ namespace CodeQLToolkit.Features.Pack.Commands
             runCommand.Add(sayHello);
             runCommand.Add(sayGoodbye);
 
-            sayHello.SetHandler((basePath, times) => {
+            sayHello.SetHandler((basePath, times) =>
+            {
 
-                new HelloJeongsooCommandTarget() { 
+                new HelloJeongsooCommandTarget()
+                {
                     Base = basePath,
-                    Times = times 
-                
+                    Times = times
+
                 }.Run();
 
             }, Globals.BasePathOption, howManyTimesHello);
 
-            sayGoodbye.SetHandler((basePath, times) => {
+            sayGoodbye.SetHandler((basePath, times) =>
+            {
 
                 Console.WriteLine($"Saying goodbye {times} number of times");
 

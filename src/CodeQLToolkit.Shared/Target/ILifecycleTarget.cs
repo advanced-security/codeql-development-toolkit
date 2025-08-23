@@ -61,7 +61,7 @@ namespace CodeQLToolkit.Shared.Target
 
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
 
-                Log<ScaffoldTarget>.G().LogInformation($"Writing new {description} in {path}.");
+                Log<ScaffoldTarget>.G().LogInformation($"Writing {description} in {path}.");
 
                 var templatePath = GetTemplatePath(template);
 
@@ -75,19 +75,20 @@ namespace CodeQLToolkit.Shared.Target
                 }
                 else
                 {
-                    var t = new TemplateUtil().TemplateFromFile(templatePath);
+                    var templateUtil = new TemplateUtil();
+                    var t = templateUtil.TemplateFromFile(templatePath);
 
                     Log<ScaffoldTarget>.G().LogInformation($"Loaded template {templatePath}");
 
-                    var rendered = t.Render(model);
+                    var rendered = templateUtil.RenderTemplateStrictly(t, model);
                     File.WriteAllText(path, rendered);
                 }
-                
+
             }
             else
             {
                 Log<ScaffoldTarget>.G().LogInformation($"Refusing to overwrite existing {description} in {path}");
             }
         }
-}
+    }
 }

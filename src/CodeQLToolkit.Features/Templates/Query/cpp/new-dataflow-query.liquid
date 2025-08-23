@@ -1,1 +1,31 @@
-﻿
+﻿/**
+ * @id {{language}}/{{query_pack_name}}/{{query_name | downcase}}
+ * @name {{query_name}}
+ * @description {{description}}
+ * @kind path-problem
+ * @precision high
+ * @problem.severity error
+ * @tags {{query_pack_name}}
+ */
+
+import cpp
+import semmle.code.cpp.dataflow.TaintTracking
+import DataFlow::PathGraph
+
+class Config extends TaintTracking::Configuration {
+  Config() { this = "{{query_name}}" }
+
+  override predicate isSource(DataFlow::Node source) {
+    // Define your sources here
+    none()
+  }
+
+  override predicate isSink(DataFlow::Node sink) {
+    // Define your sinks here  
+    none()
+  }
+}
+
+from Config config, DataFlow::PathNode source, DataFlow::PathNode sink
+where config.hasFlowPath(source, sink)
+select sink.getNode(), source, sink, "Replace this with your dataflow query."

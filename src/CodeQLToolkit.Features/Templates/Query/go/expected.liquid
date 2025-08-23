@@ -1,2 +1,7 @@
-edges
-| {{ query_name }}.go:0:0:0:0 | {{ query_name }} |
+{% if query_kind == "path-problem" %}
+{% comment %}Path-problem queries with none() source and sink return no results{% endcomment %}
+{% else %}
+{% comment %}Problem queries that select all expressions return results for each expression{% endcomment %}
+| {{ test_file_prefix }}.go:4:5:4:17 | Replace this with your query. |
+| {{ test_file_prefix }}.go:4:10:4:17 | Replace this with your query. |
+{% endif %}
