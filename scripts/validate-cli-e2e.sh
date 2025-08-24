@@ -42,6 +42,62 @@ log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+# Find CodeQL CLI executable path
+find_codeql_cli() {
+    local cli_path=""
+
+    # Try common installation paths
+    local common_paths=(
+        "$HOME/.codeql/codeql-cli_v2.22.4/codeql/codeql"
+        "$HOME/.codeql/codeql-bundle-v2.22.4/codeql/codeql"
+        "$HOME/.codeql/distributions/codeql-cli_v2.22.4/codeql/codeql"
+        "$HOME/.codeql/distributions/codeql-bundle-v2.22.4/codeql/codeql"
+        "$(which codeql 2>/dev/null)"
+    )
+
+    for path in "${common_paths[@]}"; do
+        if [[ -f "$path" && -x "$path" ]]; then
+            cli_path="$path"
+            break
+        fi
+    done
+
+    # If not found in common paths, try to find it dynamically
+    if [[ -z "$cli_path" ]]; then
+        cli_path=$(find "$HOME/.codeql" -name "codeql" -type f -executable 2>/dev/null | head -1)
+    fi
+
+    echo "$cli_path"
+}
+
+# Get detailed compilation errors for a specific query file
+get_detailed_compilation_errors() {
+    local query_file="$1"
+    local codeql_cli="$2"
+
+    if [[ -z "$codeql_cli" || ! -f "$codeql_cli" ]]; then
+        log_warning "CodeQL CLI not found, cannot get detailed compilation errors"
+        return 1
+    fi
+
+    if [[ ! -f "$query_file" ]]; then
+        log_error "Query file not found: $query_file"
+        return 1
+    fi
+
+    log_info "Getting detailed compilation errors for: $(basename "$query_file")"
+
+    # Run codeql query compile with verbose output
+    local compile_output
+    if compile_output=$("$codeql_cli" query compile --check-only -- "$query_file" 2>&1); then
+        log_info "Query compiled successfully (unexpected since validation failed)"
+        echo "$compile_output"
+    else
+        log_error "Detailed compilation errors:"
+        echo "$compile_output"
+    fi
+}
+
 # Cleanup function
 cleanup_at_start() {
     if [[ -d "$TEST_DIR" ]]; then
@@ -266,8 +322,33 @@ validate_language() {
     # Check if there are actual errors (not just deprecation warnings)
     if [[ $validation_exit_code -ne 0 ]]; then
         # Check if the failures are only deprecation warnings about assume_small_delta
-        if echo "$validation_output" | grep -v "pragma 'assume_small_delta' is deprecated" | grep -q -E "(ERROR|FAILURE|Failed to|Error:|Compilation failed)"; then
+        if echo "$validation_output" | grep -v "pragma 'assume_small_delta' is deprecated" | grep -q -E "(ERROR|FAILURE|Failed|Error:|Compilation failed|Fatal error)"; then
             log_error "Query validation failed for $language with actual errors"
+
+            # Try to get detailed compilation errors for failed queries
+            log_info "Attempting to get detailed compilation errors..."
+            local codeql_cli
+            codeql_cli=$(find_codeql_cli)
+
+            if [[ -n "$codeql_cli" ]]; then
+                # Find all query files for this language and check them individually
+                local lang_dir="$language/testpack-$language"
+                local src_dir="$lang_dir/src"
+
+                if [[ -d "$src_dir" ]]; then
+                    # Use find to get query files (compatible with older bash)
+                    while IFS= read -r -d '' query_file; do
+                        log_info "Checking individual query: $(basename "$query_file")"
+                        get_detailed_compilation_errors "$query_file" "$codeql_cli"
+                        echo "---"
+                    done < <(find "$src_dir" -name "*.ql" -type f -print0)
+                else
+                    log_warning "Source directory not found: $src_dir"
+                fi
+            else
+                log_warning "CodeQL CLI not found, cannot provide detailed compilation errors"
+            fi
+
             return 1
         else
             log_info "Query validation completed for $language (only deprecation warnings in standard library)"

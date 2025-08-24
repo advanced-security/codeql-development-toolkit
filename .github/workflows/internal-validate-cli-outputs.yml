@@ -9,11 +9,16 @@ on:
       - 'main'
   workflow_dispatch:
 
+env:
+  # Global configuration
+  DOTNET_VERSION: '6.0.x'
+  BUILD_CONFIGURATION: Debug
+
 jobs:
   validate-cli-outputs:
-    name: Validate CLI End-to-End
+    name: Validate CodeQlToolkit `query generate new-query` subcommand
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -21,26 +26,36 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build
-        run: dotnet build -c Debug --no-restore
+      - name: Build project
+        run: dotnet build -c ${{ env.BUILD_CONFIGURATION }} --no-restore
+
+      - name: Set test directory
+        run: echo "TEST_DIR=${{ runner.temp }}/qlt-cli-e2e-test" >> $GITHUB_ENV
+
+      - name: Prepare test environment
+        run: |
+          # Create test directory
+          mkdir -p "$TEST_DIR"
+
+          # Copy configuration file
+          cp example/qlt.conf.json "$TEST_DIR"
+
+      - name: Install `codeql` CLI via CodeQLToolkit
+        run: dotnet run --project src/CodeQLToolkit.Core -- codeql run install --base "$TEST_DIR"
 
       - name: Run end-to-end CLI validation
         run: ./scripts/validate-cli-e2e.sh
-        env:
-          # Use a temporary directory in the runner
-          TEST_DIR: ${{ runner.temp }}/qlt-cli-e2e-test
 
       - name: Upload test artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: cli-validation-artifacts
-          path: |
-            ${{ runner.temp }}/qlt-cli-e2e-test/**
+          path: ${{ runner.temp }}/qlt-cli-e2e-test/**
           if-no-files-found: warn
           retention-days: 3
