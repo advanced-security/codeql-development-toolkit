@@ -8,9 +8,7 @@
  * @tags {{query_pack_name}}
  */
 
-import {{ql_language_import}}
-import semmle.code.{{ql_language_import}}.dataflow.TaintTracking
-import DataFlow::PathGraph
+import csharp
 
 module Config implements DataFlow::ConfigSig {
   predicate isSource(DataFlow::Node source) {
@@ -24,7 +22,8 @@ module Config implements DataFlow::ConfigSig {
   }
 }
 
-module Flow = TaintTracking::Global<Config>;
+module Flow = DataFlow::Global<Config>;
+import Flow::PathGraph
 
 from Flow::PathNode source, Flow::PathNode sink
 where Flow::flowPath(source, sink)

@@ -45,8 +45,19 @@ jobs:
           # Copy configuration file
           cp example/qlt.conf.json "$TEST_DIR"
 
-      - name: Install `codeql` CLI via CodeQLToolkit
-        run: dotnet run --project src/CodeQLToolkit.Core -- codeql run install --base "$TEST_DIR"
+      ## Using the 'latest' version of the `codeql` CLI may eventually
+      ## cause issues, where the `qlt.conf.json` file specifies an exact
+      ## version of the CLI. For now, we live with the risk, and the issues
+      ## surfaced might actually be useful to identify emerging problems
+      ## in the `codeql` CLI -- which is only required here for extra
+      ## debugging of any queries with test failures.
+      - name: Install `codeql` CLI
+        id: install-codeql
+        uses: ./.github/actions/install-codeql
+        with:
+          add-to-path: 'true'
+          codeql-cli-version: 'latest'
+          codeql-stdlib-version: 'latest'
 
       - name: Run end-to-end CLI validation
         run: ./scripts/validate-cli-e2e.sh

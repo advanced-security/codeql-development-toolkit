@@ -8,9 +8,8 @@
  * @tags {{query_pack_name}}
  */
 
-import {{ql_language_import}}
-import codeql.ruby.TaintTracking
-import DataFlow::PathGraph
+import codeql.ruby.AST
+import codeql.ruby.DataFlow
 
 module Config implements DataFlow::ConfigSig {
   predicate isSource(DataFlow::Node node) {
@@ -24,7 +23,8 @@ module Config implements DataFlow::ConfigSig {
   }
 }
 
-module Flow = TaintTracking::Global<Config>;
+module Flow = DataFlow::Global<Config>;
+import Flow::PathGraph
 
 from Flow::PathNode source, Flow::PathNode sink
 where Flow::flowPath(source, sink)
