@@ -344,28 +344,49 @@ validate_unit_test_results() {
     local old_pwd=$(pwd)
     cd "$work_dir" || return 1
 
-    # First run validation with pretty-print for detailed output
-    local validation_output
+    # Always run validation with pretty-print first for detailed output
+    local pretty_print_output
     log_info "  → Running test result validation with detailed output..."
-    if ! validation_output=$(dotnet "$QLT_BINARY" test run validate-unit-tests --pretty-print --results-directory "$results_dir" 2>&1); then
-        log_error "Test result validation failed for $language"
-        log_error "Detailed validation output:"
-        echo "$validation_output"
+    if ! pretty_print_output=$(dotnet "$QLT_BINARY" test run validate-unit-tests --pretty-print --results-directory "$results_dir" 2>&1); then
+        log_error "Pretty-print validation failed for $language"
+        log_error "Pretty-print validation output:"
+        echo "$pretty_print_output"
         cd "$old_pwd"
         return 1
     fi
 
     log_info "Validation output for $language:"
-    echo "$validation_output"
+    echo "$pretty_print_output"
 
-    # Also run the standard validation (without pretty-print) for exit code
-    local standard_validation_output
-    if ! standard_validation_output=$(dotnet "$QLT_BINARY" test run validate-unit-tests --results-directory "$results_dir" 2>&1); then
-        log_error "Standard validation check failed for $language"
-        log_error "Standard validation output:"
-        echo "$standard_validation_output"
+    # Parse the pretty-print output to determine if tests actually passed
+    local pass_count
+    pass_count=$(echo "$pretty_print_output" | grep -c "✅ \[PASS\]" || true)
+    local fail_count
+    fail_count=$(echo "$pretty_print_output" | grep -c "❌ \[FAIL\]" || true)
+
+    # Ensure we have numeric values
+    [[ -z "$pass_count" ]] && pass_count=0
+    [[ -z "$fail_count" ]] && fail_count=0
+
+    local total_tests=$((pass_count + fail_count))
+
+    if [[ $total_tests -eq 0 ]]; then
+        log_warning "No test results found in pretty-print output for $language"
+        log_info "  → Running standard validation as fallback..."
+        local standard_output
+        if ! standard_output=$(dotnet "$QLT_BINARY" test run validate-unit-tests --results-directory "$results_dir" 2>&1); then
+            log_error "Standard validation also failed for $language"
+            log_error "Standard validation output:"
+            echo "$standard_output"
+            cd "$old_pwd"
+            return 1
+        fi
+    elif [[ $fail_count -gt 0 ]]; then
+        log_error "Test validation failed for $language: $fail_count failed out of $total_tests tests"
         cd "$old_pwd"
         return 1
+    else
+        log_info "All tests passed for $language: $pass_count out of $total_tests tests"
     fi
 
     cd "$old_pwd"
