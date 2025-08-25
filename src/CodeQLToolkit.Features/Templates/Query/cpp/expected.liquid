@@ -1,8 +1,9 @@
-{% if query_kind == "path-problem" %}
-{% comment %}Path-problem queries with none() source and sink return no results{% endcomment %}
-{% else %}
-{% comment %}Problem queries that select all expressions return results for each expression{% endcomment %}
-| {{ test_file_prefix }}.cpp:2:5:2:7 | Replace this with your query. |
-| {{ test_file_prefix }}.cpp:4:5:4:12 | Replace this with your query. |
-| {{ test_file_prefix }}.cpp:4:12:4:13 | Replace this with your query. |
-{% endif %} 
+{%- if query_kind == "path-problem" -%}
+edges
+nodes
+subpaths
+#select
+{%- else -%}
+| {{ test_file_prefix }}.cpp:0:0:0:0 | {{ test_file_prefix }}.cpp | Replace this with your query. |
+| file://:0:0:0:0 |  | Replace this with your query. |
+{%- endif -%} 

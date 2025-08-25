@@ -1,7 +1,7 @@
-{% if query_kind == "path-problem" %}
-{% comment %}Path-problem queries with none() source and sink return no results{% endcomment %}
-{% else %}
-{% comment %}Problem queries that select all expressions return results for each expression{% endcomment %}
-| {{ test_file_prefix }}.java:4:9:4:11 | Replace this with your query. |
-| {{ test_file_prefix }}.java:6:5:6:16 | Replace this with your query. |
-{% endif %}
+{%- if query_kind == "path-problem" -%}
+edges
+nodes
+subpaths
+#select
+{%- else -%}
+{%- endif -%}

@@ -1,8 +1,9 @@
-{% if query_kind == "path-problem" %}
-{% comment %}Path-problem queries with none() source and sink return no results{% endcomment %}
-{% else %}
-{% comment %}Problem queries that select all expressions return results for each expression{% endcomment %}
-| {{ test_file_prefix }}.rb:2:3:2:5 | Replace this with your query. |
-| {{ test_file_prefix }}.rb:5:1:5:19 | Replace this with your query. |
-| {{ test_file_prefix }}.rb:5:6:5:19 | Replace this with your query. |
-{% endif %}
+{%- if query_kind == "path-problem" -%}
+edges
+nodes
+subpaths
+#select
+{%- else -%}
+| {{ test_file_prefix }}.rb:0:0:0:0 | {{ test_file_prefix }}.rb | Replace this with your query. |
+| file://:0:0:0:0 |  | Replace this with your query. |
+{%- endif -%}

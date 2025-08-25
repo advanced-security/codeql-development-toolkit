@@ -270,34 +270,152 @@ install_all_packs() {
     log_success "All packs installed successfully"
 }
 
-# Run unit tests using the dedicated script
-run_unit_tests_for_languages() {
-    local languages="$1"
+# Run unit tests for a single language
+run_unit_tests_for_language() {
+    local language="$1"
     local work_dir="$2"
 
-    log_info "Running unit tests for languages: $languages"
+    log_info "Running unit tests for language: $language"
 
-    # Get the directory where this script is located
-    local script_dir="$SCRIPT_DIR"
-    local unit_test_script="$script_dir/run-unit-tests.sh"
+    # Get environment info
+    local os_name=$(uname -s)
+    if [[ "$os_name" == "Darwin" ]]; then
+        os_name="macOS"
+    fi
 
-    if [[ ! -f "$unit_test_script" ]]; then
-        log_error "Unit test script not found: $unit_test_script"
+    log_info "  → Environment: $os_name"
+
+    # Change to the work directory since that's where QLT expects to be run from
+    local old_pwd=$(pwd)
+    cd "$work_dir" || return 1
+
+    # Create test results directory for the language
+    local test_results_dir="${work_dir}/${language}/test-results"
+    mkdir -p "$test_results_dir"
+
+    # Execute tests using dotnet run
+    local test_output
+    log_info "  → Executing unit tests for $language..."
+    if ! test_output=$(dotnet "$QLT_BINARY" test run execute-unit-tests \
+        --language "$language" \
+        --num-threads 2 \
+        --work-dir "$test_results_dir" \
+        --runner-os "$os_name" \
+        --automation-type actions 2>&1); then
+        log_error "Unit test execution failed for $language"
+        log_error "Test execution output:"
+        echo "$test_output"
+        cd "$old_pwd"
         return 1
     fi
 
-    if [[ ! -x "$unit_test_script" ]]; then
-        log_error "Unit test script is not executable: $unit_test_script"
+    log_info "Test execution output for $language:"
+    echo "$test_output"
+
+    cd "$old_pwd"
+    log_success "Unit test execution completed for $language"
+    return 0
+}
+
+# Validate unit test results for a single language
+validate_unit_test_results() {
+    local language="$1"
+    local work_dir="$2"
+
+    log_info "Validating unit test results for $language..."
+
+    local results_dir="${work_dir}/${language}/test-results"
+    if [[ ! -d "$results_dir" ]]; then
+        log_error "Test results directory not found: $results_dir"
+        log_info "This suggests that unit test execution may have failed or no tests were generated"
         return 1
     fi
 
-    # Run the unit tests script
-    if "$unit_test_script" --test-dir "$work_dir" --languages "$languages"; then
-        log_success "Unit tests passed : --languages $languages"
-        return 0
+    # Check if there are any test result files
+    local result_files
+    result_files=$(find "$results_dir" -name "*.json" -o -name "test_report_*.json" 2>/dev/null | wc -l)
+    if [[ $result_files -eq 0 ]]; then
+        log_warning "No test result files found in $results_dir"
+        log_info "Available files in test results directory:"
+        ls -la "$results_dir" || log_warning "Cannot list test results directory"
+    fi
+
+    # Change to the work directory since that's where QLT expects to be run from
+    local old_pwd=$(pwd)
+    cd "$work_dir" || return 1
+
+    # First run validation with pretty-print for detailed output
+    local validation_output
+    log_info "  → Running test result validation with detailed output..."
+    if ! validation_output=$(dotnet "$QLT_BINARY" test run validate-unit-tests --pretty-print --results-directory "$results_dir" 2>&1); then
+        log_error "Test result validation failed for $language"
+        log_error "Detailed validation output:"
+        echo "$validation_output"
+        cd "$old_pwd"
+        return 1
+    fi
+
+    log_info "Validation output for $language:"
+    echo "$validation_output"
+
+    # Also run the standard validation (without pretty-print) for exit code
+    local standard_validation_output
+    if ! standard_validation_output=$(dotnet "$QLT_BINARY" test run validate-unit-tests --results-directory "$results_dir" 2>&1); then
+        log_error "Standard validation check failed for $language"
+        log_error "Standard validation output:"
+        echo "$standard_validation_output"
+        cd "$old_pwd"
+        return 1
+    fi
+
+    cd "$old_pwd"
+    log_success "Test result validation passed for $language"
+    return 0
+}
+
+# Check and diagnose test environment for a language
+diagnose_test_environment() {
+    local language="$1"
+    local work_dir="$2"
+
+    log_info "Diagnosing test environment for $language..."
+
+    local lang_dir="$work_dir/$language"
+    local pack_dir="$lang_dir/testpack-$language"
+    local test_dir="$pack_dir/test"
+    local results_dir="$lang_dir/test-results"
+
+    # Check directory structure
+    log_info "Directory structure check:"
+    if [[ -d "$lang_dir" ]]; then
+        log_success "  ✓ Language directory exists: $lang_dir"
     else
-        log_error "Unit tests failed : --languages $languages"
+        log_error "  ✗ Language directory missing: $lang_dir"
         return 1
+    fi
+
+    if [[ -d "$pack_dir" ]]; then
+        log_success "  ✓ Pack directory exists: $pack_dir"
+    else
+        log_error "  ✗ Pack directory missing: $pack_dir"
+    fi
+
+    if [[ -d "$test_dir" ]]; then
+        log_success "  ✓ Test directory exists: $test_dir"
+        local test_count
+        test_count=$(find "$test_dir" -name "*.qlref" 2>/dev/null | wc -l)
+        log_info "  → Found $test_count test reference files"
+    else
+        log_error "  ✗ Test directory missing: $test_dir"
+    fi
+
+    if [[ -d "$results_dir" ]]; then
+        log_info "  → Test results directory exists: $results_dir"
+        local result_count
+        result_count=$(find "$results_dir" -name "*.json" 2>/dev/null | wc -l)
+        log_info "  → Found $result_count result files"
+    else
+        log_warning "  → Test results directory not found: $results_dir"
     fi
 }
 
@@ -444,11 +562,27 @@ validate_language() {
     # Run unit tests if enabled
     if [[ "$RUN_TESTS" == "true" ]]; then
         log_info "  → Running unit tests for $language..."
-        if run_unit_tests_for_languages "$language" "$TEST_DIR"; then
-            log_success "  ✓ Unit tests passed for $language"
-        else
-            log_error "Unit tests failed for $language"
+
+        # Run unit tests (execution)
+        local unit_test_failed=false
+        if ! run_unit_tests_for_language "$language" "$TEST_DIR"; then
+            log_error "Unit test execution failed for $language"
+            unit_test_failed=true
+        fi
+
+        # Validate unit test results (even if execution failed, we want to see what we can)
+        if ! validate_unit_test_results "$language" "$TEST_DIR"; then
+            log_error "Unit test result validation failed for $language"
+            unit_test_failed=true
+        fi
+
+        if [[ "$unit_test_failed" == "true" ]]; then
+            log_error "  ✗ Unit tests failed for $language"
+            # Provide diagnostic information
+            diagnose_test_environment "$language" "$TEST_DIR"
             return 1
+        else
+            log_success "  ✓ Unit tests passed for $language"
         fi
     else
         log_info "  → Skipping unit tests for $language (disabled)"
@@ -464,11 +598,14 @@ main() {
     parse_arguments "$@"
 
     log_info "Starting end-to-end CLI validation..."
-    log_info "Repository: $REPO_ROOT"
-    log_info "Test directory: $TEST_DIR"
-    log_info "Languages: ${LANGUAGES[*]}"
-    log_info "Query kinds: ${QUERY_KINDS[*]}"
-    log_info "Run tests: $RUN_TESTS"
+    log_info "=============================================="
+    log_info "Configuration:"
+    log_info "  Repository: $REPO_ROOT"
+    log_info "  Test directory: $TEST_DIR"
+    log_info "  Languages: ${LANGUAGES[*]}"
+    log_info "  Query kinds: ${QUERY_KINDS[*]}"
+    log_info "  Run tests: $RUN_TESTS"
+    log_info "=============================================="
 
     # Check if QLT binary exists
     if [[ ! -f "$QLT_BINARY" ]]; then
@@ -497,34 +634,55 @@ main() {
     local failed=0
     local failed_languages=()
 
-    # Validate each language
+    # Validate each language (continue even if some fail)
     for language in "${LANGUAGES[@]}"; do
+        log_info ""
+        log_info "========================================="
+        log_info "Processing language: $language"
+        log_info "========================================="
+
         if validate_language "$language"; then
             ((passed++))
+            log_success "✓ Language $language validation PASSED"
         else
             ((failed++))
             failed_languages+=("$language")
+            log_error "✗ Language $language validation FAILED"
+            log_warning "Continuing with remaining languages..."
         fi
     done
 
     echo
-    log_info "=== Validation Summary ==="
-    log_success "Number of Languages Passed: $passed"
+    echo
+    log_info "=============================================="
+    log_info "=== FINAL VALIDATION SUMMARY ==="
+    log_info "=============================================="
+    log_info "Total languages tested: $((passed + failed))"
+    log_success "Languages passed: $passed"
+
     if [[ $failed -gt 0 ]]; then
-        log_error "Number of Languages Failed: $failed"
+        log_error "Languages failed: $failed"
         if [[ ${#failed_languages[@]} -gt 0 ]]; then
             log_error "Failed languages: ${failed_languages[*]}"
+            echo
+            log_info "Troubleshooting information:"
+            log_info "- Generated files are available in: $TEST_DIR"
+            log_info "- Check unit test results in: $TEST_DIR/<language>/test-results/"
+            log_info "- Review query validation output above for compilation errors"
+            log_info "- For detailed test failures, examine the validation output for each language"
         fi
     else
         log_success "All languages passed validation and unit testing."
     fi
 
+    echo
     if [[ $failed -eq 0 ]]; then
-        log_success "All validations passed! 🎉"
+        log_success "🎉 ALL VALIDATIONS PASSED! 🎉"
         log_info "Generated files are available in: $TEST_DIR"
         exit 0
     else
-        log_error "Some validations failed. 😞"
+        log_error "😞 SOME VALIDATIONS FAILED"
+        log_error "Failed: $failed out of $((passed + failed)) languages"
         log_info "Generated files are available for troubleshooting in: $TEST_DIR"
         exit 1
     fi
