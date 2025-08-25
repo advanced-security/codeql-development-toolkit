@@ -58,6 +58,11 @@ namespace CodeQLToolkit.Shared.Utils
                 return LanguageType.CSHARP;
             }
 
+            if (value.ToLower().Equals("python"))
+            {
+                return LanguageType.PYTHON;
+            }
+
             throw new NotImplementedException();
         }
 
@@ -191,30 +196,30 @@ namespace CodeQLToolkit.Shared.Utils
                 return "c";
             }
 
-            if(LanguageType == LanguageType.CPP)
+            if (LanguageType == LanguageType.CPP)
             {
                 return "cpp";
             }
 
-            if(LanguageType == LanguageType.JAVASCRIPT)
+            if (LanguageType == LanguageType.JAVASCRIPT)
             {
                 return "js";
             }
-            if(LanguageType == LanguageType.GO)
+            if (LanguageType == LanguageType.GO)
             {
                 return "go";
             }
-            if(LanguageType == LanguageType.RUBY)
+            if (LanguageType == LanguageType.RUBY)
             {
                 return "rb";
             }
-            if(LanguageType == LanguageType.PYTHON)
+            if (LanguageType == LanguageType.PYTHON)
             {
                 return "py";
             }
-            if(LanguageType == LanguageType.JAVA) 
+            if (LanguageType == LanguageType.JAVA)
             {
-                return "java";            
+                return "java";
             }
             if (LanguageType == LanguageType.CSHARP)
             {
@@ -223,6 +228,44 @@ namespace CodeQLToolkit.Shared.Utils
 
 
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Sanitizes a name to be safe for use as a test directory/module name for the specific language.
+        /// Different languages have different naming restrictions for modules, packages, and classes.
+        /// </summary>
+        /// <param name="languageType">The language type</param>
+        /// <param name="name">The original name to sanitize</param>
+        /// <returns>A sanitized name safe for the language</returns>
+        public static string ToSafeTestName(this LanguageType languageType, string name)
+        {
+            // For most languages that use module/package systems, hyphens are problematic
+            // and should be replaced with underscores
+            switch (languageType)
+            {
+                case LanguageType.PYTHON:
+                case LanguageType.RUBY:
+                case LanguageType.GO:
+                    // These languages have strict module naming rules
+                    return name.Replace("-", "_");
+
+                case LanguageType.JAVA:
+                case LanguageType.CSHARP:
+                    // Java and C# package/namespace names can't contain hyphens
+                    return name.Replace("-", "_");
+
+                case LanguageType.JAVASCRIPT:
+                    // JavaScript module names in some contexts can't contain hyphens
+                    return name.Replace("-", "_");
+
+                case LanguageType.C:
+                case LanguageType.CPP:
+                    // C/C++ are more flexible with file names, but underscores are safer
+                    return name.Replace("-", "_");
+
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
     }

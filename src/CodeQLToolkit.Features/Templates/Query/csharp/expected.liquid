@@ -1,0 +1,8 @@
+{%- if query_kind == "path-problem" -%}
+edges
+nodes
+subpaths
+#select
+{%- else -%}
+| {{ test_file_prefix }}.cs:0:0:0:0 | {{ test_file_prefix }}.cs | Replace this with your query. |
+{%- endif -%}

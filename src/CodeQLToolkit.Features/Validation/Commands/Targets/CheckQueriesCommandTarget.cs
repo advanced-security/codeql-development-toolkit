@@ -74,7 +74,7 @@ namespace CodeQLToolkit.Features.Validation.Commands.Targets
                     }
                 }
 
-                if(shouldFail && !PrettyPrint )
+                if (shouldFail && !PrettyPrint)
                 {
                     DieWithError("One or more validation errors found.");
                 }

@@ -21,7 +21,7 @@ namespace CodeQLDevelopmentLifecycleToolkit.Core
         {
             Log<QLT>.G().LogInformation("QLT Startup...");
 
-            Console.OutputEncoding = System.Text.Encoding.UTF8; 
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
 
             var rootCommand = new RootCommand();
 

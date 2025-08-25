@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
 {
     public class ListCommand : CommandTarget
-    {    
+    {
         public override void Run()
         {
-            Log<ListCommand>.G().LogInformation($"Running List Command");           
-        }        
+            Log<ListCommand>.G().LogInformation($"Running List Command");
+        }
     }
 }

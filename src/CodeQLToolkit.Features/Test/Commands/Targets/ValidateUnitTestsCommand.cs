@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace CodeQLToolkit.Features.Test.Commands.Targets
 {
 
-    
+
     public class UnitTestResult
     {
         public string test { get; set; }
@@ -44,9 +44,9 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets
                     string json = r.ReadToEnd();
                     List<UnitTestResult> items = JsonConvert.DeserializeObject<List<UnitTestResult>>(json);
 
-                    foreach(var item in items)
-                    {                        
-                        unitTestResults.Add(item);                        
+                    foreach (var item in items)
+                    {
+                        unitTestResults.Add(item);
                     }
                 }
             }
@@ -61,7 +61,7 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets
 
                 if (item.pass)
                 {
-                    if(PrettyPrint)
+                    if (PrettyPrint)
                     {
                         Console.WriteLine($" ✅ [PASS] ({currentCase} of {totalCases}) {item.test}");
                     }
@@ -127,12 +127,12 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets
                 }
             }
 
-            var failedTests = unitTestResults.Select(x=>x).Where(x=>x.pass==false).ToArray();
+            var failedTests = unitTestResults.Select(x => x).Where(x => x.pass == false).ToArray();
 
             if (failedTests.Length > 0 && !PrettyPrint)
             {
                 DieWithError("One or more failures during run unit tests.");
             }
-        }        
+        }
     }
 }

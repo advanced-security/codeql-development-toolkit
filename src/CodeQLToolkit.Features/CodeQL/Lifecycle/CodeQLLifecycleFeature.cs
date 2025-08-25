@@ -53,7 +53,7 @@ namespace CodeQLToolkit.Features.CodeQL.Lifecycle
 
 
             {
-                getVersionCommand.SetHandler((basePath) => 
+                getVersionCommand.SetHandler((basePath) =>
                 {
                     Log<CodeQLLifecycleFeature>.G().LogInformation("Executing get command...");
 

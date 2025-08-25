@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace CodeQLToolkit.Features.Bundle.Lifecycle.Targets
 {
-    public class SetDisableCustomCodeQLBundlesLifecycleTarget : ILifecycleTarget 
-    {       
+    public class SetDisableCustomCodeQLBundlesLifecycleTarget : ILifecycleTarget
+    {
         override public void Run()
         {
             Log<SetDisableCustomCodeQLBundlesLifecycleTarget>.G().LogInformation("Running set command...");
 
             var c = new QLTConfig()
-            {               
+            {
                 Base = Base
             };
 

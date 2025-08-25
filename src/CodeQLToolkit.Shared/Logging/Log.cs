@@ -24,7 +24,7 @@ namespace CodeQLToolkit.Shared.Logging
 
         public static ILogger G()
         {
-            return instance._logger;            
+            return instance._logger;
         }
     }
 }
