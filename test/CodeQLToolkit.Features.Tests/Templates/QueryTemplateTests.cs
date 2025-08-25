@@ -172,7 +172,6 @@ namespace CodeQLToolkit.Features.Tests.Templates
                 "new-query.liquid",
                 "test.liquid",
                 "expected.liquid",
-                "testref.liquid",
                 "qlpack-test.liquid"
             };
 
@@ -186,6 +185,11 @@ namespace CodeQLToolkit.Features.Tests.Templates
                         $"Template '{templateName}' should exist for language {language}");
                 }
             }
+
+            // Check that the shared testref.liquid template exists
+            var sharedTestRefPath = Path.Combine("Templates", "Query", "all", "testref.liquid");
+            Assert.DoesNotThrow(() => templateUtil.RawTemplateFromFile(sharedTestRefPath),
+                "Shared testref.liquid template should exist in Templates/Query/all/");
         }
 
         [Test]

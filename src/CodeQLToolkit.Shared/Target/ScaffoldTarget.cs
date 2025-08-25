@@ -19,7 +19,21 @@ namespace CodeQLToolkit.Shared.Target
         {
             var languagePath = Language;
 
-            return Path.Combine("Templates", FeatureName, Language.ToDirectory(), templateName + ".liquid");
+            // First check if there's a shared template in the "all" directory
+            var sharedTemplatePath = Path.Combine("Templates", FeatureName, "all", templateName + ".liquid");
+            var templateUtil = new TemplateUtil();
+
+            try
+            {
+                // Try to load the shared template first
+                templateUtil.RawTemplateFromFile(sharedTemplatePath);
+                return sharedTemplatePath;
+            }
+            catch
+            {
+                // If shared template doesn't exist, fall back to language-specific template
+                return Path.Combine("Templates", FeatureName, Language.ToDirectory(), templateName + ".liquid");
+            }
         }
 
 

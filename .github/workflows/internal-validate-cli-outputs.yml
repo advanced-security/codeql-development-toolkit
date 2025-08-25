@@ -16,8 +16,12 @@ env:
 
 jobs:
   validate-cli-outputs:
-    name: Validate CodeQlToolkit `query generate new-query` subcommand
+    name: "Generate, validate, and test `new-query` CLI - (${{ matrix.language }})"
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [cpp, csharp, go, java, javascript, python, ruby]
 
     steps:
       - name: Checkout repository
@@ -59,14 +63,16 @@ jobs:
           codeql-cli-version: 'latest'
           codeql-stdlib-version: 'latest'
 
-      - name: Run end-to-end CLI validation
-        run: ./scripts/validate-cli-e2e.sh
+      - name: "Run end-to-end CLI validation for '${{ matrix.language }}' language"
+        run: ./scripts/validate-cli-e2e.sh --languages ${{ matrix.language }}
 
-      - name: Upload test artifacts on failure
+      - name: "Upload test artifacts on failure for '${{ matrix.language }}' language"
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: cli-validation-artifacts
-          path: ${{ runner.temp }}/qlt-cli-e2e-test/**
+          name: cli-validation-artifacts-${{ matrix.language }}
+          path: |
+            ${{ runner.temp }}/qlt-cli-e2e-test/${{ matrix.language }}/**
+            !${{ runner.temp }}/qlt-cli-e2e-test/${{ matrix.language }}/**/*.testproj
           if-no-files-found: warn
-          retention-days: 3
+          retention-days: 2
