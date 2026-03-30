@@ -8,8 +8,8 @@ namespace CodeQLToolkit.Features.Test.Lifecycle
 {
     abstract public class BaseLifecycleTarget : ILifecycleTarget
     {
-        public int NumThreads { get; set; }     
-        public string UseRunner { get; set; }   
+        public int NumThreads { get; set; }
+        public string UseRunner { get; set; }
 
         public string ExtraArgs { get; set; }
 

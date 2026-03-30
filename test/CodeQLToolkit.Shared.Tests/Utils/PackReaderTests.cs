@@ -32,7 +32,7 @@ dependencies:
         [Test]
         public void TestReadPackName()
         {
-            Assert.AreEqual("qlt2/stuff2", CodeQLPackReader.read(TestFile).Name);
+            Assert.That(CodeQLPackReader.read(TestFile).Name, Is.EqualTo("qlt2/stuff2"));
         }
     }
 }

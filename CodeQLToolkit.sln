@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Features", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Shared.Tests", "test\CodeQLToolkit.Shared.Tests\CodeQLToolkit.Shared.Tests.csproj", "{E57121C2-2A2E-487C-9C32-A7D8914E9123}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeQLToolkit.Features.Tests", "test\CodeQLToolkit.Features.Tests\CodeQLToolkit.Features.Tests.csproj", "{F1234567-89AB-CDEF-0123-456789ABCDEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{E57121C2-2A2E-487C-9C32-A7D8914E9123}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E57121C2-2A2E-487C-9C32-A7D8914E9123}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E57121C2-2A2E-487C-9C32-A7D8914E9123}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1234567-89AB-CDEF-0123-456789ABCDEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1234567-89AB-CDEF-0123-456789ABCDEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1234567-89AB-CDEF-0123-456789ABCDEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1234567-89AB-CDEF-0123-456789ABCDEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +71,7 @@ Global
 		{A1F78CBC-9AE9-4360-A06B-395F368B183A} = {05645E0E-835A-4627-BDAE-C27EC39B23EE}
 		{B85F1529-3321-4AD2-924A-6EA478145DC5} = {667B480C-D805-4A9C-AC1F-D9FCCF3DB57C}
 		{E57121C2-2A2E-487C-9C32-A7D8914E9123} = {05645E0E-835A-4627-BDAE-C27EC39B23EE}
+		{F1234567-89AB-CDEF-0123-456789ABCDEF} = {05645E0E-835A-4627-BDAE-C27EC39B23EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF8F3B81-F4DC-4608-A41C-F00F3E5A05CA}

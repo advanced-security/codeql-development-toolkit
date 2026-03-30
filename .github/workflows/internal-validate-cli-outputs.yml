@@ -1,0 +1,78 @@
+name: ⚙️ Internal - Validate CLI Outputs
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+  workflow_dispatch:
+
+env:
+  # Global configuration
+  DOTNET_VERSION: '6.0.x'
+  BUILD_CONFIGURATION: Debug
+
+jobs:
+  validate-cli-outputs:
+    name: "Generate, validate, and test `new-query` CLI - (${{ matrix.language }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [cpp, csharp, go, java, javascript, python, ruby]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build project
+        run: dotnet build -c ${{ env.BUILD_CONFIGURATION }} --no-restore
+
+      - name: Set test directory
+        run: echo "TEST_DIR=${{ runner.temp }}/qlt-cli-e2e-test" >> $GITHUB_ENV
+
+      - name: Prepare test environment
+        run: |
+          # Create test directory
+          mkdir -p "$TEST_DIR"
+
+          # Copy configuration file
+          cp example/qlt.conf.json "$TEST_DIR"
+
+      ## Using the 'latest' version of the `codeql` CLI may eventually
+      ## cause issues, where the `qlt.conf.json` file specifies an exact
+      ## version of the CLI. For now, we live with the risk, and the issues
+      ## surfaced might actually be useful to identify emerging problems
+      ## in the `codeql` CLI -- which is only required here for extra
+      ## debugging of any queries with test failures.
+      - name: Install `codeql` CLI
+        id: install-codeql
+        uses: ./.github/actions/install-codeql
+        with:
+          add-to-path: 'true'
+          codeql-cli-version: 'latest'
+          codeql-stdlib-version: 'latest'
+
+      - name: "Run end-to-end CLI validation for '${{ matrix.language }}' language"
+        run: ./scripts/validate-cli-e2e.sh --languages ${{ matrix.language }}
+
+      - name: "Upload test artifacts on failure for '${{ matrix.language }}' language"
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-validation-artifacts-${{ matrix.language }}
+          path: |
+            ${{ runner.temp }}/qlt-cli-e2e-test/${{ matrix.language }}/**
+            !${{ runner.temp }}/qlt-cli-e2e-test/${{ matrix.language }}/**/*.testproj
+          if-no-files-found: warn
+          retention-days: 2

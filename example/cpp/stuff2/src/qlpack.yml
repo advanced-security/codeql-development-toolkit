@@ -1,9 +1,9 @@
 ---
 library: true
 name: qlt2/stuff2
-version: 0.0.1
+version: 0.0.2
 description: Default description
 suites: 
 license: 
 dependencies:
-  codeql/cpp-all: "0.12.2"
+  codeql/cpp-all: "5.4.1"

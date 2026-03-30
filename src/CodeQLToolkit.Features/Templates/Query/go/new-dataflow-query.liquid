@@ -1,0 +1,30 @@
+/**
+ * @id {{language}}/{{query_pack_name}}/{{query_name | downcase}}
+ * @name {{query_name}}
+ * @description {{description}}
+ * @kind path-problem
+ * @precision high
+ * @problem.severity error
+ * @tags {{query_pack_name}}
+ */
+
+import {{ql_language_import}}
+
+module Config implements DataFlow::ConfigSig {
+  predicate isSource(DataFlow::Node source) {
+    // Define your sources here
+    none()
+  }
+
+  predicate isSink(DataFlow::Node sink) {
+    // Define your sinks here  
+    none()
+  }
+}
+
+module Flow = DataFlow::Global<Config>;
+import Flow::PathGraph
+
+from Flow::PathNode source, Flow::PathNode sink
+where Flow::flowPath(source, sink)
+select sink.getNode(), source, sink, "Replace this with your dataflow query."

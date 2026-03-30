@@ -13,11 +13,11 @@ namespace CodeQLToolkit.Shared.Tests.Utils
         public void Setup()
         {
         }
- 
+
         [Test]
         public void TestCreateTempDirectory()
         {
-            var dir = FileUtils.CreateTempDirectory();           
+            var dir = FileUtils.CreateTempDirectory();
             Assert.IsTrue(Directory.Exists(dir));
             Assert.IsTrue(dir.StartsWith(Path.GetTempPath()));
         }

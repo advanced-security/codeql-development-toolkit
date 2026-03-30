@@ -9,7 +9,7 @@ namespace CodeQLToolkit.Features.Test.Commands
 {
     public abstract class BaseExecuteUnitTestsCommandTarget : CommandTarget
     {
-        public int NumThreads { get; set; } 
+        public int NumThreads { get; set; }
         public string WorkDirectory { get; set; }
         public string RunnerOS { get; set; }
         public string CLIVersion { get; set; }
