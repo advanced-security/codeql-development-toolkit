@@ -11,8 +11,7 @@ namespace CodeQLToolkit.Shared.Utils
     {
         public static DirectoryInfo GetExecutingDirectory()
         {
-            var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
-            return new FileInfo(location.AbsolutePath).Directory;
+            return new DirectoryInfo(AppContext.BaseDirectory);
         }
 
         public static string CreateTempDirectory()
