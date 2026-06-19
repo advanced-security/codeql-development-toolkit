@@ -26,12 +26,12 @@ namespace CodeQLToolkit.Shared.Types
 
         public static string ToDirectory(this AutomationType automationType)
         {
-            if(automationType == AutomationType.ANY)
+            if (automationType == AutomationType.ANY)
             {
                 return "Any";
             }
 
-            if(automationType == AutomationType.ACTIONS)
+            if (automationType == AutomationType.ACTIONS)
             {
                 return "Actions";
             }

@@ -21,7 +21,7 @@ namespace CodeQLToolkit.Features.Validation.Lifecycle.Targets.Actions
             // temporarily disable the language resolution 
             var tmpLanguage = Language;
             Language = null;
-           
+
             WriteTemplateIfOverwriteOrNotExists("validate-query-metadata", Path.Combine(Base, ".github", "workflows", $"validate-codeql-queries-{tmpLanguage}.yml"), $"Validate CodeQL Queries ({Language})", new
             {
                 useRunner = UseRunner,

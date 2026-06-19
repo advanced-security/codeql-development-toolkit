@@ -16,7 +16,7 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
     [AutomationType(AutomationType.ACTIONS)]
     public class ExecuteUnitTestsCommandTarget : BaseExecuteUnitTestsCommandTarget
     {
-        
+
         public override void Run()
         {
             Log<ExecuteUnitTestsCommandTarget>.G().LogInformation($"Preparing to execute unit tests found in {Base} for Language {Language}...");
@@ -24,10 +24,11 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
             // get a directory to work in 
             var tmpDirectory = WorkDirectory;
 
-            var languageRoot = Path.Combine(Base, Language);            
+            var languageRoot = Path.Combine(Base, Language);
 
             // check if the language root exists
-            if (!Directory.Exists(languageRoot)){
+            if (!Directory.Exists(languageRoot))
+            {
                 DieWithError($"Language root {languageRoot} does not exist so unit tests cannnot be run.");
             }
 
@@ -37,20 +38,21 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
             Log<ExecuteUnitTestsCommandTarget>.G().LogInformation($"Test Directory Inventory {Language}");
             Log<ExecuteUnitTestsCommandTarget>.G().LogInformation($"-----------------------------------");
 
-            foreach ( string dir in dirs)
+            foreach (string dir in dirs)
             {
                 Log<ExecuteUnitTestsCommandTarget>.G().LogInformation($"Found test directory: {dir}");
             }
 
             var transformedDirs = dirs.Select(dir => Path.GetRelativePath(Base, dir));
 
-            if(dirs.Length == 0)
+            if (dirs.Length == 0)
             {
                 DieWithError($"No tests detected. Please create unit tests before running this command.");
             }
-          
+
             Parallel.For(0, NumThreads,
-                 slice => {
+                 slice =>
+                 {
 
                      TestReport report = new TestReport()
                      {
@@ -86,8 +88,8 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
                          process.StartInfo.UseShellExecute = false;
                          process.StartInfo.RedirectStandardOutput = true;
                          process.StartInfo.RedirectStandardError = false;
-                         process.StartInfo.Arguments = $"test run {ExtraCodeQLArgs} --failing-exitcode=122 --slice={slice+1}/{NumThreads} --ram=2048 --format=json --search-path={Language} {testPathString}";
-                         
+                         process.StartInfo.Arguments = $"test run {ExtraCodeQLArgs} --failing-exitcode=122 --slice={slice + 1}/{NumThreads} --ram=2048 --format=json --search-path={Language} {testPathString}";
+
                          process.Start();
 
                          // needed for STDOUT redirection
@@ -100,7 +102,7 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
                          if (process.ExitCode != 0)
                          {
                              // This fine
-                             if(process.ExitCode == 122)
+                             if (process.ExitCode == 122)
                              {
                                  Log<ExecuteUnitTestsCommandTarget>.G().LogError($"One more more unit tests failed. Please see the output of the validation step for more information about failed tests cases.");
                              }
@@ -108,7 +110,7 @@ namespace CodeQLToolkit.Features.Test.Commands.Targets.Actions
                              else
                              {
                                  DieWithError($"Non-test related error while running unit tests. Please check debug output for more infomation.");
-                             }                             
+                             }
                          }
                      }
                  }

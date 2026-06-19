@@ -33,23 +33,23 @@ namespace CodeQLToolkit.Features.Query.Commands.Targets
 
 
             // filter the packs that are part of a custom bundle if we are using bundles.
-            if(UseBundle)
+            if (UseBundle)
             {
                 // load the config
                 var config = QLTConfig.LoadFromFile(Base);
 
                 Log<InstallQueryPacksCommandTarget>.G().LogInformation("In bundle mode so filtering bundled packs...");
 
-                
+
                 foreach (var pack in config.CodeQLPackConfiguration)
                 {
                     Log<InstallQueryPacksCommandTarget>.G().LogInformation($"Pack {pack.Name} will NOT installed because it is part of the bundle...");
                 }
 
-                files = files.Where(f => 
+                files = files.Where(f =>
                     // all things that are part of the customization pack must be excluded. 
                     // if it is exported is not relevant here.
-                    !config.CodeQLPackConfiguration.Any(p => CodeQLPackReader.read(f).Name == p.Name && (p.Bundle==true || p.ReferencesBundle==true))
+                    !config.CodeQLPackConfiguration.Any(p => CodeQLPackReader.read(f).Name == p.Name && (p.Bundle == true || p.ReferencesBundle == true))
                 ).ToArray();
 
                 Log<InstallQueryPacksCommandTarget>.G().LogInformation($"Got {files.Length} packs after filtering...");
@@ -61,11 +61,11 @@ namespace CodeQLToolkit.Features.Query.Commands.Targets
             }
 
 
-            foreach ( string file in files )
+            foreach (string file in files)
             {
                 Log<InstallQueryPacksCommandTarget>.G().LogInformation($"Installing qlpack {file}...");
 
-                using(Process  process = new Process())
+                using (Process process = new Process())
                 {
                     process.StartInfo.FileName = installation.CodeQLToolBinary;
                     process.StartInfo.UseShellExecute = false;
@@ -75,7 +75,7 @@ namespace CodeQLToolkit.Features.Query.Commands.Targets
 
                     process.WaitForExit();
 
-                    if(process.ExitCode !=0)
+                    if (process.ExitCode != 0)
                     {
                         DieWithError($"Failed to install query pack {file}.");
                     }

@@ -16,7 +16,7 @@ namespace CodeQLToolkit.Shared.Types
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
             foreach (var assembly in assemblies)
-            {                
+            {
                 var types = assembly.GetTypes();
 
                 foreach (var type in types)
@@ -25,7 +25,7 @@ namespace CodeQLToolkit.Shared.Types
                     // of targets 
                     if (!type.IsSubclassOf(typeof(ITarget)) || !type.IsSubclassOf(typeof(T)))
                     {
-                       continue;
+                        continue;
                     }
 
                     var attributes = type.GetCustomAttributes(typeof(AutomationTypeAttribute), true);

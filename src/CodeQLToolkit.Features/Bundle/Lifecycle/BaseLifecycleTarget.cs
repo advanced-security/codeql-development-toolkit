@@ -8,7 +8,7 @@ namespace CodeQLToolkit.Features.Bundle.Lifecycle
 {
     abstract public class BaseLifecycleTarget : ILifecycleTarget
     {
-        public string UseRunner { get; set; }   
+        public string UseRunner { get; set; }
 
     }
 }

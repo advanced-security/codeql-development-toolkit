@@ -34,7 +34,7 @@ namespace CodeQLToolkit.Features.Query.Lifecycle
             {
                 Log<QueryLifecycleFeature>.G().LogInformation("Executing init command...");
 
-               
+
                 new InitLifecycleTarget()
                 {
                     FeatureName = FeatureName,
@@ -43,7 +43,7 @@ namespace CodeQLToolkit.Features.Query.Lifecycle
 
                 }.Run();
 
-                
+
             }, Globals.BasePathOption, overwriteExistingOption);
 
         }

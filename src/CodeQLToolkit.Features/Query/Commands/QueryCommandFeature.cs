@@ -15,7 +15,7 @@ namespace CodeQLToolkit.Features.Query.Commands
     {
         public QueryCommandFeature()
         {
-            FeatureName = "Query"; 
+            FeatureName = "Query";
         }
 
         public void Register(Command parentCommand)
@@ -31,7 +31,7 @@ namespace CodeQLToolkit.Features.Query.Commands
             runCommand.Add(installPacksQueryCommand);
 
             installPacksQueryCommand.SetHandler(
-                (basePath, useBundle) => new InstallQueryPacksCommandTarget() { Base = basePath, UseBundle = useBundle}.Run(), Globals.BasePathOption, Globals.UseBundle);
+                (basePath, useBundle) => new InstallQueryPacksCommandTarget() { Base = basePath, UseBundle = useBundle }.Run(), Globals.BasePathOption, Globals.UseBundle);
 
         }
 

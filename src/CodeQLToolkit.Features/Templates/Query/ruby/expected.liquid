@@ -1,0 +1,9 @@
+{%- if query_kind == "path-problem" -%}
+edges
+nodes
+subpaths
+#select
+{%- else -%}
+| {{ test_file_prefix }}.rb:0:0:0:0 | {{ test_file_prefix }}.rb | Replace this with your query. |
+| file://:0:0:0:0 |  | Replace this with your query. |
+{%- endif -%}

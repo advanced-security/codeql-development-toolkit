@@ -22,7 +22,7 @@ namespace CodeQLToolkit.Features.Bundle.Lifecycle.Targets.Actions
             // temporarily disable the language resolution 
             var tmpLanguage = Language;
             Language = null;
-           
+
             WriteTemplateIfOverwriteOrNotExists("install-qlt", Path.Combine(Base, ".github", "actions", "install-qlt", "action.yml"), "install-qlt action");
             WriteTemplateIfOverwriteOrNotExists("run-bundle-integration-tests", Path.Combine(Base, ".github", "workflows", $"run-bundle-integration-tests-{tmpLanguage}.yml"), $"Run CodeQL Unit Tests ({Language})", new
             {

@@ -1,0 +1,24 @@
+{%- if query_kind == "path-problem" -%}
+edges
+nodes
+subpaths
+#select
+{%- else -%}
+| {{ test_file_prefix }}.py:2:1:2:1 | x | Replace this with your query. |
+| {{ test_file_prefix }}.py:2:5:2:6 | IntegerLiteral | Replace this with your query. |
+| {{ test_file_prefix }}.py:3:1:3:1 | y | Replace this with your query. |
+| {{ test_file_prefix }}.py:3:5:3:11 | StringLiteral | Replace this with your query. |
+| {{ test_file_prefix }}.py:4:1:4:1 | z | Replace this with your query. |
+| {{ test_file_prefix }}.py:4:5:4:5 | x | Replace this with your query. |
+| {{ test_file_prefix }}.py:4:5:4:14 | BinaryExpr | Replace this with your query. |
+| {{ test_file_prefix }}.py:4:9:4:11 | len | Replace this with your query. |
+| {{ test_file_prefix }}.py:4:9:4:14 | len() | Replace this with your query. |
+| {{ test_file_prefix }}.py:4:13:4:13 | y | Replace this with your query. |
+| {{ test_file_prefix }}.py:5:1:5:6 | result | Replace this with your query. |
+| {{ test_file_prefix }}.py:5:10:5:10 | x | Replace this with your query. |
+| {{ test_file_prefix }}.py:5:10:5:14 | BinaryExpr | Replace this with your query. |
+| {{ test_file_prefix }}.py:5:14:5:14 | IntegerLiteral | Replace this with your query. |
+| {{ test_file_prefix }}.py:6:1:6:5 | print | Replace this with your query. |
+| {{ test_file_prefix }}.py:6:1:6:13 | print() | Replace this with your query. |
+| {{ test_file_prefix }}.py:6:7:6:12 | result | Replace this with your query. |
+{%- endif -%}

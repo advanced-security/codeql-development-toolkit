@@ -1,5 +1,5 @@
 /**
- * @id {{language}}/{{query_pack_name}}/{{query_name}}
+ * @id {{language}}/{{query_pack_name}}/{{query_name | downcase}}
  * @name {{query_name}}
  * @description {{description}}
  * @kind problem
@@ -8,7 +8,7 @@
  * @tags {{query_pack_name}}
  */
 
- import {{ql_language_import}}
- 
- from Expr e
- select e, "Replace this with your query."
+import {{ql_language_import}}
+
+from File f
+select f, "Replace this with your query."

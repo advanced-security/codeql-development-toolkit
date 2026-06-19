@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CodeQLToolkit.Features.CodeQL.Lifecycle.Targets
 {
-    public class SetVersionLifecycleTarget : ILifecycleTarget 
+    public class SetVersionLifecycleTarget : ILifecycleTarget
     {
         public string CodeQLCLI { get; set; }
         public string CodeQLStandardLibrary { get; set; }

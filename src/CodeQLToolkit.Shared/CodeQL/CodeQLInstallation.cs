@@ -170,12 +170,35 @@ namespace CodeQLToolkit.Shared.CodeQL
 
             Log<CodeQLInstallation>.G().LogInformation($"Checkout standard library into.. {StdLibDirectory}");
 
-            var repoPath = Repository.Clone("https://github.com/github/codeql.git", StdLibDirectory);
+            // Use direct git command to clone the repository to avoid LibGit2Sharp
+            // issues with SSH URL rewriting in Git configuration
+            using (Process gitProcess = new Process())
+            {
+                gitProcess.StartInfo.FileName = "git";
+                gitProcess.StartInfo.WorkingDirectory = InstallationDirectory;
+                gitProcess.StartInfo.UseShellExecute = false;
+                gitProcess.StartInfo.RedirectStandardOutput = true;
+                gitProcess.StartInfo.RedirectStandardError = true;
+                gitProcess.StartInfo.Arguments = $"clone https://github.com/github/codeql.git {Path.GetFileName(StdLibDirectory)}";
 
+                gitProcess.Start();
+                string output = gitProcess.StandardOutput.ReadToEnd();
+                string error = gitProcess.StandardError.ReadToEnd();
+                gitProcess.WaitForExit();
+
+                if (gitProcess.ExitCode != 0)
+                {
+                    Log<CodeQLInstallation>.G().LogError($"Git clone failed with exit code {gitProcess.ExitCode}");
+                    Log<CodeQLInstallation>.G().LogError($"Output: {output}");
+                    Log<CodeQLInstallation>.G().LogError($"Error: {error}");
+                    throw new Exception($"Failed to clone CodeQL standard library repository: {error}");
+                }
+            }
 
             Log<CodeQLInstallation>.G().LogInformation($"Getting standard library version.. {StandardLibraryVersion}");
 
-            using (var repo = new Repository(repoPath))
+            // Now use LibGit2Sharp to checkout the specific version since the repo is already cloned
+            using (var repo = new Repository(StdLibDirectory))
             {
                 var tag = repo.Tags[$"refs/tags/{StandardLibraryVersion}"];
 

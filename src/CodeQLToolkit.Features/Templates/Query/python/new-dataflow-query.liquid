@@ -1,0 +1,33 @@
+/**
+ * @id {{language}}/{{query_pack_name}}/{{query_name | downcase}}
+ * @name {{query_name}}
+ * @description {{description}}
+ * @kind path-problem
+ * @problem.severity error
+ * @security-severity 6.1
+ * @precision high
+ * @tags {{query_pack_name}}
+ */
+
+import {{ql_language_import}}
+import semmle.python.dataflow.new.DataFlow
+import semmle.python.dataflow.new.TaintTracking
+
+module Config implements DataFlow::ConfigSig {
+  predicate isSource(DataFlow::Node node) {
+    // Define your source here
+    none()
+  }
+
+  predicate isSink(DataFlow::Node node) {
+    // Define your sink here
+    none()
+  }
+}
+
+module Flow = TaintTracking::Global<Config>;
+import Flow::PathGraph
+
+from Flow::PathNode source, Flow::PathNode sink
+where Flow::flowPath(source, sink)
+select sink.getNode(), source, sink, "Replace this with your query."

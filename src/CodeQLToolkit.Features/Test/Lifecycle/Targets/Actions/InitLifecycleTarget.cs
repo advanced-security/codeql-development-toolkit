@@ -9,9 +9,9 @@ namespace CodeQLToolkit.Features.Test.Lifecycle.Targets.Actions
     [AutomationType(AutomationType.ACTIONS)]
     public class InitLifecycleTarget : BaseLifecycleTarget
     {
-        public InitLifecycleTarget() 
+        public InitLifecycleTarget()
         {
-            AutomationType = AutomationType.ACTIONS; 
+            AutomationType = AutomationType.ACTIONS;
         }
         public override void Run()
         {
@@ -37,11 +37,11 @@ namespace CodeQLToolkit.Features.Test.Lifecycle.Targets.Actions
                 language = tmpLanguage,
                 codeqlArgs = EXcodeqlArgs,
                 devMode = DevMode,
-                branch = Branch 
+                branch = Branch
 
             });
 
-            Language = tmpLanguage; 
+            Language = tmpLanguage;
 
             var message = @"------------------------------------------
 Your repository now has the CodeQL Unit Test Runner installed in `.github/workflows/`. Additionally, 

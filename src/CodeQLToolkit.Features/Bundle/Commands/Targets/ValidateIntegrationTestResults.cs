@@ -12,7 +12,7 @@ namespace CodeQLToolkit.Features.Bundle.Commands.Targets
 {
     public class ValidateIntegrationTestResults : CommandTarget
     {
-        public string Expected {  get; set; }
+        public string Expected { get; set; }
         public string Actual { get; set; }
 
         public override void Run()
@@ -25,7 +25,7 @@ namespace CodeQLToolkit.Features.Bundle.Commands.Targets
                 DieWithError($"Expected file {Expected} does not exist.");
             }
 
-            if(!File.Exists(Actual))
+            if (!File.Exists(Actual))
             {
                 DieWithError($"Actual file {Actual} does not exist.");
             }
@@ -56,13 +56,13 @@ namespace CodeQLToolkit.Features.Bundle.Commands.Targets
                 var actualDict = ExtractResultMap(actualSARIF);
                 var expectedDict = ExtractResultMap(expectedSARIF);
 
-               
+
                 // Populate the differences.
                 var resultsInExpectedNotInActual = FindMissingResults(expectedSARIF, actualDict);
                 var resultsInActualNotInExpected = FindMissingResults(actualSARIF, expectedDict);
 
                 // Report results.
-                if(resultsInExpectedNotInActual.Count == 0 && resultsInActualNotInExpected.Count == 0)
+                if (resultsInExpectedNotInActual.Count == 0 && resultsInActualNotInExpected.Count == 0)
                 {
                     Log<ValidateIntegrationTestResults>.G().LogInformation($"SARIF results identical.");
                 }
@@ -129,20 +129,20 @@ namespace CodeQLToolkit.Features.Bundle.Commands.Targets
 
         private bool ContainsResult(Result searchFor, List<Result> inResults)
         {
-            foreach(var result in inResults)
+            foreach (var result in inResults)
             {
-                if(ResultMatches(result, searchFor))
+                if (ResultMatches(result, searchFor))
                 {
                     return true;
                 }
             }
-            
+
             return false;
         }
 
         private bool ResultMatches(Result a, Result b)
         {
-            if(a.ruleId == b.ruleId && a.message.text == b.message.text && a.LocationsString() == b.LocationsString())
+            if (a.ruleId == b.ruleId && a.message.text == b.message.text && a.LocationsString() == b.LocationsString())
             {
                 return true;
             }
