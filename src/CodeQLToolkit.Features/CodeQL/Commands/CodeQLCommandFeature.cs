@@ -42,14 +42,16 @@ namespace CodeQLToolkit.Features.CodeQL.Commands
             var customBundleOption = new Option<bool>("--custom-bundle", () => false, "Build a custom bundle and compile the bundle.") { IsRequired = true };
             var quickBundleOption = new Option<bool>("--quick-bundle", () => false, "Build a custom bundle and DO NOT compile the bundle.") { IsRequired = true };
             var packsOption = new Option<string[]>("--packs", "When creating bundles, this specifies the packs to include, Example `pack1 pack2 pack3`. You may specify also as `--pack pack1 --pack2 --pack3`") { IsRequired = false, AllowMultipleArgumentsPerToken = true };
+            var cacheDirOption = new Option<string>("--cache-dir", () => null, "Directory the bundle tool uses for downloaded bundles and compilation caches. Restore it across CI runs (e.g. with actions/cache) to avoid re-downloading and to reuse published compilation caches. Overrides the 'CacheDir' value in qlt.conf.json. If unset, the bundle tool's platform-specific default is used.") { IsRequired = false };
 
             installCommand.Add(customBundleOption);
             installCommand.Add(quickBundleOption);
             installCommand.Add(packsOption);
+            installCommand.Add(cacheDirOption);
 
             runCommand.Add(installCommand);
 
-            installCommand.SetHandler((basePath, automationType, customBundleOption, quickBundleOption, packs) =>
+            installCommand.SetHandler((basePath, automationType, customBundleOption, quickBundleOption, packs, cacheDir) =>
             {
                 Log<CodeQLCommandFeature>.G().LogInformation("Executing install command...");
 
@@ -59,11 +61,12 @@ namespace CodeQLToolkit.Features.CodeQL.Commands
                     AutomationTarget = automationType,
                     CustomBundles = customBundleOption,
                     QuickBundles = quickBundleOption,
-                    Packs = packs
+                    Packs = packs,
+                    CacheDir = cacheDir
                 }.Run();
 
 
-            }, Globals.BasePathOption, Globals.AutomationTypeOption, customBundleOption, quickBundleOption, packsOption);
+            }, Globals.BasePathOption, Globals.AutomationTypeOption, customBundleOption, quickBundleOption, packsOption, cacheDirOption);
         }
 
         public int Run()

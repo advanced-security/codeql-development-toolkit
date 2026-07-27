@@ -15,6 +15,7 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
         public bool CustomBundles { get; set; }
         public bool QuickBundles { get; set; }
         public string[] Packs { get; set; }
+        public string CacheDir { get; set; }
 
         void SetEnvironmentVariableMultiTarget(string name, string value)
         {
@@ -50,6 +51,15 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
 
             // First, check if CodeQL is installed.
             var installation = CodeQLInstallation.LoadFromConfig(Base);
+
+            // A cache directory supplied on the command line takes precedence
+            // over any value loaded from `qlt.conf.json`.
+            if (!string.IsNullOrEmpty(CacheDir))
+            {
+                Log<InstallCommand>.G().LogInformation($"Overriding bundle cache directory from the command line: {CacheDir}");
+                installation.CacheDir = CacheDir;
+            }
+
             if (CustomBundles || QuickBundles)
             {
                 installation.EnableCustomCodeQLBundles = true;

@@ -25,6 +25,10 @@ namespace CodeQLToolkit.Shared.CodeQL
         public bool QuickBundle { get; set; }
         public string Base { get; set; }
 
+        // Optional directory passed to the bundle tool via `--cache-dir`, used
+        // for downloaded bundles and compilation caches.
+        public string CacheDir { get; set; }
+
         public static CodeQLInstallation LoadFromConfig(string Base)
         {
             var c = new QLTConfig()
@@ -48,6 +52,7 @@ namespace CodeQLToolkit.Shared.CodeQL
                 CodeQLPackConfiguration = config.CodeQLPackConfiguration,
                 Base = config.Base,
                 CodeScanningConfig = config.CodeQLConfiguration,
+                CacheDir = config.CacheDir,
                 QLTConfigFilePath = config.QLTConfigFilePath
             };
         }
@@ -264,6 +269,12 @@ namespace CodeQLToolkit.Shared.CodeQL
                 {
                     bundleArgs = $"-c \"{Path.Combine(Base, CodeScanningConfig)}\" {bundleArgs}";
                 }
+            }
+
+            if (CacheDir != null && CacheDir.Length > 0)
+            {
+                Log<CodeQLInstallation>.G().LogInformation($"Note: Using bundle cache directory `{CacheDir}` ...");
+                bundleArgs = $"--cache-dir \"{Path.GetFullPath(CacheDir)}\" {bundleArgs}";
             }
 
             Log<CodeQLInstallation>.G().LogInformation($"Executing Bundle Tool with Working Directory: `{workingDirectory}`");
