@@ -1,5 +1,5 @@
 import cpp
-import qlt.Customizations
+import qlt.cpp_customizations.Customizations
 import semmle.code.cpp.security.FlowSources
 
 select any(RemoteFlowSource s)
