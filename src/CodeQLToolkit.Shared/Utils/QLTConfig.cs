@@ -23,6 +23,13 @@ namespace CodeQLToolkit.Shared.Utils
         public string CodeQLCLIBundle { get; set; }
         public string CodeQLConfiguration { get; set; }
 
+        // Optional directory passed through to the codeql-bundle tool via
+        // `--cache-dir`. It holds downloaded bundles and compilation caches, so
+        // restoring it across CI runs (e.g. with actions/cache) avoids
+        // re-downloading and speeds up compilation of customized queries. May be
+        // overridden on the command line with `--cache-dir`.
+        public string CacheDir { get; set; }
+
         public CodeQLPackConfiguration[] CodeQLPackConfiguration { get; set; }
 
         public string CodeQLStandardLibraryIdent

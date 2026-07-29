@@ -54,8 +54,27 @@ if ($LASTEXITCODE -ne 0) {
 # Move into the cli directory
 Push-Location "codeql_bundle"
 
+# PyInstaller only freezes Python modules, so any package data files read at
+# runtime (via importlib.resources) have to be added explicitly. The separator
+# expected by --add-data is os.pathsep, which differs per platform, so it is
+# resolved here rather than hardcoded. Older codeql-bundle releases do not ship
+# these files, hence the Test-Path guard.
+$PathSeparator = [System.IO.Path]::PathSeparator
+$DataArgs = @()
+
+foreach ($DataFile in @("supported-codeql-bundles.json", "supported-codeql-bundles.schema.json")) {
+    if (Test-Path $DataFile) {
+        $DataArgs += "--add-data"
+        $DataArgs += "${DataFile}${PathSeparator}codeql_bundle"
+    }
+    else {
+        Write-Host "Note: data file '$DataFile' not present in this release, skipping."
+    }
+}
+
 # Build executable with pyinstaller
-pyinstaller -F -n codeql_bundle cli.py
+Write-Host "Running: pyinstaller -F -n codeql_bundle $($DataArgs -join ' ') cli.py"
+pyinstaller -F -n codeql_bundle @DataArgs cli.py
 if ($LASTEXITCODE -ne 0) {
     throw "PyInstaller build failed"
 }
