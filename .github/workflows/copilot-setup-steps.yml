@@ -1,0 +1,64 @@
+name: Copilot Setup Steps
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  copilot-setup-steps:
+    name: Pre-install Dependencies for Copilot Environment
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 6.0.x
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Verify .NET installation
+      run: |
+        dotnet --version
+        echo "✅ .NET 6.0.x installed successfully"
+
+    - name: Setup GitHub CLI (for QLT installation)
+      run: |
+        # GitHub CLI is typically pre-installed on GitHub runners
+        gh --version
+        echo "✅ GitHub CLI available"
+
+    - name: Install QLT CLI dependencies
+      run: |
+        # Install dependencies required for QLT to run
+        sudo apt-get update
+        sudo apt-get install -y unzip curl
+        echo "✅ Required system dependencies installed"
+
+    - name: Restore .NET dependencies
+      run: |
+        dotnet restore
+        echo "✅ .NET dependencies restored"
+
+    - name: Build project to verify setup
+      run: |
+        dotnet build -c Release --no-restore
+        echo "✅ Project builds successfully"
+
+    - name: Test QLT CLI availability
+      run: |
+        # Build and test that the qlt CLI can be executed
+        dotnet run --project src/CodeQLToolkit.Core -- version
+        echo "✅ QLT CLI is functional"
+
+    - name: Verify Copilot environment readiness
+      run: |
+        echo "🤖 Copilot environment setup complete!"
+        echo "✅ .NET 6.0.x: $(dotnet --version)"
+        echo "✅ GitHub CLI: $(gh --version | head -n1)"
+        echo "✅ System tools: unzip, curl available"
+        echo "✅ QLT CLI: Ready for CodeQL development tasks"
