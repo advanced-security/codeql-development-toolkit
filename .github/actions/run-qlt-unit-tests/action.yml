@@ -28,6 +28,13 @@ inputs:
     required: false
     default: ${{ github.workspace }}
 
+  verbosity:
+    description: |
+      CodeQL `--verbosity` level for the test run, e.g. `progress++` to show per-test
+      progress. Set to `''` to leave verbosity at CodeQL's own default.
+    required: false
+    default: "progress++"
+
   codeql-args:
     description: Extra arguments to pass through to CodeQL.
     required: false
@@ -44,6 +51,10 @@ runs:
     - name: Execute unit tests
       shell: bash
       run: |
+        CODEQL_ARGS="${{ inputs.codeql-args }}"
+        if [ -n "${{ inputs.verbosity }}" ]; then
+          CODEQL_ARGS="$CODEQL_ARGS --verbosity=${{ inputs.verbosity }}"
+        fi
         qlt test run execute-unit-tests \
           --num-threads "${{ inputs.num-threads }}" \
           --language "${{ inputs.language }}" \
@@ -51,7 +62,7 @@ runs:
           --work-dir "${{ inputs.work-dir }}" \
           --base "${{ inputs.base }}" \
           --automation-type actions \
-          ${{ inputs.codeql-args != '' && format('--codeql-args "{0}"', inputs.codeql-args) || '' }}
+          ${{ format('--codeql-args "{0}"', '$CODEQL_ARGS') }}
 
     - name: Validate unit test results
       shell: bash
