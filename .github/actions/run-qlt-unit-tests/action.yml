@@ -57,14 +57,18 @@ runs:
         if [ -n "$VERBOSITY" ]; then
           CODEQL_ARGS="$CODEQL_ARGS --verbosity=$VERBOSITY"
         fi
-        qlt test run execute-unit-tests \
-          --num-threads "${{ inputs.num-threads }}" \
-          --language "${{ inputs.language }}" \
-          --runner-os "${{ runner.os }}" \
-          --work-dir "${{ inputs.work-dir }}" \
-          --base "${{ inputs.base }}" \
-          --automation-type actions \
-          $([ -n "$CODEQL_ARGS" ] && echo --codeql-args "$CODEQL_ARGS")
+        ARGS=(
+          --num-threads "${{ inputs.num-threads }}"
+          --language "${{ inputs.language }}"
+          --runner-os "${{ runner.os }}"
+          --work-dir "${{ inputs.work-dir }}"
+          --base "${{ inputs.base }}"
+          --automation-type actions
+        )
+        if [ -n "$CODEQL_ARGS" ]; then
+          ARGS+=(--codeql-args "$CODEQL_ARGS")
+        fi
+        qlt test run execute-unit-tests "${ARGS[@]}"
 
     - name: Validate unit test results
       shell: bash
