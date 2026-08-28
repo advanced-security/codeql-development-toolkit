@@ -1,0 +1,64 @@
+name: Run and validate CodeQL unit tests via QLT
+description: |
+  Runs the repository's unit tests for a given language via `qlt test run
+  execute-unit-tests`, then validates the results via `qlt test run
+  validate-unit-tests`, failing the step if any test failed.
+
+  Replaces a hand-rolled `codeql test run` slicing script plus a separate
+  results-validation job with QLT's own test-running/validation subcommands.
+  Unverified: whether QLT's runner supports the same degree of parallelism/RAM
+  tuning as the `--slice`/`--ram` flags used by the script it replaces.
+inputs:
+  language:
+    description: The language to run tests for, e.g. `cpp` or `c`.
+    required: true
+
+  num-threads:
+    description: Number of threads to use for the test runner.
+    required: false
+    default: "8"
+
+  work-dir:
+    description: Where to place intermediate execution output files.
+    required: false
+    default: ${{ runner.temp }}
+
+  base:
+    description: The base path to find the query repository.
+    required: false
+    default: ${{ github.workspace }}
+
+  codeql-args:
+    description: Extra arguments to pass through to CodeQL.
+    required: false
+    default: ""
+
+outputs:
+  results-directory:
+    description: The directory containing the raw test execution results.
+    value: ${{ inputs.work-dir }}
+
+runs:
+  using: composite
+  steps:
+    - name: Execute unit tests
+      shell: bash
+      run: |
+        qlt test run execute-unit-tests \
+          --num-threads "${{ inputs.num-threads }}" \
+          --language "${{ inputs.language }}" \
+          --runner-os "${{ runner.os }}" \
+          --work-dir "${{ inputs.work-dir }}" \
+          --base "${{ inputs.base }}" \
+          --automation-type actions \
+          ${{ inputs.codeql-args != '' && format('--codeql-args "{0}"', inputs.codeql-args) || '' }}
+
+    - name: Validate unit test results
+      shell: bash
+      run: |
+        # Deliberately omit --pretty-print: per QLT's own docs, that mode does not
+        # exit with a failure code on test failures, which we need for CI gating.
+        qlt test run validate-unit-tests \
+          --results-directory "${{ inputs.work-dir }}" \
+          --base "${{ inputs.base }}" \
+          --automation-type actions

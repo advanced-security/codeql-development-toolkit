@@ -1,0 +1,38 @@
+name: Bundle CodeQL packs
+description: |
+  Bundles a set of CodeQL query packs via `codeql pack bundle`, reusing the cache
+  directory populated by the `install-qlt` action. This wraps the CLI directly rather than
+  a `qlt pack` subcommand, since QLT's own pack-publication CLI surface wasn't verified
+  when this action was written; it can be swapped for a native `qlt pack bundle` call
+  once that's confirmed.
+inputs:
+  codeql-bin:
+    description: Path to the `codeql` binary, e.g. the `codeql-bin` output of `install-qlt`.
+    required: true
+
+  cache-dir:
+    description: The cache directory to pass as `--common-caches`, e.g. the `cache-dir` output of `install-qlt`.
+    required: true
+
+  packs:
+    description: |
+      One `<output-file>.tgz <pack-src-path>` pair per line, e.g.:
+        common-cpp-coding-standards.tgz cpp/common/src
+        common-c-coding-standards.tgz c/common/src
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Bundle packs
+      shell: bash
+      env:
+        CODEQL_BIN: ${{ inputs.codeql-bin }}
+        CACHE_DIR: ${{ inputs.cache-dir }}
+        PACKS: ${{ inputs.packs }}
+      run: |
+        while read -r output pack_path; do
+          [ -z "$output" ] && continue
+          echo "::debug::Bundling $pack_path -> $output"
+          "$CODEQL_BIN" pack bundle --common-caches="$CACHE_DIR" --output="$output" "$pack_path"
+        done <<< "$PACKS"

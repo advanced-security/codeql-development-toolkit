@@ -1,0 +1,22 @@
+name: Save QLT cache
+description: |
+  Persists the cache directory populated by the `install-qlt` action (downloaded bundle and
+  compiled query artifacts) so subsequent runs can reuse it. Call this at the end of the job,
+  typically with `if: always()` so the cache is saved even if the test run failed.
+inputs:
+  cache-dir:
+    description: The cache directory output by the `install-qlt` action.
+    required: true
+
+  cache-primary-key:
+    description: The cache-primary-key output by the `install-qlt` action.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Save QLT cache
+      uses: actions/cache/save@v6
+      with:
+        path: ${{ inputs.cache-dir }}
+        key: ${{ inputs.cache-primary-key }}
