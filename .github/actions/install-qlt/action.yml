@@ -36,10 +36,7 @@ inputs:
       (`qlt codeql run install --custom-bundle --packs <language>`), or a plain CodeQL CLI +
       standard library checkout (`qlt codeql run install`, using the `codeql-cli-version`/
       `codeql-standard-library-version` set above) for testing/using the standard library
-      directly rather than this repo's packs. Plain installs live under `~/.qlt` rather than
-      `cache-dir` (QLT's `--cache-dir` only applies to custom-bundle downloads/compilation),
-      so the cache step below caches `~/.qlt` instead in that case. Ignored unless `language`
-      is set.
+      directly rather than this repo's packs. Ignored unless `language` is set.
     required: false
     default: 'true'
 
@@ -47,6 +44,15 @@ inputs:
     description: |
       The version of the CodeQL CLI to use, e.g. `2.23.9`. Leave unset to use an already
       committed `qlt.conf.json` as-is. Ignored unless `language` is set.
+
+      QLT has no option to point at a differently-named/located config file: it always reads
+      `qlt.conf.json` from `--base`. Setting this input runs `qlt codeql set version`, which
+      *overwrites* `qlt.conf.json` with only the CLI/standard-library/bundle versions (any
+      other committed settings, e.g. `ExportedCustomizationPacks`, are dropped from the file,
+      though `--packs`/`--cache-dir` passed explicitly to the install step below still apply
+      since those are passed on the command line, not read back from the file). Only needed
+      when a caller wants to override the committed `qlt.conf.json` per matrix entry, e.g. to
+      test multiple CLI/standard-library combinations from a single `qlt.conf.json`.
     required: false
     default: ''
 
@@ -72,8 +78,10 @@ inputs:
   cache-dir:
     description: |
       Directory used for the downloaded bundle and compiled query cache when `custom-bundle`
-      is `true`. Ignored unless `language` is set (and, for caching purposes, unless
-      `custom-bundle` is also `true` — see `custom-bundle`).
+      is `true` (passed to the `codeql-bundle` tool's own `--cache-dir`). This is separate
+      from, and in addition to, `~/.qlt` (see the `cache-dir` output) which is where QLT
+      itself installs CodeQL for every install mode. Ignored unless `language` is set (and,
+      for caching purposes, unless `custom-bundle` is also `true`).
     required: false
     default: ${{ github.workspace }}/.qlt-cache
 
@@ -102,9 +110,12 @@ outputs:
 
   cache-dir:
     description: |
-      The directory holding the install/compile cache (`cache-dir` for custom bundles, `~/.qlt`
-      for plain installs). Empty unless `language` is set.
-    value: ${{ inputs.language != '' && (inputs.custom-bundle == 'true' && inputs.cache-dir || '~/.qlt') || '' }}
+      Newline-separated list of paths to restore/save for the CodeQL install cache: always
+      `~/.qlt` (where QLT installs CodeQL for every install mode), plus `cache-dir` too when
+      `custom-bundle` is `true`. Pass straight through to `save-qlt-cache`'s `cache-dir` input
+      (which forwards it, unmodified, to `actions/cache/save`'s multiline-capable `path`).
+      Empty unless `language` is set.
+    value: ${{ steps.qlt-cache-paths.outputs.paths }}
 
   cache-primary-key:
     description: The primary cache key to pass to a cache-save step at the end of the job. Empty unless `language` is set.
@@ -189,15 +200,28 @@ runs:
           --base "${{ inputs.base }}" \
           --automation-type actions
 
+    - name: Determine QLT cache paths
+      if: inputs.language != ''
+      id: qlt-cache-paths
+      shell: bash
+      run: |
+        # QLT installs CodeQL under ~/.qlt regardless of install mode (packages or custom
+        # bundles); --cache-dir is a second, separate cache used only by custom-bundle builds.
+        {
+          echo "paths<<EOF"
+          echo "~/.qlt"
+          if [ "${{ inputs.custom-bundle }}" == "true" ] && [ -n "${{ inputs.cache-dir }}" ]; then
+            echo "${{ inputs.cache-dir }}"
+          fi
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
+
     - name: Restore QLT cache
       if: inputs.language != ''
       id: restore-qlt-cache
       uses: actions/cache/restore@v6
       with:
-        # Plain (non-custom-bundle) installs aren't affected by --cache-dir at all (QLT only
-        # uses it for custom-bundle downloads/compilation), so cache ~/.qlt instead, which is
-        # where `qlt codeql run install` puts a plain CLI + standard library checkout.
-        path: ${{ inputs.custom-bundle == 'true' && inputs.cache-dir || '~/.qlt' }}
+        path: ${{ steps.qlt-cache-paths.outputs.paths }}
         key: qlt-${{ runner.os }}-${{ inputs.custom-bundle }}-${{ inputs.language }}-${{ hashFiles('qlt.conf.json') }}-${{ github.run_id }}
         restore-keys: qlt-${{ runner.os }}-${{ inputs.custom-bundle }}-${{ inputs.language }}-${{ hashFiles('qlt.conf.json') }}
 
