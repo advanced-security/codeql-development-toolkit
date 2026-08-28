@@ -270,7 +270,8 @@ runs:
         # No QLT equivalent to --compilation-cache-size exists (its own --cache-dir is a
         # fingerprinted download cache, not a size-bounded compile cache), so this shells
         # out to the CLI directly rather than a qlt subcommand.
-        ARGS=(query compile --common-caches="$CACHE_DIR" --compilation-cache-size="$CACHE_SIZE" --threads 0)
+        # --verbosity=progress++ surfaces per-query compilation-cache hit/miss messages.
+        ARGS=(query compile --common-caches="$CACHE_DIR" --compilation-cache-size="$CACHE_SIZE" --threads 0 --verbosity=progress++)
         if [ "$PRECOMPILE" == "true" ]; then
           ARGS+=(--precompile)
         fi
