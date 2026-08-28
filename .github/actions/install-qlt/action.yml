@@ -61,6 +61,24 @@ inputs:
     required: false
     default: ${{ github.workspace }}/.qlt-cache
 
+  compilation-cache-size:
+    description: |
+      If set, precompiles `language` right after install via `codeql query compile
+      --common-caches=<cache-dir> --compilation-cache-size=<this value>`, so callers don't
+      each need to hand-roll that step. QLT itself has no equivalent setting (its own
+      `--cache-dir` is a fingerprinted download cache, not a size-bounded compile cache), so
+      this action runs the CLI directly. Ignored unless `language` is set.
+    required: false
+    default: ''
+
+  precompile:
+    description: |
+      Pass `--precompile` to the `codeql query compile` step described by
+      `compilation-cache-size`. Ignored unless both `language` and `compilation-cache-size`
+      are set.
+    required: false
+    default: 'false'
+
 outputs:
   qlt-home:
     description: 'The directory containing the QLT installation'
@@ -190,3 +208,21 @@ runs:
         fi
         echo "::debug::Resolved codeql binary to $CODEQL_BIN"
         echo "codeql-bin=$CODEQL_BIN" >> "$GITHUB_OUTPUT"
+
+    - name: Precompile queries
+      if: inputs.language != '' && inputs.compilation-cache-size != ''
+      shell: bash
+      env:
+        CODEQL_BIN: ${{ steps.locate-codeql-bin.outputs.codeql-bin }}
+        CACHE_DIR: ${{ inputs.cache-dir }}
+        CACHE_SIZE: ${{ inputs.compilation-cache-size }}
+        PRECOMPILE: ${{ inputs.precompile }}
+      run: |
+        # No QLT equivalent to --compilation-cache-size exists (its own --cache-dir is a
+        # fingerprinted download cache, not a size-bounded compile cache), so this shells
+        # out to the CLI directly rather than a qlt subcommand.
+        ARGS=(query compile --common-caches="$CACHE_DIR" --compilation-cache-size="$CACHE_SIZE" --threads 0)
+        if [ "$PRECOMPILE" == "true" ]; then
+          ARGS+=(--precompile)
+        fi
+        "$CODEQL_BIN" "${ARGS[@]}" ${{ inputs.language }}
