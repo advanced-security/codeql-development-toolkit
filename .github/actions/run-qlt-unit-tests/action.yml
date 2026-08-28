@@ -50,10 +50,12 @@ runs:
   steps:
     - name: Execute unit tests
       shell: bash
+      env:
+        CODEQL_ARGS: ${{ inputs.codeql-args }}
+        VERBOSITY: ${{ inputs.verbosity }}
       run: |
-        CODEQL_ARGS="${{ inputs.codeql-args }}"
-        if [ -n "${{ inputs.verbosity }}" ]; then
-          CODEQL_ARGS="$CODEQL_ARGS --verbosity=${{ inputs.verbosity }}"
+        if [ -n "$VERBOSITY" ]; then
+          CODEQL_ARGS="$CODEQL_ARGS --verbosity=$VERBOSITY"
         fi
         qlt test run execute-unit-tests \
           --num-threads "${{ inputs.num-threads }}" \
@@ -62,7 +64,7 @@ runs:
           --work-dir "${{ inputs.work-dir }}" \
           --base "${{ inputs.base }}" \
           --automation-type actions \
-          ${{ format('--codeql-args "{0}"', '$CODEQL_ARGS') }}
+          $([ -n "$CODEQL_ARGS" ] && echo --codeql-args "$CODEQL_ARGS")
 
     - name: Validate unit test results
       shell: bash
