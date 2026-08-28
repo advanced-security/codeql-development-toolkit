@@ -78,10 +78,11 @@ inputs:
   cache-dir:
     description: |
       Directory used for the downloaded bundle and compiled query cache when `custom-bundle`
-      is `true` (passed to the `codeql-bundle` tool's own `--cache-dir`). This is separate
-      from, and in addition to, `~/.qlt` (see the `cache-dir` output) which is where QLT
-      itself installs CodeQL for every install mode. Ignored unless `language` is set (and,
-      for caching purposes, unless `custom-bundle` is also `true`).
+      is `true` (passed to the `codeql-bundle` tool's own `--cache-dir`, and to `codeql`'s own
+      `--common-caches` in the precompile step below). This is separate from, and in addition
+      to, `~/.qlt` (see the `install-cache-paths` output) which is where QLT itself installs
+      CodeQL for every install mode. Ignored unless `language` is set (and, for caching
+      purposes, unless `custom-bundle` is also `true`).
     required: false
     default: ${{ github.workspace }}/.qlt-cache
 
@@ -110,10 +111,19 @@ outputs:
 
   cache-dir:
     description: |
-      Newline-separated list of paths to restore/save for the CodeQL install cache: always
-      `~/.qlt` (where QLT installs CodeQL for every install mode), plus `cache-dir` too when
-      `custom-bundle` is `true`. Pass straight through to `save-qlt-cache`'s `cache-dir` input
-      (which forwards it, unmodified, to `actions/cache/save`'s multiline-capable `path`).
+      The single directory passed as `--cache-dir`/`--common-caches` to `codeql-bundle`/
+      `codeql` (e.g. for a `bundle-codeql-packs` or further `codeql query compile` call).
+      Empty unless `language` is set.
+    value: ${{ inputs.language != '' && inputs.cache-dir || '' }}
+
+  install-cache-paths:
+    description: |
+      Newline-separated list of paths to restore/save with `actions/cache` to cover the whole
+      CodeQL install: always `~/.qlt` (where QLT installs CodeQL for every install mode), plus
+      `cache-dir` too when `custom-bundle` is `true`. Pass straight through to
+      `save-qlt-cache`'s `cache-dir` input (which forwards it, unmodified, to
+      `actions/cache/save`'s multiline-capable `path`) — do not use this for `--common-caches`/
+      `--cache-dir` CLI flags, which expect a single directory (see the `cache-dir` output).
       Empty unless `language` is set.
     value: ${{ steps.qlt-cache-paths.outputs.paths }}
 
