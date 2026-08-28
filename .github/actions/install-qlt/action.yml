@@ -1,6 +1,12 @@
 name: Fetch and Install QLT
 description: |
-  Fetches and installs QLT. 
+  Fetches and installs QLT.
+
+  Optionally also installs CodeQL and the repo's query packs via `qlt codeql run install`,
+  restoring a cache directory covering both the downloaded bundle and compiled query
+  artifacts, when `language` is supplied. Existing callers that only pass `qlt-version`/
+  `add-to-path` are unaffected: the original "Install QLT" step and `qlt-home` output are
+  unchanged, and all the CodeQL-related steps below are skipped unless `language` is set.
 inputs:
   qlt-version:
     description: |
@@ -14,10 +20,63 @@ inputs:
     required: false
     default: 'true'
 
+  language:
+    description: |
+      The language pack(s) to install and to scope the cache key to, e.g. `cpp` or `c`.
+      Space-separate multiple values (e.g. `cpp c`) to install packs for more than one
+      language in a single call. Leave unset to only install QLT itself (original behavior).
+    required: false
+    default: ''
+
+  codeql-cli-version:
+    description: |
+      The version of the CodeQL CLI to use, e.g. `2.23.9`. Leave unset to use an already
+      committed `qlt.conf.json` as-is. Ignored unless `language` is set.
+    required: false
+    default: ''
+
+  codeql-standard-library-version:
+    description: |
+      The tag or commit to use from the CodeQL Standard Library, e.g. `codeql-cli/v2.23.9`.
+      Ignored unless `language` is set.
+    required: false
+    default: ''
+
+  codeql-bundle-version:
+    description: |
+      The CodeQL bundle version to use, e.g. `codeql-bundle-v2.23.9`. Ignored unless
+      `language` is set.
+    required: false
+    default: ''
+
+  base:
+    description: The base path to find the query repository. Ignored unless `language` is set.
+    required: false
+    default: ${{ github.workspace }}
+
+  cache-dir:
+    description: |
+      Directory used for the downloaded bundle and compiled query cache. Ignored unless
+      `language` is set.
+    required: false
+    default: ${{ github.workspace }}/.qlt-cache
+
 outputs:
   qlt-home:
     description: 'The directory containing the QLT installation'
     value: ${{ steps.install-qlt.outputs.qlt-home }}
+
+  cache-dir:
+    description: The directory holding the downloaded bundle and compiled query cache. Empty unless `language` is set.
+    value: ${{ inputs.language != '' && inputs.cache-dir || '' }}
+
+  cache-primary-key:
+    description: The primary cache key to pass to a cache-save step at the end of the job. Empty unless `language` is set.
+    value: ${{ steps.restore-qlt-cache.outputs.cache-primary-key }}
+
+  codeql-bin:
+    description: Path to the `codeql` binary installed by QLT. Empty unless `language` is set.
+    value: ${{ steps.locate-codeql-bin.outputs.codeql-bin }}
 
 runs:
   using: composite
@@ -80,3 +139,54 @@ runs:
 
         popd
         echo -e "\e[0;32m[QLT]\e[0m Done."
+
+    # Everything below is opt-in: skipped entirely unless `language` is supplied, so existing
+    # callers that only install QLT itself see no behavior change.
+    - name: Configure QLT for this CodeQL version
+      if: inputs.language != '' && inputs.codeql-cli-version != ''
+      shell: bash
+      run: |
+        qlt codeql set version \
+          --cli-version "${{ inputs.codeql-cli-version }}" \
+          --standard-library-version "${{ inputs.codeql-standard-library-version }}" \
+          --bundle-version "${{ inputs.codeql-bundle-version }}" \
+          --base "${{ inputs.base }}" \
+          --automation-type actions
+
+    - name: Restore QLT cache
+      if: inputs.language != ''
+      id: restore-qlt-cache
+      uses: actions/cache/restore@v6
+      with:
+        path: ${{ inputs.cache-dir }}
+        key: qlt-${{ runner.os }}-${{ inputs.language }}-${{ hashFiles('qlt.conf.json') }}-${{ github.run_id }}
+        restore-keys: qlt-${{ runner.os }}-${{ inputs.language }}-${{ hashFiles('qlt.conf.json') }}
+
+    - name: Install CodeQL + packs via QLT
+      if: inputs.language != ''
+      shell: bash
+      run: |
+        # Installation lives under the `run` subgroup of `codeql` (`codeql install` alone is
+        # not a valid command).
+        qlt codeql run install \
+          --custom-bundle \
+          --packs ${{ inputs.language }} \
+          --cache-dir "${{ inputs.cache-dir }}" \
+          --base "${{ inputs.base }}" \
+          --automation-type actions
+
+    - name: Locate installed codeql binary
+      if: inputs.language != ''
+      id: locate-codeql-bin
+      shell: bash
+      env:
+        CACHE_DIR: ${{ inputs.cache-dir }}
+      run: |
+        # Unverified layout: QLT installs the CodeQL CLI it downloads/bundles somewhere
+        # under the cache directory. Fall back to PATH if it can't be found there.
+        CODEQL_BIN="$(find "$CACHE_DIR" -type f -name codeql -perm -u+x 2>/dev/null | head -n1)"
+        if [ -z "$CODEQL_BIN" ]; then
+          CODEQL_BIN="$(command -v codeql)"
+        fi
+        echo "::debug::Resolved codeql binary to $CODEQL_BIN"
+        echo "codeql-bin=$CODEQL_BIN" >> "$GITHUB_OUTPUT"
