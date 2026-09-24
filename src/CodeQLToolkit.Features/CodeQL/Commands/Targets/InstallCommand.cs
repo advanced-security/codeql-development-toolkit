@@ -100,9 +100,6 @@ namespace CodeQLToolkit.Features.CodeQL.Commands.Targets
                 if (CustomBundles || QuickBundles)
                 {
                     SetEnvironmentVariableMultiTarget("QLT_CODEQL_BUNDLE_PATH", installation.CustomBundleOutputBundleCurrentPlatform);
-                    SetEnvironmentVariableMultiTarget("QLT_CODEQL_BUNDLE_PATH_WIN64", installation.CustomBundleOutputBundleWindows);
-                    SetEnvironmentVariableMultiTarget("QLT_CODEQL_BUNDLE_PATH_OSX64", installation.CustomBundleOutputBundleOSX);
-                    SetEnvironmentVariableMultiTarget("QLT_CODEQL_BUNDLE_PATH_LINUX64", installation.CustomBundleOutputBundleLinux);
                 }
             }
 

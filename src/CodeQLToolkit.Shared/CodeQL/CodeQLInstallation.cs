@@ -137,9 +137,6 @@ namespace CodeQLToolkit.Shared.CodeQL
         }
 
         public string CustomBundleOutputBundleCurrentPlatform => Path.Combine(CustomBundleOutputDirectory, $"codeql-bundle-{PlatformID}.tar.gz");
-        public string CustomBundleOutputBundleLinux => Path.Combine(CustomBundleOutputDirectory, "codeql-bundle-linux64.tar.gz");
-        public string CustomBundleOutputBundleWindows => Path.Combine(CustomBundleOutputDirectory, "codeql-bundle-win64.tar.gz");
-        public string CustomBundleOutputBundleOSX => Path.Combine(CustomBundleOutputDirectory, "codeql-bundle-osx64.tar.gz");
 
         public string CustomBundleOutputDirectory => Path.Combine(InstallationDirectory, "out");
 
@@ -205,10 +202,9 @@ namespace CodeQLToolkit.Shared.CodeQL
                 Directory.CreateDirectory(InstallationDirectory);
             }
 
-            // Download the platform-independent bundle.
             Log<CodeQLInstallation>.G().LogInformation($"Downloading CodeQL base bundle...");
 
-            var downloadFile = $"codeql-bundle.tar.gz";
+            var downloadFile = $"codeql-bundle-{PlatformID}.tar.gz";
             var customBundlePath = Path.Combine(InstallationDirectory, downloadFile);
 
             Log<CodeQLInstallation>.G().LogInformation($"Checking if existing source bundle {downloadFile} is present...");
@@ -221,7 +217,7 @@ namespace CodeQLToolkit.Shared.CodeQL
             {
                 using var client = new WebClient();
                 string uri = $"https://github.com/github/codeql-action/releases/download/{CLIBundle}/{downloadFile}";
-                Log<CodeQLInstallation>.G().LogInformation($"Downloading platform-independent bundle from remote URL: {uri}...");
+                Log<CodeQLInstallation>.G().LogInformation($"Downloading platform-specific bundle from remote URL: {uri}...");
                 client.DownloadFile(uri, customBundlePath);
             }
 
@@ -252,8 +248,7 @@ namespace CodeQLToolkit.Shared.CodeQL
             var packsToExport = CodeQLPackConfiguration.Where(p => p.Bundle == true).Select(p => p.Name).ToArray();
             var packs = string.Join(" ", packsToExport);
 
-            // Run the bundling tool to create the platform-specific custom bundles from the platform-independent bundle
-            var bundleArgs = $"--log DEBUG -a qlt.conf.json -p win64 -p osx64 -p linux64 -b {customBundlePath} -o {CustomBundleOutputDirectory} -w {workingDirectory} {packs}";
+            var bundleArgs = $"--log DEBUG -a qlt.conf.json -p {PlatformID} -b {customBundlePath} -o {CustomBundleOutputDirectory} -w {workingDirectory} {packs}";
 
             if (QuickBundle)
             {
