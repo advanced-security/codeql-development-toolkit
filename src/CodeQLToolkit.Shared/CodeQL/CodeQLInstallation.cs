@@ -96,7 +96,12 @@ namespace CodeQLToolkit.Shared.CodeQL
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    return "linux64";
+                    return RuntimeInformation.OSArchitecture switch
+                    {
+                        Architecture.X64 => "linux64",
+                        Architecture.Arm64 => "linux-arm64",
+                        _ => throw new PlatformNotSupportedException($"Unsupported Linux architecture: {RuntimeInformation.OSArchitecture}.")
+                    };
                 }
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -104,7 +109,7 @@ namespace CodeQLToolkit.Shared.CodeQL
                     return "osx64";
                 }
 
-                throw new Exception("Unknown platform.");
+                throw new PlatformNotSupportedException("Unsupported operating system.");
             }
         }
 

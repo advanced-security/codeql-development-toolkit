@@ -11,7 +11,12 @@ namespace CodeQLToolkit.Shared.Tests.CodeQL
             var expectedPlatform = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                 ? "win64"
                 : RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
-                    ? "linux64"
+                    ? RuntimeInformation.OSArchitecture switch
+                    {
+                        Architecture.X64 => "linux64",
+                        Architecture.Arm64 => "linux-arm64",
+                        _ => throw new PlatformNotSupportedException($"Unsupported Linux architecture: {RuntimeInformation.OSArchitecture}.")
+                    }
                     : "osx64";
             var installation = new CodeQLInstallation
             {

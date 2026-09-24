@@ -18,7 +18,7 @@ jobs:
       matrix: ${{ steps.export-test-matrix.outputs.matrix }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 {% endraw %}
 {% if dev_mode %}
       - name: Install QLT
@@ -57,7 +57,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
 {% endraw %}
 {% if dev_mode %}

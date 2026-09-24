@@ -14,9 +14,9 @@ jobs:
     runs-on: macos-15 # note this is arm64
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v7
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
@@ -48,7 +48,7 @@ jobs:
         pip install -U pyinstaller 
 
         # run the packaging 
-        ./scripts/build_codeql_bundle_dist.ps1 -Version 0.5.0 -WorkDirectory dist -DestinationDirectory ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/macos-arm64/tools/
+        ./scripts/build_codeql_bundle_dist.ps1 -Version 0.6.0 -WorkDirectory dist -DestinationDirectory ./src/CodeQLToolkit.Core/bin/Release/net6.0/publish/macos-arm64/tools/
       env:
         GH_TOKEN: ${{ github.token }}
 

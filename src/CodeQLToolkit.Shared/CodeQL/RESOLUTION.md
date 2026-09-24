@@ -54,7 +54,8 @@ In all cases, two environment variables are set after a run:
 When using custom bundles, one additional environment variable is set after a run:
 - `QLT_CODEQL_BUNDLE_PATH` - The path to the current platform bundle created by QLT.
 
-Each invocation creates a bundle only for its current platform. Run QLT on each target operating system when Linux, Windows, and macOS bundles are all required.
+Each invocation creates a bundle only for its current platform. Run QLT on each target platform when Linux x64, Linux ARM64, Windows, and macOS bundles are required.
+Linux ARM64 requires CodeQL CLI and bundle version 2.27.0 or later.
 
 ## Idents within the Installation Directory 
 
