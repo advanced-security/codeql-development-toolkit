@@ -68,10 +68,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: codeql-bundles
-        path: |
-          ${{ env.QLT_CODEQL_BUNDLE_PATH_LINUX64 }}
-          ${{ env.QLT_CODEQL_BUNDLE_PATH_WIN64 }}
-          ${{ env.QLT_CODEQL_BUNDLE_PATH_OSX64 }}
+        path: ${{ env.QLT_CODEQL_BUNDLE_PATH }}
         if-no-files-found: error
         compression-level: 0
 
@@ -122,4 +119,3 @@ jobs:
       run: |
         # Compare the expected vs the actual 
         qlt bundle run validate-integration-tests --expected example/integration-tests/${{ matrix.language }}/expected.sarif --actual ${{ steps.analysis.outputs.sarif-output }}/${{ matrix.language }}.sarif        
-

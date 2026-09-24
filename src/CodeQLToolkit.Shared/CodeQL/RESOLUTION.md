@@ -45,19 +45,17 @@ For a normal installation, the mapping of these values is as follows:
 
 For a bundle installation the mapping is as follows:
 
-- `CodeQLCLIBundle` - The bundle downloaded from `github/codeql-action/releases` to base the bundle on. 
+- `CodeQLCLIBundle` - The `github/codeql-action` bundle release tag to base the bundle on. QLT downloads the platform-specific source bundle for the current host.
 
 In all cases, two environment variables are set after a run:
 - `QLT_CODEQL_PATH` - The path to the CodeQL binary. (Always set)
 - `QLT_CODEQL_HOME` - The root installation of CodeQL. (Always set)
 
-When using custom bundles, four additional environmental variables are set after a run:
-- `QLT_CODEQL_BUNDLE_PATH` - The path to the current platform bundle created by QLT. (Set when using custom bundles)
-- `QLT_CODEQL_BUNDLE_PATH_WIN64` - The path to the Windows bundle created by QLT. (Set when using custom bundles)
-- `QLT_CODEQL_BUNDLE_PATH_LINUX64` - The path to the Linux bundle created by QLT. (Set when using custom bundles)
-- `QLT_CODEQL_BUNDLE_PATH_OSX64` - The path to the MacOS bundle created by QLT. (Set when using custom bundles)
+When using custom bundles, one additional environment variable is set after a run:
+- `QLT_CODEQL_BUNDLE_PATH` - The path to the current platform bundle created by QLT.
 
-The environmental variable `QLT_CODE_BUNDLE_PATH` will map to one of the three other bundle variables.
+Each invocation creates a bundle only for its current platform. Run QLT on each target platform when Linux x64, Linux ARM64, Windows, and macOS bundles are required.
+Linux ARM64 requires CodeQL CLI and bundle version 2.27.0 or later.
 
 ## Idents within the Installation Directory 
 
